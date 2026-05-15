@@ -11,12 +11,6 @@ Page({
   },
 
   onLoad(options) {
-    if (auth.isDesigner()) {
-      wx.showToast({ title: '设计师无法以客户身份加入项目', icon: 'none' })
-      setTimeout(() => wx.navigateBack(), 1500)
-      return
-    }
-
     const inviteCode = options.code || ''
     if (!inviteCode) {
       this.setData({

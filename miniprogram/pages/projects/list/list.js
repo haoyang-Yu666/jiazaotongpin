@@ -3,11 +3,14 @@ const auth = require('../../../utils/auth')
 
 Page({
   data: {
-    currentRole: 'client',
+    currentRole: 'designer',
+    viewTabs: [
+      { key: 'designer', label: '我设计的' },
+      { key: 'client', label: '我参与的' }
+    ],
     projects: [],
     loading: true,
     isEmpty: false,
-    isDesigner: false,
     page: 1,
     pageSize: 10,
     hasMore: true,
@@ -28,13 +31,8 @@ Page({
   },
 
   onLoad() {
-    const role = auth.getRole() || 'client'
-    const isDesigner = role === 'designer'
-    this.setData({ currentRole: role, isDesigner })
-  },
-
-  onShow() {
-    this.resetAndLoad()
+    // 默认显示设计师视角
+    this.setData({ currentRole: 'designer' })
   },
 
   onShow() {
@@ -109,6 +107,13 @@ Page({
   onSortToggle() {
     const newSort = this.data.sortBy === 'updated_at' ? 'created_at' : 'updated_at'
     this.setData({ sortBy: newSort })
+    this.resetAndLoad()
+  },
+
+  onViewSwitch(e) {
+    const role = e.currentTarget.dataset.role
+    if (role === this.data.currentRole) return
+    this.setData({ currentRole: role })
     this.resetAndLoad()
   },
 

@@ -20,10 +20,6 @@ Page({
   },
 
   onLoad() {
-    if (!auth.isDesigner()) {
-      wx.showToast({ title: '仅设计师可创建项目', icon: 'none' })
-      setTimeout(() => wx.navigateBack(), 1000)
-    }
   },
 
   onInputChange(e) {

@@ -3,6 +3,43 @@
   background-color: #F5F5F5;
 }
 
+/* 视角切换 */
+.view-tabs {
+  display: flex;
+  background: #1A6D5C;
+  padding: 0;
+}
+
+.view-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24rpx 0;
+  position: relative;
+}
+
+.view-tab-label {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+}
+
+.view-tab.active .view-tab-label {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.view-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  width: 48rpx;
+  height: 6rpx;
+  border-radius: 3rpx;
+  background: #ffffff;
+}
+
 /* 内容区 */
 .project-content {
   flex: 1;

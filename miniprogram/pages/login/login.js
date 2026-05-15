@@ -11,13 +11,15 @@ Page({
   },
 
   onLoad(options) {
-    const role = options.role || auth.getRole() || 'client'
+    // 已登录用户直接跳走，登录页只给新用户用
+    if (auth.isLoggedIn()) {
+      wx.switchTab({ url: '/pages/projects/list/list' })
+      return
+    }
+
+    const role = options.role || 'client'
     const roleLabel = role === 'designer' ? '设计师' : '客户'
     this.setData({ role, roleLabel })
-
-    if (auth.isLoggedIn()) {
-      this._navigateAfterLogin()
-    }
   },
 
   onChooseAvatar(e) {
@@ -45,7 +47,7 @@ Page({
     try {
       let finalAvatar = ''
 
-      // 上传头像到云存储（临时文件才上传）
+      // 上传头像到云存储
       if (avatarUrl && (avatarUrl.indexOf('tmp') > -1 || avatarUrl.indexOf('wxfile') > -1)) {
         try {
           const ext = avatarUrl.split('.').pop() || 'png'
@@ -57,7 +59,6 @@ Page({
           finalAvatar = uploadRes.fileID
         } catch (uploadErr) {
           console.error('头像上传失败:', uploadErr)
-          // 上传失败继续登录，使用空头像
         }
       } else if (avatarUrl) {
         finalAvatar = avatarUrl
@@ -69,17 +70,15 @@ Page({
         avatar: finalAvatar
       })
 
+      // 保存登录态
       auth.saveUserInfo({
         ...loginRes,
-        nickname: nickName.trim(),
-        avatar: finalAvatar,
         role: role
       })
 
       wx.showToast({ title: '登录成功', icon: 'success' })
-
       setTimeout(() => {
-        this._navigateAfterLogin()
+        wx.switchTab({ url: '/pages/projects/list/list' })
       }, 1000)
     } catch (err) {
       console.error('登录失败:', err)
@@ -87,11 +86,5 @@ Page({
     } finally {
       this.setData({ loading: false })
     }
-  },
-
-  _navigateAfterLogin() {
-    wx.switchTab({
-      url: '/pages/projects/list/list'
-    })
   }
 })

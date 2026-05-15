@@ -1,4 +1,17 @@
 <view class="project-list-page">
+  <!-- 视角切换 -->
+  <view class="view-tabs">
+    <view
+      class="view-tab {{currentRole === item.key ? 'active' : ''}}"
+      wx:for="{{viewTabs}}"
+      wx:key="key"
+      data-role="{{item.key}}"
+      bindtap="onViewSwitch"
+    >
+      <text class="view-tab-label">{{item.label}}</text>
+    </view>
+  </view>
+
   <!-- 搜索栏 -->
   <view class="search-bar">
     <input
@@ -37,10 +50,16 @@
 
     <!-- 空状态 -->
     <empty-state
-      wx:if="{{!loading && isEmpty}}"
+      wx:if="{{!loading && isEmpty && currentRole === 'designer'}}"
       type="project"
-      message="暂无项目"
-      description="{{isDesigner ? '点击下方按钮创建新项目' : '点击下方按钮加入项目'}}"
+      message="暂无设计项目"
+      description="点击下方按钮创建新项目"
+    />
+    <empty-state
+      wx:if="{{!loading && isEmpty && currentRole === 'client'}}"
+      type="project"
+      message="暂无参与项目"
+      description="点击下方按钮加入项目"
     />
 
     <!-- 项目卡片列表 -->
@@ -73,20 +92,20 @@
     </scroll-view>
   </view>
 
-  <!-- 设计师：新建项目 -->
+  <!-- 新建项目 -->
   <view
     class="fab-btn"
-    wx:if="{{isDesigner}}"
+    wx:if="{{currentRole === 'designer'}}"
     bindtap="onCreateProject"
   >
     <text class="fab-icon">+</text>
     <text class="fab-label">新建项目</text>
   </view>
 
-  <!-- 客户：加入项目 -->
+  <!-- 加入项目 -->
   <view
     class="fab-btn fab-join"
-    wx:if="{{!isDesigner}}"
+    wx:if="{{currentRole === 'client'}}"
     bindtap="onShowJoinDialog"
   >
     <text class="fab-icon">+</text>
