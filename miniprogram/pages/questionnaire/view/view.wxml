@@ -78,6 +78,43 @@
         </view>
       </view>
 
+      <!-- 按房间详情 -->
+      <view class="view-section" wx:if="{{questionnaire.rooms && questionnaire.rooms.length > 0}}">
+        <text class="section-header">按房间偏好</text>
+        <view class="room-detail" wx:for="{{questionnaire.rooms}}" wx:key="room_type">
+          <text class="room-detail-title">{{item.room_type}}</text>
+          <view class="field-row" wx:if="{{item.style_preference}}">
+            <text class="field-label">风格</text>
+            <text class="field-value">{{item.style_preference}}</text>
+          </view>
+          <view class="field-row" wx:if="{{item.color_preference}}">
+            <text class="field-label">颜色</text>
+            <text class="field-value">{{item.color_preference}}</text>
+          </view>
+          <view class="field-block" wx:if="{{item.special_requirements}}">
+            <text class="field-label">特殊要求</text>
+            <text class="field-content">{{item.special_requirements}}</text>
+          </view>
+          <view class="room-images" wx:if="{{item.reference_images && item.reference_images.length > 0}}">
+            <text class="field-label">参考图</text>
+            <view class="image-grid">
+              <image
+                class="room-ref-image"
+                wx:for="{{item.reference_images}}"
+                wx:for-item="imgUrl"
+                wx:key="*this"
+                src="{{imgUrl}}"
+                mode="aspectFill"
+                data-url="{{imgUrl}}"
+                data-urls="{{item.reference_images}}"
+                bindtap="onPreviewRoomImage"
+              />
+            </view>
+          </view>
+          <view class="field-divider" wx:if="{{index < questionnaire.rooms.length - 1}}"></view>
+        </view>
+      </view>
+
       <!-- 底部留白 -->
       <view class="bottom-space"></view>
     </scroll-view>

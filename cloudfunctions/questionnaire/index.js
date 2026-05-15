@@ -40,7 +40,8 @@ async function handleSubmit(openid, event) {
         color_preference: event.colorPreference || '',
         budget_range: event.budgetRange || '',
         special_requirements: event.specialRequirements || '',
-        disliked: event.disliked || ''
+        disliked: event.disliked || '',
+        rooms: event.rooms || []
       },
       submitted_at: db.serverDate(),
       reviewed_at: null

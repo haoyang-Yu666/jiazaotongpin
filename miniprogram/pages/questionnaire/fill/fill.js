@@ -1,12 +1,12 @@
 const { questionnaireApi } = require('../../../utils/cloud')
 const constants = require('../../../utils/constants')
+const upload = require('../../../utils/upload')
 
 Page({
   data: {
     projectId: '',
     submitting: false,
 
-    // 表单数据
     form: {
       residents: '',
       familyStructure: '',
@@ -20,14 +20,18 @@ Page({
       dislikedElements: ''
     },
 
-    // 选项数据
     styleOptions: constants.STYLE_OPTIONS,
     budgetOptions: constants.BUDGET_OPTIONS,
     coreNeedsOptions: [
       '收纳空间', '开放式厨房', '智能家居', '儿童房',
       '书房/办公', '宠物友好', '无障碍设计', '环保材料',
       '中央空调', '地暖', '新风系统', '隔音'
-    ]
+    ],
+
+    // 按房间
+    roomTypes: constants.ROOM_TYPES,
+    rooms: [],
+    expandedRoom: -1
   },
 
   onLoad(options) {
@@ -37,7 +41,17 @@ Page({
       setTimeout(() => wx.navigateBack(), 1000)
       return
     }
-    this.setData({ projectId })
+
+    const rooms = constants.ROOM_TYPES.map(r => ({
+      room_type: r.key,
+      room_label: r.label,
+      style_preference: '',
+      color_preference: '',
+      special_requirements: '',
+      reference_images: []
+    }))
+
+    this.setData({ projectId, rooms })
   },
 
   onInputChange(e) {
@@ -49,13 +63,11 @@ Page({
     const need = e.currentTarget.dataset.need
     let coreNeeds = [...this.data.form.coreNeeds]
     const index = coreNeeds.indexOf(need)
-
     if (index > -1) {
       coreNeeds.splice(index, 1)
     } else {
       coreNeeds.push(need)
     }
-
     this.setData({ 'form.coreNeeds': coreNeeds })
   },
 
@@ -75,6 +87,24 @@ Page({
     })
   },
 
+  // 按房间操作
+  onRoomToggle(e) {
+    const index = e.currentTarget.dataset.index
+    this.setData({ expandedRoom: this.data.expandedRoom === index ? -1 : index })
+  },
+
+  onRoomInput(e) {
+    const { index, field } = e.currentTarget.dataset
+    this.setData({ [`rooms[${index}].${field}`]: e.detail.value })
+  },
+
+  onRoomImageChange(e) {
+    // image-uploader 不传递 data-index，通过 expandedRoom 确定当前房间
+    const index = this.data.expandedRoom
+    if (index < 0) return
+    this.setData({ [`rooms[${index}].reference_images`]: e.detail.imageList })
+  },
+
   validateForm() {
     const { residents, familyStructure } = this.data.form
     if (!residents || !residents.trim()) {
@@ -91,11 +121,34 @@ Page({
   async onSubmit() {
     if (!this.validateForm()) return
     if (this.data.submitting) return
-
     this.setData({ submitting: true })
 
     try {
       const { form } = this.data
+
+      // 上传房间参考图
+      const rooms = []
+      for (let i = 0; i < this.data.rooms.length; i++) {
+        const room = this.data.rooms[i]
+        let refImages = []
+        if (room.reference_images && room.reference_images.length > 0) {
+          refImages = await upload.uploadImages(
+            room.reference_images,
+            `questionnaire/${this.data.projectId}/rooms/${room.room_type}`
+          )
+        }
+        // 只提交有内容的房间
+        if (room.style_preference || room.color_preference || room.special_requirements || refImages.length > 0) {
+          rooms.push({
+            room_type: room.room_type,
+            style_preference: room.style_preference,
+            color_preference: room.color_preference,
+            special_requirements: room.special_requirements,
+            reference_images: refImages
+          })
+        }
+      }
+
       await questionnaireApi.submit({
         projectId: this.data.projectId,
         residents: form.residents.trim(),
@@ -105,14 +158,12 @@ Page({
         colorPreference: form.colorPreference.trim(),
         budgetRange: form.budgetRange,
         specialRequirements: form.specialRequirements.trim(),
-        disliked: form.dislikedElements.trim()
+        disliked: form.dislikedElements.trim(),
+        rooms
       })
 
       wx.showToast({ title: '提交成功', icon: 'success' })
-
-      setTimeout(() => {
-        wx.navigateBack()
-      }, 1000)
+      setTimeout(() => wx.navigateBack(), 1000)
     } catch (err) {
       console.error('提交问卷失败:', err)
       wx.showToast({ title: err.message || '提交失败', icon: 'none' })

@@ -131,6 +131,71 @@
       </view>
     </view>
 
+    <!-- 按房间详细需求 -->
+    <view class="form-section">
+      <text class="section-header">按房间偏好</text>
+      <text class="section-hint">可选，为每个房间单独设定偏好和上传参考图</text>
+
+      <view
+        class="room-card {{expandedRoom === index ? 'room-expanded' : ''}}"
+        wx:for="{{rooms}}"
+        wx:key="room_type"
+        data-index="{{index}}"
+      >
+        <view class="room-header" data-index="{{index}}" bindtap="onRoomToggle">
+          <text class="room-name">{{item.room_label}}</text>
+          <text class="room-arrow">{{expandedRoom === index ? '−' : '+'}}</text>
+        </view>
+
+        <view class="room-body" wx:if="{{expandedRoom === index}}">
+          <view class="form-group">
+            <text class="form-label">风格偏好</text>
+            <input
+              class="form-input"
+              placeholder="例: 简约、温馨"
+              value="{{item.style_preference}}"
+              data-index="{{index}}"
+              data-field="style_preference"
+              bindinput="onRoomInput"
+            />
+          </view>
+          <view class="form-group">
+            <text class="form-label">颜色偏好</text>
+            <input
+              class="form-input"
+              placeholder="例: 浅灰+白色"
+              value="{{item.color_preference}}"
+              data-index="{{index}}"
+              data-field="color_preference"
+              bindinput="onRoomInput"
+            />
+          </view>
+          <view class="form-group">
+            <text class="form-label">特殊要求</text>
+            <textarea
+              class="form-textarea"
+              placeholder="这个房间有什么特别的需求？"
+              value="{{item.special_requirements}}"
+              data-index="{{index}}"
+              data-field="special_requirements"
+              bindinput="onRoomInput"
+              maxlength="200"
+              auto-height
+            />
+          </view>
+          <view class="form-group">
+            <text class="form-label">参考图（最多3张）</text>
+            <image-uploader
+              imageList="{{item.reference_images}}"
+              maxCount="3"
+              data-index="{{index}}"
+              bind:change="onRoomImageChange"
+            />
+          </view>
+        </view>
+      </view>
+    </view>
+
     <!-- 底部留白 -->
     <view class="bottom-space"></view>
   </scroll-view>

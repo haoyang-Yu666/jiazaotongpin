@@ -86,7 +86,31 @@ const constants = {
   MAX_IMAGES: 9,
 
   // 邀请码长度
-  INVITE_CODE_LENGTH: 6
+  INVITE_CODE_LENGTH: 6,
+
+  // 房间类型（按房间问卷用）
+  ROOM_TYPES: [
+    { key: 'living_room', label: '客厅' },
+    { key: 'master_bedroom', label: '主卧' },
+    { key: 'second_bedroom', label: '次卧' },
+    { key: 'kitchen', label: '厨房' },
+    { key: 'bathroom', label: '卫生间' },
+    { key: 'study', label: '书房' },
+    { key: 'balcony', label: '阳台' },
+    { key: 'dining', label: '餐厅' },
+    { key: 'children_room', label: '儿童房' },
+    { key: 'other', label: '其他' }
+  ],
+
+  // 通知类型
+  NOTIFICATION_TYPES: {
+    FILE_UPLOAD: 'file_upload',
+    FILE_CONFIRM: 'file_confirm',
+    FILE_REJECT: 'file_reject',
+    PROGRESS_PUBLISH: 'progress_publish',
+    QUESTIONNAIRE_SUBMIT: 'questionnaire_submit',
+    PROJECT_JOIN: 'project_join'
+  }
 }
 
 module.exports = constants

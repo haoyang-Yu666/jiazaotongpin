@@ -37,7 +37,8 @@ Page({
         colorPreference: qData.color_preference || '',
         budgetRange: qData.budget_range || '',
         specialRequirements: qData.special_requirements || '',
-        dislikedElements: qData.disliked || ''
+        dislikedElements: qData.disliked || '',
+        rooms: qData.rooms || []
       }
 
       this.setData({
@@ -62,5 +63,11 @@ Page({
       console.error('标记已阅失败:', err)
       wx.showToast({ title: err.message || '操作失败', icon: 'none' })
     }
+  },
+
+  onPreviewRoomImage(e) {
+    const url = e.currentTarget.dataset.url
+    const urls = e.currentTarget.dataset.urls
+    wx.previewImage({ current: url, urls })
   }
 })

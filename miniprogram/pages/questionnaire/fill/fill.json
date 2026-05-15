@@ -1,4 +1,6 @@
 {
-  "usingComponents": {},
+  "usingComponents": {
+    "image-uploader": "/components/image-uploader/image-uploader"
+  },
   "navigationBarTitleText": "填写需求问卷"
 }
