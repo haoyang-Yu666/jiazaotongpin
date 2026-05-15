@@ -71,11 +71,21 @@ const progressApi = {
   getComments: (logId, page) => callFunction('progress', { action: 'getComments', logId, page })
 }
 
+// notification 模块
+const notificationApi = {
+  list: (data) => callFunction('notification', { action: 'list', ...data }),
+  getUnreadCount: () => callFunction('notification', { action: 'getUnreadCount' }),
+  markRead: (notificationId) => callFunction('notification', { action: 'markRead', notificationId }),
+  markAllRead: () => callFunction('notification', { action: 'markAllRead' }),
+  remove: (notificationId) => callFunction('notification', { action: 'remove', notificationId })
+}
+
 module.exports = {
   userApi,
   projectApi,
   questionnaireApi,
   fileApi,
   inspirationApi,
-  progressApi
+  progressApi,
+  notificationApi
 }

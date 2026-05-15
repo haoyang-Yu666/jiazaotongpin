@@ -157,6 +157,25 @@ async function handleJoin(openid, inviteCode) {
       }
     })
 
+    // 通知设计师
+    try {
+      if (project.designer_openid) {
+        await db.collection('jt_notifications').add({
+          data: {
+            user_openid: project.designer_openid,
+            project_id: project._id,
+            project_name: project.name,
+            type: 'project_join',
+            title: '客户已加入',
+            content: (client.nickname || '客户') + ' 已加入项目「' + project.name + '」',
+            related_id: project._id,
+            is_read: false,
+            created_at: db.serverDate()
+          }
+        })
+      }
+    } catch (e) {}
+
     return {
       code: 0,
       data: { project_id: project._id },

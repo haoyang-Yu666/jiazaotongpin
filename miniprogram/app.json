@@ -19,7 +19,8 @@
     "pages/progress/publish/publish",
     "pages/progress/log-detail/log-detail",
     "pages/profile/index/index",
-    "pages/profile/edit/edit"
+    "pages/profile/edit/edit",
+    "pages/notifications/list/list"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -39,6 +40,12 @@
         "text": "项目",
         "iconPath": "images/tab-project.png",
         "selectedIconPath": "images/tab-project-active.png"
+      },
+      {
+        "pagePath": "pages/notifications/list/list",
+        "text": "消息",
+        "iconPath": "images/tab-notification.png",
+        "selectedIconPath": "images/tab-notification-active.png"
       },
       {
         "pagePath": "pages/profile/index/index",

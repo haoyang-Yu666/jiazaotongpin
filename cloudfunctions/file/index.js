@@ -54,6 +54,26 @@ async function handleSave(openid, event) {
 
     const result = await db.collection('jt_design_files').add({ data: fileRecord })
 
+    // 通知客户
+    try {
+      const { data: project } = await db.collection('jt_projects').doc(event.projectId).get()
+      if (project && project.client_openid) {
+        await db.collection('jt_notifications').add({
+          data: {
+            user_openid: project.client_openid,
+            project_id: event.projectId,
+            project_name: project.name,
+            type: 'file_upload',
+            title: '新图纸已上传',
+            content: '设计师上传了「' + (event.title || '文件') + '」',
+            related_id: result._id,
+            is_read: false,
+            created_at: db.serverDate()
+          }
+        })
+      }
+    } catch (e) {}
+
     return { code: 0, data: { _id: result._id }, message: '文件上传成功' }
   } catch (err) {
     return { code: -1, message: '上传失败: ' + err.message }
@@ -144,6 +164,25 @@ async function handleConfirm(openid, event) {
         confirmations: _.push(confirmation)
       }
     })
+
+    // 通知设计师
+    try {
+      if (project.designer_openid) {
+        await db.collection('jt_notifications').add({
+          data: {
+            user_openid: project.designer_openid,
+            project_id: file.project_id,
+            project_name: project.name,
+            type: event.actionType === 'confirmed' ? 'file_confirm' : 'file_reject',
+            title: event.actionType === 'confirmed' ? '图纸已确认' : '图纸被退回',
+            content: '客户' + (event.actionType === 'confirmed' ? '确认' : '退回') + '了「' + (file.title || '文件') + '」',
+            related_id: event.fileId,
+            is_read: false,
+            created_at: db.serverDate()
+          }
+        })
+      }
+    } catch (e) {}
 
     return { code: 0, data: null, message: event.actionType === 'confirmed' ? '已确认' : '已拒绝' }
   } catch (err) {

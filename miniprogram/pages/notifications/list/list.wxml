@@ -1,0 +1,61 @@
+<view class="notification-page">
+  <!-- 顶部操作栏 -->
+  <view class="top-bar" wx:if="{{notifications.length > 0}}">
+    <text class="unread-text" wx:if="{{unreadCount > 0}}">{{unreadCount}}条未读</text>
+    <view class="read-all-btn" bindtap="onMarkAllRead" wx:if="{{unreadCount > 0}}">
+      <text class="read-all-text">全部已读</text>
+    </view>
+  </view>
+
+  <!-- 骨架屏 -->
+  <skeleton wx:if="{{loading && notifications.length === 0}}" type="notification" count="5" />
+
+  <!-- 空状态 -->
+  <empty-state
+    wx:if="{{!loading && isEmpty}}"
+    message="暂无消息"
+    description="项目动态会在这里通知你"
+  />
+
+  <!-- 通知列表 -->
+  <scroll-view
+    wx:if="{{!isEmpty}}"
+    class="notification-scroll"
+    scroll-y
+    bindscrolltolower="onLoadMore"
+    lower-threshold="200"
+  >
+    <view class="notification-list">
+      <view
+        class="notification-item {{item.is_read ? '' : 'unread'}}"
+        wx:for="{{notifications}}"
+        wx:key="_id"
+        data-item="{{item}}"
+        bindtap="onNotificationTap"
+      >
+        <view class="notif-icon">
+          <text class="icon-text">{{item.iconText}}</text>
+        </view>
+        <view class="notif-content">
+          <view class="notif-header">
+            <text class="notif-title">{{item.title}}</text>
+            <text class="notif-time">{{item.timeText}}</text>
+          </view>
+          <text class="notif-desc">{{item.content}}</text>
+          <text class="notif-project" wx:if="{{item.project_name}}">{{item.project_name}}</text>
+        </view>
+        <view class="notif-delete" data-id="{{item._id}}" catchtap="onDeleteTap">
+          <text class="delete-icon">×</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="load-more" wx:if="{{loading && notifications.length > 0}}">
+      <view class="loading-spinner"></view>
+      <text class="loading-text">加载中...</text>
+    </view>
+    <view class="load-more" wx:if="{{!hasMore && notifications.length > 0}}">
+      <text class="no-more-text">没有更多了</text>
+    </view>
+  </scroll-view>
+</view>

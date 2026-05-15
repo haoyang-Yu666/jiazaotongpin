@@ -56,6 +56,26 @@ async function handleCreateLog(openid, event) {
 
     const result = await db.collection('jt_progress_logs').add({ data: log })
 
+    // 通知客户
+    try {
+      const { data: project } = await db.collection('jt_projects').doc(event.projectId).get()
+      if (project && project.client_openid) {
+        await db.collection('jt_notifications').add({
+          data: {
+            user_openid: project.client_openid,
+            project_id: event.projectId,
+            project_name: project.name,
+            type: 'progress_publish',
+            title: '新进度发布',
+            content: '设计师发布了新的施工进度',
+            related_id: result._id,
+            is_read: false,
+            created_at: db.serverDate()
+          }
+        })
+      }
+    } catch (e) {}
+
     return { code: 0, data: { _id: result._id }, message: '发布成功' }
   } catch (err) {
     return { code: -1, message: '发布失败: ' + err.message }

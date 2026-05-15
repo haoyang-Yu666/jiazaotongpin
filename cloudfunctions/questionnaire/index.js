@@ -51,10 +51,48 @@ async function handleSubmit(openid, event) {
       await db.collection('jt_questionnaires').doc(existing[0]._id).update({
         data: questionnaire
       })
+      // 通知设计师
+      try {
+        const { data: project } = await db.collection('jt_projects').doc(event.projectId).get()
+        if (project && project.designer_openid) {
+          await db.collection('jt_notifications').add({
+            data: {
+              user_openid: project.designer_openid,
+              project_id: event.projectId,
+              project_name: project.name,
+              type: 'questionnaire_submit',
+              title: '问卷已提交',
+              content: '客户已提交需求问卷，请查阅',
+              related_id: event.projectId,
+              is_read: false,
+              created_at: db.serverDate()
+            }
+          })
+        }
+      } catch (e) {}
       return { code: 0, data: null, message: '问卷提交成功' }
     }
 
     const result = await db.collection('jt_questionnaires').add({ data: questionnaire })
+    // 通知设计师
+    try {
+      const { data: project } = await db.collection('jt_projects').doc(event.projectId).get()
+      if (project && project.designer_openid) {
+        await db.collection('jt_notifications').add({
+          data: {
+            user_openid: project.designer_openid,
+            project_id: event.projectId,
+            project_name: project.name,
+            type: 'questionnaire_submit',
+            title: '问卷已提交',
+            content: '客户已提交需求问卷，请查阅',
+            related_id: event.projectId,
+            is_read: false,
+            created_at: db.serverDate()
+          }
+        })
+      }
+    } catch (e) {}
     return { code: 0, data: { _id: result._id }, message: '问卷提交成功' }
   } catch (err) {
     return { code: -1, message: '提交失败: ' + err.message }
