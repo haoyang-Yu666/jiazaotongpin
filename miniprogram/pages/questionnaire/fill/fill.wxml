@@ -244,7 +244,7 @@
         <!-- 多选 -->
         <view class="tag-group" wx:if="{{item.type === 'multi_select'}}">
           <view
-            class="tag-item {{(customAnswers[index] || []).indexOf(opt) > -1 ? 'active' : ''}}"
+            class="tag-item {{customAnswers[index].indexOf(opt) > -1 ? 'active' : ''}}"
             wx:for="{{item.options}}"
             wx:for-item="opt"
             wx:key="*this"

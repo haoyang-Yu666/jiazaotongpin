@@ -63,7 +63,10 @@ Page({
     try {
       const res = await questionnaireApi.get(this.data.projectId)
       if (res && res.custom_questions && res.custom_questions.length > 0) {
-        const answers = res.custom_questions.map(() => '')
+        const answers = res.custom_questions.map(q => {
+          if (q.type === 'multi_select') return []
+          return ''
+        })
         this.setData({ customQuestions: res.custom_questions, customAnswers: answers })
       }
     } catch (err) {
