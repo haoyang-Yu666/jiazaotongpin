@@ -31,7 +31,11 @@ Page({
     // 按房间
     roomTypes: constants.ROOM_TYPES,
     rooms: [],
-    expandedRoom: -1
+    expandedRoom: -1,
+
+    // 设计师自定义问题
+    customQuestions: [],
+    customAnswers: []
   },
 
   onLoad(options) {
@@ -52,6 +56,19 @@ Page({
     }))
 
     this.setData({ projectId, rooms })
+    this.loadCustomQuestions()
+  },
+
+  async loadCustomQuestions() {
+    try {
+      const res = await questionnaireApi.get(this.data.projectId)
+      if (res && res.custom_questions && res.custom_questions.length > 0) {
+        const answers = res.custom_questions.map(() => '')
+        this.setData({ customQuestions: res.custom_questions, customAnswers: answers })
+      }
+    } catch (err) {
+      console.error('加载自定义问题失败:', err)
+    }
   },
 
   onInputChange(e) {
@@ -99,10 +116,33 @@ Page({
   },
 
   onRoomImageChange(e) {
-    // image-uploader 不传递 data-index，通过 expandedRoom 确定当前房间
     const index = this.data.expandedRoom
     if (index < 0) return
     this.setData({ [`rooms[${index}].reference_images`]: e.detail.imageList })
+  },
+
+  onCustomInput(e) {
+    const index = e.currentTarget.dataset.index
+    this.setData({ [`customAnswers[${index}]`]: e.detail.value })
+  },
+
+  onCustomSelect(e) {
+    const { index, option } = e.currentTarget.dataset
+    this.setData({ [`customAnswers[${index}]`]: option })
+  },
+
+  onCustomMultiToggle(e) {
+    const { index, option } = e.currentTarget.dataset
+    let current = this.data.customAnswers[index] || []
+    if (!Array.isArray(current)) current = []
+    const arr = [...current]
+    const pos = arr.indexOf(option)
+    if (pos > -1) {
+      arr.splice(pos, 1)
+    } else {
+      arr.push(option)
+    }
+    this.setData({ [`customAnswers[${index}]`]: arr })
   },
 
   validateForm() {
@@ -159,7 +199,9 @@ Page({
         budgetRange: form.budgetRange,
         specialRequirements: form.specialRequirements.trim(),
         disliked: form.dislikedElements.trim(),
-        rooms
+        rooms,
+        customAnswers: this.data.customAnswers,
+        snapshotQuestions: this.data.customQuestions
       })
 
       wx.showToast({ title: '提交成功', icon: 'success' })

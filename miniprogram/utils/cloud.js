@@ -44,7 +44,8 @@ const projectApi = {
 const questionnaireApi = {
   submit: (data) => callFunction('questionnaire', { action: 'submit', ...data }),
   get: (projectId) => callFunction('questionnaire', { action: 'get', projectId }),
-  markReviewed: (projectId) => callFunction('questionnaire', { action: 'markReviewed', projectId })
+  markReviewed: (projectId) => callFunction('questionnaire', { action: 'markReviewed', projectId }),
+  updateTemplate: (projectId, customQuestions) => callFunction('questionnaire', { action: 'updateTemplate', projectId, customQuestions })
 }
 
 // file 模块

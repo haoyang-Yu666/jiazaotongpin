@@ -1,0 +1,335 @@
+.template-page {
+  min-height: 100vh;
+  background-color: #F5F5F5;
+  padding-bottom: 200rpx;
+}
+
+.section-card {
+  background: #ffffff;
+  border-radius: 16rpx;
+  padding: 28rpx;
+  margin: 24rpx 32rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1A1A1A;
+  margin-bottom: 20rpx;
+  display: block;
+}
+
+/* 问题列表 */
+.question-item {
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #F0F0F0;
+}
+
+.question-item:last-child {
+  border-bottom: none;
+}
+
+.question-main {
+  margin-bottom: 12rpx;
+}
+
+.question-header {
+  display: flex;
+  align-items: flex-start;
+}
+
+.question-num {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  background: #1A6D5C;
+  color: #ffffff;
+  font-size: 22rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-right: 16rpx;
+  margin-top: 4rpx;
+}
+
+.question-text {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.5;
+}
+
+.required-mark {
+  color: #FF4D4F;
+  font-size: 28rpx;
+  margin-left: 4rpx;
+}
+
+.question-meta {
+  margin-top: 8rpx;
+  margin-left: 56rpx;
+}
+
+.type-tag {
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  border-radius: 8rpx;
+  font-size: 22rpx;
+}
+
+.type-text { background: #E8F5E9; color: #2E7D32; }
+.type-textarea { background: #E3F2FD; color: #1565C0; }
+.type-single_select { background: #FFF3E0; color: #E65100; }
+.type-multi_select { background: #F3E5F5; color: #7B1FA2; }
+
+.option-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 12rpx;
+  margin-left: 56rpx;
+}
+
+.option-tag {
+  padding: 6rpx 20rpx;
+  border-radius: 16rpx;
+  background: #F5F5F5;
+  font-size: 24rpx;
+  color: #666;
+}
+
+.question-actions {
+  display: flex;
+  gap: 16rpx;
+  margin-left: 56rpx;
+}
+
+.q-action {
+  padding: 6rpx 16rpx;
+}
+
+.q-action-text {
+  font-size: 24rpx;
+  color: #1A6D5C;
+}
+
+.q-action-danger .q-action-text {
+  color: #FF4D4F;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 80rpx 60rpx;
+}
+
+.empty-text {
+  font-size: 30rpx;
+  color: #999;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.empty-hint {
+  font-size: 26rpx;
+  color: #BBB;
+  display: block;
+  line-height: 1.6;
+}
+
+/* 按钮 */
+.add-btn-area {
+  padding: 0 32rpx;
+  margin-top: 24rpx;
+}
+
+.add-question-btn {
+  width: 100%;
+  border: 2rpx dashed #1A6D5C;
+  color: #1A6D5C;
+  background: transparent;
+}
+
+.save-area {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20rpx 32rpx;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  background: #ffffff;
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.06);
+}
+
+.save-btn {
+  width: 100%;
+}
+
+/* 弹窗 */
+.dialog-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+.dialog-box {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 640rpx;
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 40rpx 32rpx;
+  z-index: 101;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.dialog-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #1A1A1A;
+  display: block;
+  text-align: center;
+  margin-bottom: 28rpx;
+}
+
+.dialog-form {
+  margin-bottom: 28rpx;
+}
+
+.form-label {
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 12rpx;
+  display: block;
+  margin-top: 20rpx;
+}
+
+.form-input {
+  width: 100%;
+  height: 72rpx;
+  line-height: 72rpx;
+  background: #F5F5F5;
+  border-radius: 12rpx;
+  padding: 0 24rpx;
+  font-size: 28rpx;
+  box-sizing: border-box;
+}
+
+.form-picker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72rpx;
+  background: #F5F5F5;
+  border-radius: 12rpx;
+  padding: 0 24rpx;
+}
+
+.picker-text {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.picker-arrow {
+  font-size: 28rpx;
+  color: #999;
+}
+
+.options-list {
+  margin-bottom: 12rpx;
+}
+
+.option-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12rpx 0;
+}
+
+.option-item {
+  font-size: 28rpx;
+  color: #333;
+  padding: 6rpx 20rpx;
+  background: #F5F5F5;
+  border-radius: 16rpx;
+}
+
+.option-remove {
+  padding: 8rpx 16rpx;
+}
+
+.remove-text {
+  font-size: 28rpx;
+  color: #FF4D4F;
+}
+
+.add-option-row {
+  display: flex;
+  gap: 16rpx;
+  align-items: center;
+}
+
+.option-input {
+  flex: 1;
+  height: 64rpx;
+  line-height: 64rpx;
+  background: #F5F5F5;
+  border-radius: 12rpx;
+  padding: 0 20rpx;
+  font-size: 26rpx;
+}
+
+.add-option-btn {
+  padding: 0 24rpx;
+  height: 64rpx;
+  line-height: 64rpx;
+  background: #1A6D5C;
+  border-radius: 12rpx;
+}
+
+.add-option-text {
+  font-size: 26rpx;
+  color: #ffffff;
+}
+
+.required-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20rpx;
+}
+
+.required-row .form-label {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.dialog-actions {
+  display: flex;
+  gap: 20rpx;
+}
+
+.dialog-btn {
+  flex: 1;
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  border-radius: 40rpx;
+  font-size: 30rpx;
+  font-weight: 500;
+}
+
+.dialog-cancel {
+  background: #F5F5F5;
+  color: #666;
+}
+
+.dialog-confirm {
+  background: #1A6D5C;
+  color: #ffffff;
+}

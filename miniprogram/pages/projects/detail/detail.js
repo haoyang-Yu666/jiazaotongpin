@@ -91,7 +91,7 @@ Page({
       const res = await questionnaireApi.get(this.data.projectId)
       this.setData({
         questionnaireData: res,
-        questionnaireStatus: res ? res.status : ''
+        questionnaireStatus: res ? res.status : 'pending'
       })
     } catch (err) {
       // 问卷可能尚未提交
@@ -150,6 +150,12 @@ Page({
   onViewInspiration() {
     wx.navigateTo({
       url: `/pages/inspiration/list/list?projectId=${this.data.projectId}`
+    })
+  },
+
+  onEditTemplate() {
+    wx.navigateTo({
+      url: `/pages/questionnaire/edit-template/edit-template?projectId=${this.data.projectId}`
     })
   },
 

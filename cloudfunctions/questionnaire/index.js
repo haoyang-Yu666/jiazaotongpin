@@ -13,6 +13,8 @@ exports.main = async (event, context) => {
       return handleGet(event.projectId)
     case 'markReviewed':
       return handleMarkReviewed(openid, event.projectId)
+    case 'updateTemplate':
+      return handleUpdateTemplate(openid, event)
     default:
       return { code: -1, message: '未知操作' }
   }
@@ -41,7 +43,9 @@ async function handleSubmit(openid, event) {
         budget_range: event.budgetRange || '',
         special_requirements: event.specialRequirements || '',
         disliked: event.disliked || '',
-        rooms: event.rooms || []
+        rooms: event.rooms || [],
+        custom_answers: event.customAnswers || [],
+        snapshot_questions: event.snapshotQuestions || []
       },
       submitted_at: db.serverDate(),
       reviewed_at: null
@@ -145,5 +149,48 @@ async function handleMarkReviewed(openid, event) {
     return { code: 0, data: null, message: '已标记已阅' }
   } catch (err) {
     return { code: -1, message: '操作失败: ' + err.message }
+  }
+}
+
+async function handleUpdateTemplate(openid, event) {
+  try {
+    const { data: users } = await db.collection('jt_users')
+      .where({ openid })
+      .get()
+
+    if (users.length === 0 || users[0].role !== 'designer') {
+      return { code: -1, message: '仅设计师可编辑问卷模板' }
+    }
+
+    const customQuestions = event.customQuestions || []
+    const projectId = event.projectId
+
+    const { data: existing } = await db.collection('jt_questionnaires')
+      .where({ project_id: projectId })
+      .get()
+
+    if (existing.length > 0) {
+      await db.collection('jt_questionnaires').doc(existing[0]._id).update({
+        data: {
+          custom_questions: customQuestions,
+          updated_at: db.serverDate()
+        }
+      })
+    } else {
+      await db.collection('jt_questionnaires').add({
+        data: {
+          project_id: projectId,
+          status: 'template',
+          custom_questions: customQuestions,
+          data: {},
+          created_at: db.serverDate(),
+          updated_at: db.serverDate()
+        }
+      })
+    }
+
+    return { code: 0, data: null, message: '模板保存成功' }
+  } catch (err) {
+    return { code: -1, message: '保存失败: ' + err.message }
   }
 }

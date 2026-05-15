@@ -196,6 +196,68 @@
       </view>
     </view>
 
+    <!-- 设计师自定义问题 -->
+    <view class="form-section" wx:if="{{customQuestions.length > 0}}">
+      <text class="section-header">设计师提问</text>
+      <text class="section-hint">设计师为你准备了以下问题</text>
+
+      <view class="custom-question" wx:for="{{customQuestions}}" wx:key="index">
+        <text class="custom-q-text">{{index + 1}}. {{item.question}} <text class="required" wx:if="{{item.required}}">*</text></text>
+
+        <!-- 短文本 -->
+        <input
+          wx:if="{{item.type === 'text'}}"
+          class="form-input custom-input"
+          placeholder="请输入"
+          value="{{customAnswers[index]}}"
+          data-index="{{index}}"
+          bindinput="onCustomInput"
+        />
+
+        <!-- 多行文本 -->
+        <textarea
+          wx:if="{{item.type === 'textarea'}}"
+          class="form-textarea custom-input"
+          placeholder="请输入"
+          value="{{customAnswers[index]}}"
+          data-index="{{index}}"
+          bindinput="onCustomInput"
+          maxlength="500"
+          auto-height
+        />
+
+        <!-- 单选 -->
+        <view class="tag-group" wx:if="{{item.type === 'single_select'}}">
+          <view
+            class="tag-item {{customAnswers[index] === opt ? 'active' : ''}}"
+            wx:for="{{item.options}}"
+            wx:for-item="opt"
+            wx:key="*this"
+            data-index="{{index}}"
+            data-option="{{opt}}"
+            bindtap="onCustomSelect"
+          >
+            <text class="tag-text">{{opt}}</text>
+          </view>
+        </view>
+
+        <!-- 多选 -->
+        <view class="tag-group" wx:if="{{item.type === 'multi_select'}}">
+          <view
+            class="tag-item {{(customAnswers[index] || []).indexOf(opt) > -1 ? 'active' : ''}}"
+            wx:for="{{item.options}}"
+            wx:for-item="opt"
+            wx:key="*this"
+            data-index="{{index}}"
+            data-option="{{opt}}"
+            bindtap="onCustomMultiToggle"
+          >
+            <text class="tag-text">{{opt}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
     <!-- 底部留白 -->
     <view class="bottom-space"></view>
   </scroll-view>

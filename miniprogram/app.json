@@ -8,6 +8,7 @@
     "pages/projects/invite/invite",
     "pages/questionnaire/fill/fill",
     "pages/questionnaire/view/view",
+    "pages/questionnaire/edit-template/edit-template",
     "pages/inspiration/list/list",
     "pages/inspiration/add/add",
     "pages/files/list/list",

@@ -204,6 +204,33 @@
   display: block;
 }
 
+.section-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+}
+
+.section-title-row .section-title {
+  margin-bottom: 0;
+}
+
+.edit-template-btn {
+  padding: 8rpx 20rpx;
+  border-radius: 20rpx;
+  background: rgba(26, 109, 92, 0.1);
+}
+
+.edit-template-btn:active {
+  background: rgba(26, 109, 92, 0.2);
+}
+
+.edit-template-text {
+  font-size: 24rpx;
+  color: #1A6D5C;
+  font-weight: 500;
+}
+
 /* 问卷状态卡片 */
 .questionnaire-status-card {
   display: flex;

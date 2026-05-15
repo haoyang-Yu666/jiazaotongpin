@@ -1,0 +1,126 @@
+<view class="template-page">
+  <!-- 问题列表 -->
+  <view class="section-card" wx:if="{{customQuestions.length > 0}}">
+    <text class="section-title">已添加的问题</text>
+    <view class="question-list">
+      <view class="question-item" wx:for="{{customQuestions}}" wx:key="index">
+        <view class="question-main">
+          <view class="question-header">
+            <text class="question-num">{{index + 1}}</text>
+            <text class="question-text">{{item.question}}</text>
+            <text class="required-mark" wx:if="{{item.required}}">*</text>
+          </view>
+          <view class="question-meta">
+            <text class="type-tag type-{{item.type}}">
+              {{item.type === 'text' ? '短文本' : item.type === 'textarea' ? '多行文本' : item.type === 'single_select' ? '单选' : '多选'}}
+            </text>
+          </view>
+          <view class="option-preview" wx:if="{{item.options.length > 0}}">
+            <text class="option-tag" wx:for="{{item.options}}" wx:for-item="opt" wx:key="*this">{{opt}}</text>
+          </view>
+        </view>
+        <view class="question-actions">
+          <view class="q-action" data-index="{{index}}" bindtap="onMoveUp" wx:if="{{index > 0}}">
+            <text class="q-action-text">上移</text>
+          </view>
+          <view class="q-action" data-index="{{index}}" bindtap="onMoveDown" wx:if="{{index < customQuestions.length - 1}}">
+            <text class="q-action-text">下移</text>
+          </view>
+          <view class="q-action" data-index="{{index}}" bindtap="onEditQuestion">
+            <text class="q-action-text">编辑</text>
+          </view>
+          <view class="q-action q-action-danger" data-index="{{index}}" bindtap="onDeleteQuestion">
+            <text class="q-action-text">删除</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{customQuestions.length === 0}}">
+    <text class="empty-text">暂无自定义问题</text>
+    <text class="empty-hint">点击下方按钮添加设计师自定义问题，客户填写问卷时将看到这些问题</text>
+  </view>
+
+  <!-- 添加问题按钮 -->
+  <view class="add-btn-area">
+    <button class="btn-outline add-question-btn" bindtap="onShowAddDialog">
+      + 添加自定义问题
+    </button>
+  </view>
+
+  <!-- 保存按钮 -->
+  <view class="save-area">
+    <button class="btn-primary save-btn" bindtap="onSave" disabled="{{saving}}">
+      {{saving ? '保存中...' : '保存模板'}}
+    </button>
+  </view>
+
+  <!-- 添加/编辑弹窗 -->
+  <view class="dialog-mask" wx:if="{{showAddDialog}}" bindtap="onCancelAdd"></view>
+  <view class="dialog-box" wx:if="{{showAddDialog}}">
+    <text class="dialog-title">{{editingIndex >= 0 ? '编辑问题' : '添加问题'}}</text>
+
+    <view class="dialog-form">
+      <text class="form-label">问题内容</text>
+      <input
+        class="form-input"
+        placeholder="例如：你家养宠物吗？"
+        value="{{formData.question}}"
+        bindinput="onFormQuestionInput"
+      />
+
+      <text class="form-label">回答方式</text>
+      <picker mode="selector" range="{{typeOptions}}" value="{{typeIndex}}" bindchange="onTypeChange">
+        <view class="form-picker">
+          <text class="picker-text">{{typeOptions[typeIndex]}}</text>
+          <text class="picker-arrow">></text>
+        </view>
+      </picker>
+
+      <!-- 选项编辑（仅单选/多选） -->
+      <block wx:if="{{formData.type === 'single_select' || formData.type === 'multi_select'}}">
+        <text class="form-label">选项列表</text>
+        <view class="options-list">
+          <view class="option-row" wx:for="{{formData.options}}" wx:key="*this">
+            <text class="option-item">{{item}}</text>
+            <view class="option-remove" data-index="{{index}}" bindtap="onRemoveOption">
+              <text class="remove-text">x</text>
+            </view>
+          </view>
+        </view>
+        <view class="add-option-row">
+          <input
+            class="option-input"
+            placeholder="输入选项内容"
+            value="{{newOption}}"
+            bindinput="onNewOptionInput"
+            bindconfirm="onAddOption"
+          />
+          <view class="add-option-btn" bindtap="onAddOption">
+            <text class="add-option-text">添加</text>
+          </view>
+        </view>
+      </block>
+
+      <view class="required-row">
+        <text class="form-label">是否必填</text>
+        <switch
+          checked="{{formData.required}}"
+          bindchange="onRequiredChange"
+          color="#1A6D5C"
+        />
+      </view>
+    </view>
+
+    <view class="dialog-actions">
+      <view class="dialog-btn dialog-cancel" bindtap="onCancelAdd">
+        <text>取消</text>
+      </view>
+      <view class="dialog-btn dialog-confirm" bindtap="onConfirmAdd">
+        <text>确定</text>
+      </view>
+    </view>
+  </view>
+</view>

@@ -115,6 +115,34 @@
         </view>
       </view>
 
+      <!-- 设计师自定义问题 -->
+      <view class="view-section" wx:if="{{questionnaire.snapshotQuestions && questionnaire.snapshotQuestions.length > 0}}">
+        <text class="section-header">设计师提问</text>
+        <view class="custom-qa" wx:for="{{questionnaire.snapshotQuestions}}" wx:key="index">
+          <text class="custom-q">{{index + 1}}. {{item.question}}</text>
+          <block wx:if="{{item.type === 'text' || item.type === 'textarea'}}">
+            <text class="custom-a">{{questionnaire.customAnswers[index].answer || '未填写'}}</text>
+          </block>
+          <block wx:if="{{item.type === 'single_select'}}">
+            <view class="tags-display" wx:if="{{questionnaire.customAnswers[index].answer}}">
+              <view class="display-tag">
+                <text class="tag-text">{{questionnaire.customAnswers[index].answer}}</text>
+              </view>
+            </view>
+            <text class="custom-a" wx:else>未选择</text>
+          </block>
+          <block wx:if="{{item.type === 'multi_select'}}">
+            <view class="tags-display" wx:if="{{questionnaire.customAnswers[index].answer && questionnaire.customAnswers[index].answer.length > 0}}">
+              <view class="display-tag" wx:for="{{questionnaire.customAnswers[index].answer}}" wx:for-item="opt" wx:key="*this">
+                <text class="tag-text">{{opt}}</text>
+              </view>
+            </view>
+            <text class="custom-a" wx:else>未选择</text>
+          </block>
+          <view class="field-divider" wx:if="{{index < questionnaire.snapshotQuestions.length - 1}}"></view>
+        </view>
+      </view>
+
       <!-- 底部留白 -->
       <view class="bottom-space"></view>
     </scroll-view>

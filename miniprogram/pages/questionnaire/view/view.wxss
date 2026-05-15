@@ -154,6 +154,26 @@
   display: block;
 }
 
+/* 设计师自定义问答 */
+.custom-qa {
+  padding: 14rpx 0;
+}
+
+.custom-q {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.custom-a {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.6;
+  display: block;
+}
+
 /* 底部留白 */
 .bottom-space {
   height: 40rpx;

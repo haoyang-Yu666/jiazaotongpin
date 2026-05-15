@@ -38,7 +38,9 @@ Page({
         budgetRange: qData.budget_range || '',
         specialRequirements: qData.special_requirements || '',
         dislikedElements: qData.disliked || '',
-        rooms: qData.rooms || []
+        rooms: qData.rooms || [],
+        snapshotQuestions: qData.snapshot_questions || [],
+        customAnswers: qData.custom_answers || []
       }
 
       this.setData({

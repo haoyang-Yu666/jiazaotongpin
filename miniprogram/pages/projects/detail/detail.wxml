@@ -67,7 +67,12 @@
           <view class="tab-inner">
             <!-- 问卷状态卡片 -->
             <view class="section-card">
-              <text class="section-title">需求问卷</text>
+              <view class="section-title-row">
+                <text class="section-title">需求问卷</text>
+                <view class="edit-template-btn" wx:if="{{isDesigner}}" bindtap="onEditTemplate">
+                  <text class="edit-template-text">编辑模板</text>
+                </view>
+              </view>
               <view class="questionnaire-status-card" wx:if="{{questionnaireStatus === 'pending'}}">
                 <text class="qs-desc">客户尚未填写需求问卷</text>
                 <button
