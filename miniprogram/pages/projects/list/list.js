@@ -3,11 +3,7 @@ const auth = require('../../../utils/auth')
 
 Page({
   data: {
-    currentRole: 'designer',
-    roleTabs: [
-      { key: 'designer', label: '设计师' },
-      { key: 'client', label: '客户' }
-    ],
+    currentRole: 'client',
     projects: [],
     loading: true,
     isEmpty: false,
@@ -35,6 +31,10 @@ Page({
     const role = auth.getRole() || 'client'
     const isDesigner = role === 'designer'
     this.setData({ currentRole: role, isDesigner })
+  },
+
+  onShow() {
+    this.resetAndLoad()
   },
 
   onShow() {
@@ -109,13 +109,6 @@ Page({
   onSortToggle() {
     const newSort = this.data.sortBy === 'updated_at' ? 'created_at' : 'updated_at'
     this.setData({ sortBy: newSort })
-    this.resetAndLoad()
-  },
-
-  onRoleSwitch(e) {
-    const role = e.currentTarget.dataset.role
-    if (role === this.data.currentRole) return
-    this.setData({ currentRole: role, isDesigner: role === 'designer' })
     this.resetAndLoad()
   },
 

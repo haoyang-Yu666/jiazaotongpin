@@ -3,46 +3,6 @@
   background-color: #F5F5F5;
 }
 
-/* 角色切换 */
-.role-tabs {
-  display: flex;
-  background: #ffffff;
-  padding: 0 32rpx;
-  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-.role-tab {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 24rpx 0 20rpx;
-  position: relative;
-}
-
-.tab-label {
-  font-size: 28rpx;
-  color: #666666;
-  font-weight: 500;
-}
-
-.role-tab.active .tab-label {
-  color: #1A6D5C;
-  font-weight: 600;
-}
-
-.tab-indicator {
-  position: absolute;
-  bottom: 0;
-  width: 48rpx;
-  height: 6rpx;
-  border-radius: 3rpx;
-  background: #1A6D5C;
-}
-
 /* 内容区 */
 .project-content {
   flex: 1;

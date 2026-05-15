@@ -42,6 +42,11 @@ async function handleCreate(openid, event) {
 
     const designer = users[0]
 
+    // 仅设计师可创建项目
+    if (designer.role !== 'designer') {
+      return { code: -1, message: '仅设计师可创建项目' }
+    }
+
     // 生成邀请码
     let inviteCode = generateInviteCode()
     let codeExists = true
@@ -133,6 +138,11 @@ async function handleJoin(openid, inviteCode) {
     }
 
     const client = users[0]
+
+    // 设计师不能以客户身份加入项目
+    if (client.role === 'designer') {
+      return { code: -1, message: '设计师无法加入项目，请使用客户账号' }
+    }
 
     const { data: projects } = await db.collection('jt_projects')
       .where({ invite_code: inviteCode })

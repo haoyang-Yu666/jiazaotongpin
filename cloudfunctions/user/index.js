@@ -76,7 +76,7 @@ async function handleGetProfile(openid) {
 async function handleUpdateProfile(openid, event) {
   try {
     const updateData = {}
-    const fields = ['nickname', 'avatar', 'phone', 'company', 'role']
+    const fields = ['nickname', 'avatar', 'phone', 'company']
 
     fields.forEach(field => {
       if (event[field] !== undefined) {

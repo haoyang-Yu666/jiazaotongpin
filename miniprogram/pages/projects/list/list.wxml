@@ -1,18 +1,4 @@
 <view class="project-list-page">
-  <!-- 角色切换 -->
-  <view class="role-tabs">
-    <view
-      class="role-tab {{currentRole === item.key ? 'active' : ''}}"
-      wx:for="{{roleTabs}}"
-      wx:key="key"
-      data-role="{{item.key}}"
-      bindtap="onRoleSwitch"
-    >
-      <text class="tab-label">{{item.label}}</text>
-      <view class="tab-indicator" wx:if="{{currentRole === item.key}}"></view>
-    </view>
-  </view>
-
   <!-- 搜索栏 -->
   <view class="search-bar">
     <input
