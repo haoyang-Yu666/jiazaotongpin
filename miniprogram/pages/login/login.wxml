@@ -1,0 +1,61 @@
+<view class="login-page">
+  <!-- 顶部装饰 -->
+  <view class="login-header">
+    <view class="header-bg"></view>
+    <view class="avatar-area">
+      <view class="avatar-wrapper">
+        <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+          <image
+            class="avatar-img"
+            src="{{avatarUrl || '/images/default-avatar.png'}}"
+            mode="aspectFill"
+          />
+          <view class="avatar-edit">
+            <text class="edit-icon">+</text>
+          </view>
+        </button>
+      </view>
+      <text class="role-tag role-tag-{{role}}">{{roleLabel}}</text>
+    </view>
+  </view>
+
+  <!-- 信息区域 -->
+  <view class="login-body">
+    <view class="welcome-text">
+      <text class="welcome-title">欢迎使用家造同频</text>
+      <text class="welcome-desc">设置头像和昵称以开始使用</text>
+    </view>
+
+    <!-- 昵称输入 -->
+    <view class="form-area">
+      <view class="input-group">
+        <text class="input-label">昵称</text>
+        <input
+          class="nickname-input"
+          type="nickname"
+          placeholder="请输入昵称"
+          value="{{nickName}}"
+          bindinput="onNicknameInput"
+        />
+      </view>
+    </view>
+
+    <!-- 登录按钮 -->
+    <button
+      class="login-btn"
+      bindtap="onLogin"
+      loading="{{loading}}"
+      disabled="{{loading}}"
+    >
+      开始使用
+    </button>
+
+    <!-- 提示 -->
+    <view class="login-tips">
+      <text class="tip-text">登录即表示同意</text>
+      <text class="tip-link">《用户协议》</text>
+      <text class="tip-text">和</text>
+      <text class="tip-link">《隐私政策》</text>
+    </view>
+  </view>
+</view>

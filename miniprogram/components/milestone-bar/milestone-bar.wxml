@@ -1,0 +1,12 @@
+<view class="milestone-bar">
+  <view class="milestone-track">
+    <view wx:for="{{milestones}}" wx:key="order" class="milestone-item {{index <= currentStage ? 'completed' : ''}} {{index === currentStage ? 'current' : ''}}" bindtap="onStageTap" data-index="{{index}}">
+      <view class="milestone-dot">
+        <text wx:if="{{index < currentStage}}" class="dot-check">✓</text>
+        <text wx:elif="{{index === currentStage}}" class="dot-icon">{{item.icon}}</text>
+        <view wx:else class="dot-empty"></view>
+      </view>
+      <text class="milestone-name">{{item.name}}</text>
+    </view>
+  </view>
+</view>

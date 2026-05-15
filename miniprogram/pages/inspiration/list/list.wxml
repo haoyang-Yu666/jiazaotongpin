@@ -1,0 +1,110 @@
+<view class="inspiration-page">
+  <!-- 灵感列表 -->
+  <scroll-view
+    class="inspiration-scroll"
+    scroll-y
+    bindscrolltolower="onReachBottom"
+    lower-threshold="100"
+  >
+    <!-- 瀑布流网格 -->
+    <view class="masonry-grid" wx:if="{{!isEmpty}}">
+      <view class="masonry-column masonry-left">
+        <view
+          class="inspiration-card"
+          wx:for="{{inspirations}}"
+          wx:if="{{index % 2 === 0}}"
+          wx:key="_id"
+          data-id="{{item._id}}"
+          bindlongpress="onItemLongPress"
+        >
+          <view class="card-images" wx:if="{{item.images.length > 0}}">
+            <image
+              class="card-image"
+              src="{{item.images[0]}}"
+              mode="widthFix"
+              data-current="{{item.images[0]}}"
+              data-urls="{{item.images}}"
+              bindtap="onImagePreview"
+            />
+            <view class="image-count" wx:if="{{item.images.length > 1}}">
+              <text class="count-text">{{item.images.length}}张</text>
+            </view>
+          </view>
+          <view class="card-content" wx:if="{{item.description}}">
+            <text class="card-desc">{{item.description}}</text>
+          </view>
+          <view class="card-footer">
+            <view class="uploader-info">
+              <image
+                class="uploader-avatar"
+                src="{{item.uploaderAvatar || '/images/default-avatar.png'}}"
+                mode="aspectFill"
+              />
+              <text class="uploader-name">{{item.uploaderName || '匿名'}}</text>
+            </view>
+            <text class="card-time">{{item.timeAgoText}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="masonry-column masonry-right">
+        <view
+          class="inspiration-card"
+          wx:for="{{inspirations}}"
+          wx:if="{{index % 2 === 1}}"
+          wx:key="_id"
+          data-id="{{item._id}}"
+          bindlongpress="onItemLongPress"
+        >
+          <view class="card-images" wx:if="{{item.images.length > 0}}">
+            <image
+              class="card-image"
+              src="{{item.images[0]}}"
+              mode="widthFix"
+              data-current="{{item.images[0]}}"
+              data-urls="{{item.images}}"
+              bindtap="onImagePreview"
+            />
+            <view class="image-count" wx:if="{{item.images.length > 1}}">
+              <text class="count-text">{{item.images.length}}张</text>
+            </view>
+          </view>
+          <view class="card-content" wx:if="{{item.description}}">
+            <text class="card-desc">{{item.description}}</text>
+          </view>
+          <view class="card-footer">
+            <view class="uploader-info">
+              <image
+                class="uploader-avatar"
+                src="{{item.uploaderAvatar || '/images/default-avatar.png'}}"
+                mode="aspectFill"
+              />
+              <text class="uploader-name">{{item.uploaderName || '匿名'}}</text>
+            </view>
+            <text class="card-time">{{item.timeAgoText}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 加载状态 -->
+    <view class="loading-area" wx:if="{{loading}}">
+      <text class="loading-text">加载中...</text>
+    </view>
+    <view class="no-more" wx:if="{{!hasMore && !isEmpty && inspirations.length > 0}}">
+      <text class="no-more-text">没有更多了</text>
+    </view>
+
+    <!-- 空状态 -->
+    <empty-state
+      wx:if="{{isEmpty && !loading}}"
+      message="还没有灵感图片"
+      sub-message="点击下方按钮添加第一个灵感"
+    />
+  </scroll-view>
+
+  <!-- 添加按钮 -->
+  <view class="fab-btn" bindtap="onAddTap">
+    <text class="fab-icon">+</text>
+  </view>
+</view>

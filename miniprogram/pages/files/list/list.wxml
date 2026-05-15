@@ -1,0 +1,52 @@
+<view class="files-page">
+  <!-- 分类筛选 -->
+  <view class="category-tabs">
+    <scroll-view class="tabs-scroll" scroll-x enable-flex>
+      <view
+        class="tab-item {{currentCategory === item.key ? 'tab-active' : ''}}"
+        wx:for="{{categories}}"
+        wx:key="key"
+        data-key="{{item.key}}"
+        bindtap="onCategoryTap"
+      >
+        <text class="tab-text">{{item.label}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 文件列表 -->
+  <scroll-view class="files-scroll" scroll-y>
+    <view class="files-list" wx:if="{{!isEmpty}}">
+      <view
+        wx:for="{{files}}"
+        wx:key="_id"
+        data-id="{{item._id}}"
+        bindtap="onFileTap"
+      >
+        <file-card
+          file="{{item}}"
+          category-label="{{item.categoryLabel}}"
+        />
+      </view>
+    </view>
+
+    <!-- 加载状态 -->
+    <view class="loading-area" wx:if="{{loading}}">
+      <text class="loading-text">加载中...</text>
+    </view>
+
+    <!-- 空状态 -->
+    <empty-state
+      wx:if="{{isEmpty && !loading}}"
+      message="暂无设计文件"
+      sub-message="设计师可上传设计文件"
+    />
+  </scroll-view>
+
+  <!-- 上传按钮 (仅设计师可见) -->
+  <view class="upload-btn-area" wx:if="{{isDesigner}}">
+    <button class="btn-primary upload-btn" bindtap="onUploadTap">
+      上传文件
+    </button>
+  </view>
+</view>

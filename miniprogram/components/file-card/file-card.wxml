@@ -1,0 +1,17 @@
+<view class="file-card" bindtap="onTap">
+  <view class="file-preview">
+    <image wx:if="{{file.file_type === 'image' && file.file_ids.length > 0}}" class="preview-img" src="{{file.file_ids[0]}}" mode="aspectFill"></image>
+    <view wx:else class="file-icon">
+      <text class="icon-text">PDF</text>
+    </view>
+    <view class="version-tag version-{{file.version}}">{{file.version}}</view>
+  </view>
+  <view class="file-info">
+    <text class="file-title">{{file.title}}</text>
+    <view class="file-meta">
+      <text class="category-label">{{categoryText}}</text>
+      <text class="file-status status-{{file.status}}">{{statusText}}</text>
+    </view>
+    <text class="file-date">{{dateText}}</text>
+  </view>
+</view>

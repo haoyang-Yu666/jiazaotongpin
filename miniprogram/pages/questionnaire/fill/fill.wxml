@@ -1,0 +1,149 @@
+<view class="fill-page">
+  <scroll-view class="form-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+    <!-- 居住信息 -->
+    <view class="form-section">
+      <text class="section-header">居住信息</text>
+
+      <view class="form-group">
+        <text class="form-label">常住人口 <text class="required">*</text></text>
+        <input
+          class="form-input"
+          placeholder="例: 3人 (夫妻+1个孩子)"
+          value="{{form.residents}}"
+          data-field="residents"
+          bindinput="onInputChange"
+        />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">家庭结构 <text class="required">*</text></text>
+        <input
+          class="form-input"
+          placeholder="例: 夫妻30岁+男孩5岁"
+          value="{{form.familyStructure}}"
+          data-field="familyStructure"
+          bindinput="onInputChange"
+        />
+      </view>
+    </view>
+
+    <!-- 核心需求 -->
+    <view class="form-section">
+      <text class="section-header">核心需求</text>
+      <text class="section-hint">可多选</text>
+
+      <view class="tag-group">
+        <view
+          class="tag-item {{form.coreNeeds.indexOf(item) > -1 ? 'active' : ''}}"
+          wx:for="{{coreNeedsOptions}}"
+          wx:key="*this"
+          data-need="{{item}}"
+          bindtap="onCoreNeedToggle"
+        >
+          <text class="tag-text">{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 风格偏好 -->
+    <view class="form-section">
+      <text class="section-header">风格偏好</text>
+
+      <view class="form-group">
+        <text class="form-label">喜欢的风格</text>
+        <picker
+          mode="selector"
+          range="{{styleOptions}}"
+          value="{{form.styleIndex}}"
+          bindchange="onStyleChange"
+        >
+          <view class="form-picker">
+            <text class="picker-value {{form.stylePreference ? '' : 'placeholder'}}">
+              {{form.stylePreference || '请选择风格'}}
+            </text>
+            <text class="picker-arrow">></text>
+          </view>
+        </picker>
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">喜欢的颜色</text>
+        <input
+          class="form-input"
+          placeholder="例: 喜欢暖色调、原木色"
+          value="{{form.colorPreference}}"
+          data-field="colorPreference"
+          bindinput="onInputChange"
+        />
+      </view>
+    </view>
+
+    <!-- 预算范围 -->
+    <view class="form-section">
+      <text class="section-header">预算范围</text>
+
+      <view class="form-group">
+        <text class="form-label">装修预算</text>
+        <picker
+          mode="selector"
+          range="{{budgetOptions}}"
+          value="{{form.budgetIndex}}"
+          bindchange="onBudgetChange"
+        >
+          <view class="form-picker">
+            <text class="picker-value {{form.budgetRange ? '' : 'placeholder'}}">
+              {{form.budgetRange || '请选择预算范围'}}
+            </text>
+            <text class="picker-arrow">></text>
+          </view>
+        </picker>
+      </view>
+    </view>
+
+    <!-- 特别要求 -->
+    <view class="form-section">
+      <text class="section-header">特别要求</text>
+
+      <view class="form-group">
+        <text class="form-label">特殊需求</text>
+        <textarea
+          class="form-textarea"
+          placeholder="请描述特殊需求，如老人房、宠物空间等"
+          value="{{form.specialRequirements}}"
+          data-field="specialRequirements"
+          bindinput="onInputChange"
+          maxlength="500"
+          auto-height
+        />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">不喜欢的元素</text>
+        <textarea
+          class="form-textarea"
+          placeholder="请描述不喜欢的元素或风格"
+          value="{{form.dislikedElements}}"
+          data-field="dislikedElements"
+          bindinput="onInputChange"
+          maxlength="300"
+          auto-height
+        />
+      </view>
+    </view>
+
+    <!-- 底部留白 -->
+    <view class="bottom-space"></view>
+  </scroll-view>
+
+  <!-- 提交按钮 -->
+  <view class="form-footer">
+    <button
+      class="btn-primary submit-btn"
+      bindtap="onSubmit"
+      loading="{{submitting}}"
+      disabled="{{submitting}}"
+    >
+      提交问卷
+    </button>
+  </view>
+</view>

@@ -1,0 +1,103 @@
+<view class="create-page">
+  <view class="form-container">
+    <!-- 项目名称 -->
+    <view class="form-group">
+      <text class="form-label">项目名称 <text class="required">*</text></text>
+      <input
+        class="form-input"
+        placeholder="请输入项目名称"
+        value="{{form.name}}"
+        data-field="name"
+        bindinput="onInputChange"
+        maxlength="30"
+      />
+    </view>
+
+    <!-- 小区名称 -->
+    <view class="form-group">
+      <text class="form-label">小区名称 <text class="required">*</text></text>
+      <input
+        class="form-input"
+        placeholder="请输入小区名称"
+        value="{{form.community}}"
+        data-field="community"
+        bindinput="onInputChange"
+        maxlength="30"
+      />
+    </view>
+
+    <!-- 面积 -->
+    <view class="form-group">
+      <text class="form-label">面积 (m2) <text class="required">*</text></text>
+      <input
+        class="form-input"
+        type="digit"
+        placeholder="请输入面积"
+        value="{{form.area}}"
+        data-field="area"
+        bindinput="onInputChange"
+      />
+    </view>
+
+    <!-- 装修风格 -->
+    <view class="form-group">
+      <text class="form-label">装修风格</text>
+      <picker
+        mode="selector"
+        range="{{styleOptions}}"
+        value="{{styleIndex}}"
+        bindchange="onStyleChange"
+      >
+        <view class="form-picker">
+          <text class="picker-value {{form.style ? '' : 'placeholder'}}">
+            {{form.style || '请选择装修风格'}}
+          </text>
+          <text class="picker-arrow">></text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 预算范围 -->
+    <view class="form-group">
+      <text class="form-label">预算范围</text>
+      <picker
+        mode="selector"
+        range="{{budgetOptions}}"
+        value="{{budgetIndex}}"
+        bindchange="onBudgetChange"
+      >
+        <view class="form-picker">
+          <text class="picker-value {{form.budget ? '' : 'placeholder'}}">
+            {{form.budget || '请选择预算范围'}}
+          </text>
+          <text class="picker-arrow">></text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 详细地址 -->
+    <view class="form-group">
+      <text class="form-label">详细地址</text>
+      <input
+        class="form-input"
+        placeholder="请输入详细地址"
+        value="{{form.address}}"
+        data-field="address"
+        bindinput="onInputChange"
+        maxlength="50"
+      />
+    </view>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="form-footer">
+    <button
+      class="btn-primary submit-btn"
+      bindtap="onSubmit"
+      loading="{{submitting}}"
+      disabled="{{submitting}}"
+    >
+      创建项目
+    </button>
+  </view>
+</view>

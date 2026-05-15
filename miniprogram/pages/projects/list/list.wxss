@@ -1,0 +1,196 @@
+.project-list-page {
+  min-height: 100vh;
+  background-color: #F5F5F5;
+}
+
+/* 角色切换 */
+.role-tabs {
+  display: flex;
+  background: #ffffff;
+  padding: 0 32rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.role-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24rpx 0 20rpx;
+  position: relative;
+}
+
+.tab-label {
+  font-size: 28rpx;
+  color: #666666;
+  font-weight: 500;
+}
+
+.role-tab.active .tab-label {
+  color: #1A6D5C;
+  font-weight: 600;
+}
+
+.tab-indicator {
+  position: absolute;
+  bottom: 0;
+  width: 48rpx;
+  height: 6rpx;
+  border-radius: 3rpx;
+  background: #1A6D5C;
+}
+
+/* 内容区 */
+.project-content {
+  flex: 1;
+  position: relative;
+}
+
+.project-scroll {
+  height: calc(100vh - 88rpx);
+}
+
+.project-list {
+  padding: 24rpx 32rpx;
+  padding-bottom: 160rpx;
+}
+
+/* 加载中 */
+.loading-area {
+  padding-top: 200rpx;
+}
+
+/* 浮动按钮 */
+.fab-btn {
+  position: fixed;
+  right: 40rpx;
+  bottom: 160rpx;
+  display: flex;
+  align-items: center;
+  padding: 20rpx 36rpx;
+  background: #1A6D5C;
+  border-radius: 999rpx;
+  box-shadow: 0 8rpx 24rpx rgba(26, 109, 92, 0.35);
+  z-index: 20;
+}
+
+.fab-btn:active {
+  transform: scale(0.95);
+  background: #0D4F42;
+}
+
+.fab-icon {
+  font-size: 36rpx;
+  color: #ffffff;
+  font-weight: 300;
+  margin-right: 8rpx;
+}
+
+.fab-label {
+  font-size: 28rpx;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+/* 加入项目按钮用不同底色区分 */
+.fab-join {
+  background: #D4A574;
+  box-shadow: 0 8rpx 24rpx rgba(212, 165, 116, 0.4);
+}
+
+.fab-join:active {
+  background: #C0956A;
+}
+
+/* 弹窗遮罩 */
+.dialog-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+/* 弹窗 */
+.dialog-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600rpx;
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 48rpx 40rpx 32rpx;
+  z-index: 101;
+  box-shadow: 0 16rpx 48rpx rgba(0, 0, 0, 0.15);
+}
+
+.dialog-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #1A1A1A;
+  display: block;
+  text-align: center;
+  margin-bottom: 12rpx;
+}
+
+.dialog-hint {
+  font-size: 26rpx;
+  color: #999999;
+  display: block;
+  text-align: center;
+  margin-bottom: 32rpx;
+}
+
+.dialog-input {
+  width: 100%;
+  height: 88rpx;
+  line-height: 88rpx;
+  background: #F5F5F5;
+  border-radius: 16rpx;
+  text-align: center;
+  font-size: 36rpx;
+  font-weight: 700;
+  letter-spacing: 16rpx;
+  color: #1A6D5C;
+  margin-bottom: 36rpx;
+  box-sizing: border-box;
+}
+
+.dialog-actions {
+  display: flex;
+  gap: 20rpx;
+}
+
+.dialog-btn {
+  flex: 1;
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  border-radius: 40rpx;
+  font-size: 30rpx;
+  font-weight: 500;
+}
+
+.dialog-cancel {
+  background: #F5F5F5;
+  color: #666666;
+}
+
+.dialog-cancel:active {
+  background: #EEEEEE;
+}
+
+.dialog-confirm {
+  background: #1A6D5C;
+  color: #ffffff;
+}
+
+.dialog-confirm:active {
+  background: #0D4F42;
+}

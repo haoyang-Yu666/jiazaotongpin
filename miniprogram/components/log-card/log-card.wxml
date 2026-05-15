@@ -1,0 +1,25 @@
+<view class="log-card">
+  <view class="log-header">
+    <image class="author-avatar" src="{{log.author_info.avatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+    <view class="author-info">
+      <text class="author-name">{{log.author_info.nickname}}</text>
+      <text class="log-time">{{timeText}}</text>
+    </view>
+  </view>
+  <text class="log-content">{{log.content}}</text>
+  <view class="log-images" wx:if="{{log.images.length > 0}}">
+    <view class="image-grid grid-{{log.images.length > 1 ? 'multi' : 'single'}}">
+      <image wx:for="{{log.images}}" wx:key="index" class="grid-image" src="{{item}}" mode="aspectFill" bindtap="onImageTap" data-index="{{index}}"></image>
+    </view>
+  </view>
+  <view class="log-actions">
+    <view class="action-btn like-btn {{liked ? 'liked' : ''}}" bindtap="onLikeTap">
+      <text class="action-icon">{{liked ? '❤️' : '🤍'}}</text>
+      <text class="action-count" wx:if="{{log.likes.length > 0}}">{{log.likes.length}}</text>
+    </view>
+    <view class="action-btn" bindtap="onCommentTap">
+      <text class="action-icon">💬</text>
+      <text class="action-count" wx:if="{{log.comment_count > 0}}">{{log.comment_count}}</text>
+    </view>
+  </view>
+</view>

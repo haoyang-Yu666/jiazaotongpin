@@ -1,0 +1,104 @@
+<view class="log-detail-page" wx:if="{{log}}">
+  <!-- 日志内容 -->
+  <scroll-view class="content-scroll" scroll-y bindscrolltolower="onScrollToLower">
+    <!-- 作者信息 -->
+    <view class="author-bar">
+      <image
+        class="author-avatar"
+        src="{{log.authorAvatar || '/images/default-avatar.png'}}"
+        mode="aspectFill"
+      />
+      <view class="author-info">
+        <text class="author-name">{{log.authorName || '设计师'}}</text>
+        <text class="author-time">{{log.createdAtText}}</text>
+      </view>
+    </view>
+
+    <!-- 里程碑标签 -->
+    <view class="stage-tag" wx:if="{{log.stageName}}">
+      <text class="stage-text">{{log.stageName}}</text>
+    </view>
+
+    <!-- 文字内容 -->
+    <view class="log-content">
+      <text class="content-text">{{log.content}}</text>
+    </view>
+
+    <!-- 图片轮播 -->
+    <view class="log-images" wx:if="{{log.images.length > 0}}">
+      <swiper
+        class="image-swiper"
+        indicator-dots="{{log.images.length > 1}}"
+        indicator-color="rgba(0,0,0,0.3)"
+        indicator-active-color="#1A6D5C"
+        autoplay="{{false}}"
+        circular="{{true}}"
+      >
+        <swiper-item
+          wx:for="{{log.images}}"
+          wx:key="*this"
+        >
+          <image
+            class="swiper-image"
+            src="{{item}}"
+            mode="aspectFit"
+            data-url="{{item}}"
+            bindtap="onImagePreview"
+          />
+        </swiper-item>
+      </swiper>
+    </view>
+
+    <!-- 点赞 -->
+    <view class="like-bar">
+      <view class="like-btn" bindtap="onLikeTap">
+        <text class="like-icon">{{isLiked ? '❤️' : '🤍'}}</text>
+        <text class="like-count">{{likeCount}}</text>
+      </view>
+    </view>
+
+    <!-- 分割线 -->
+    <view class="divider"></view>
+
+    <!-- 评论列表 -->
+    <view class="comments-section">
+      <text class="comments-title">评论 ({{comments.length}})</text>
+
+      <view class="comment-list" wx:if="{{comments.length > 0}}">
+        <view class="comment-item" wx:for="{{comments}}" wx:key="_id">
+          <image
+            class="comment-avatar"
+            src="{{item.userAvatar || '/images/default-avatar.png'}}"
+            mode="aspectFill"
+          />
+          <view class="comment-body">
+            <view class="comment-header">
+              <text class="comment-user">{{item.userName || '用户'}}</text>
+              <text class="comment-time">{{item.timeText}}</text>
+            </view>
+            <text class="comment-text">{{item.content}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="no-comments" wx:if="{{comments.length === 0}}">
+        <text class="no-comments-text">暂无评论，来说两句吧</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 底部评论输入 -->
+  <view class="comment-input-bar">
+    <input
+      class="comment-input"
+      placeholder="写评论..."
+      value="{{commentContent}}"
+      bindinput="onCommentInput"
+      confirm-type="send"
+      bindconfirm="onSubmitComment"
+    />
+    <view class="send-btn" bindtap="onSubmitComment">
+      <text class="send-text">发送</text>
+    </view>
+  </view>
+</view>

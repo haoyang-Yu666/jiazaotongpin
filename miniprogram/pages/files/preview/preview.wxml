@@ -1,0 +1,78 @@
+<view class="preview-page" wx:if="{{file}}">
+  <!-- 文件信息头部 -->
+  <view class="file-header card">
+    <view class="header-top">
+      <text class="file-title">{{file.title}}</text>
+      <view
+        class="status-tag"
+        style="background: {{statusColors[file.status] || '#999'}}20; color: {{statusColors[file.status] || '#999'}}"
+      >
+        <text class="status-text">{{statusLabels[file.status] || '未知'}}</text>
+      </view>
+    </view>
+    <view class="header-meta">
+      <view class="meta-item">
+        <text class="meta-label">版本</text>
+        <text class="meta-value">{{file.version}}</text>
+      </view>
+      <view class="meta-item">
+        <text class="meta-label">分类</text>
+        <text class="meta-value">{{file.categoryLabel}}</text>
+      </view>
+      <view class="meta-item" wx:if="{{file.description}}">
+        <text class="meta-label">说明</text>
+        <text class="meta-value">{{file.description}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 预览区域 -->
+  <view class="preview-area">
+    <!-- 图片预览 -->
+    <block wx:if="{{file.file_type === 'image' && file.file_ids.length > 0}}">
+      <view class="image-grid">
+        <image
+          class="preview-img"
+          wx:for="{{file.file_ids}}"
+          wx:key="*this"
+          src="{{item}}"
+          mode="aspectFit"
+          data-url="{{item}}"
+          bindtap="onPreviewImage"
+        />
+      </view>
+    </block>
+
+    <!-- PDF 预览 -->
+    <block wx:if="{{file.file_type === 'pdf'}}">
+      <view class="pdf-preview-card card" bindtap="onOpenPdf">
+        <text class="pdf-icon">📄</text>
+        <text class="pdf-name">{{file.title}}.pdf</text>
+        <text class="pdf-hint">点击打开文件</text>
+      </view>
+    </block>
+  </view>
+
+  <!-- 客户确认按钮 -->
+  <view class="action-area" wx:if="{{isClient && file.status === 'pending'}}">
+    <button
+      class="btn-outline action-btn reject-btn"
+      data-action="rejected"
+      bindtap="onQuickConfirm"
+    >
+      驳回
+    </button>
+    <button
+      class="btn-primary action-btn confirm-btn"
+      data-action="confirmed"
+      bindtap="onQuickConfirm"
+    >
+      确认通过
+    </button>
+  </view>
+
+  <!-- 跳转详细确认页 -->
+  <view class="detail-confirm-area" wx:if="{{isClient && file.status === 'pending'}}">
+    <text class="detail-link" bindtap="onConfirm">查看详细确认页 ></text>
+  </view>
+</view>

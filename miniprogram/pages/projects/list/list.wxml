@@ -1,0 +1,93 @@
+<view class="project-list-page">
+  <!-- 角色切换 -->
+  <view class="role-tabs">
+    <view
+      class="role-tab {{currentRole === item.key ? 'active' : ''}}"
+      wx:for="{{roleTabs}}"
+      wx:key="key"
+      data-role="{{item.key}}"
+      bindtap="onRoleSwitch"
+    >
+      <text class="tab-label">{{item.label}}</text>
+      <view class="tab-indicator" wx:if="{{currentRole === item.key}}"></view>
+    </view>
+  </view>
+
+  <!-- 项目列表 -->
+  <view class="project-content">
+    <!-- 加载中 -->
+    <view class="loading-area" wx:if="{{loading}}">
+      <view class="loading-spinner"></view>
+      <text class="loading-text">加载中...</text>
+    </view>
+
+    <!-- 空状态 -->
+    <empty-state
+      wx:if="{{!loading && isEmpty}}"
+      type="project"
+      message="暂无项目"
+      description="{{isDesigner ? '点击下方按钮创建新项目' : '等待设计师邀请加入项目'}}"
+    />
+
+    <!-- 项目卡片列表 -->
+    <scroll-view
+      wx:if="{{!loading && !isEmpty}}"
+      class="project-scroll"
+      scroll-y
+      enhanced
+      show-scrollbar="{{false}}"
+    >
+      <view class="project-list">
+        <project-card
+          wx:for="{{projects}}"
+          wx:key="_id"
+          data-id="{{item._id}}"
+          project="{{item}}"
+          bindtap="onProjectTap"
+        />
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 设计师：新建项目 -->
+  <view
+    class="fab-btn"
+    wx:if="{{isDesigner}}"
+    bindtap="onCreateProject"
+  >
+    <text class="fab-icon">+</text>
+    <text class="fab-label">新建项目</text>
+  </view>
+
+  <!-- 客户：加入项目 -->
+  <view
+    class="fab-btn fab-join"
+    wx:if="{{!isDesigner}}"
+    bindtap="onShowJoinDialog"
+  >
+    <text class="fab-icon">+</text>
+    <text class="fab-label">加入项目</text>
+  </view>
+
+  <!-- 加入项目弹窗 -->
+  <view class="dialog-mask" wx:if="{{showJoinDialog}}" bindtap="onHideJoinDialog"></view>
+  <view class="dialog-box" wx:if="{{showJoinDialog}}">
+    <text class="dialog-title">加入项目</text>
+    <text class="dialog-hint">请输入设计师提供的6位邀请码</text>
+    <input
+      class="dialog-input"
+      maxlength="6"
+      placeholder="请输入邀请码"
+      value="{{inviteCode}}"
+      bindinput="onInviteCodeInput"
+    />
+    <view class="dialog-actions">
+      <view class="dialog-btn dialog-cancel" bindtap="onHideJoinDialog">
+        <text>取消</text>
+      </view>
+      <view class="dialog-btn dialog-confirm" bindtap="onJoinProject">
+        <text>加入</text>
+      </view>
+    </view>
+  </view>
+</view>

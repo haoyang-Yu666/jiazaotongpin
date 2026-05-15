@@ -1,0 +1,81 @@
+.files-page {
+  min-height: 100vh;
+  background-color: #F5F5F5;
+}
+
+/* 分类筛选 */
+.category-tabs {
+  background: #ffffff;
+  padding: 20rpx 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.tabs-scroll {
+  white-space: nowrap;
+  padding: 0 24rpx;
+}
+
+.tab-item {
+  display: inline-block;
+  padding: 12rpx 32rpx;
+  margin-right: 12rpx;
+  border-radius: 32rpx;
+  background: #f0f0f0;
+}
+
+.tab-item.tab-active {
+  background: #1A6D5C;
+}
+
+.tab-text {
+  font-size: 26rpx;
+  color: #666666;
+}
+
+.tab-active .tab-text {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+/* 文件列表 */
+.files-scroll {
+  height: calc(100vh - 200rpx);
+  padding: 20rpx 24rpx 120rpx;
+}
+
+.files-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+/* 加载状态 */
+.loading-area {
+  padding: 40rpx 0;
+  text-align: center;
+}
+
+.loading-text {
+  font-size: 26rpx;
+  color: #999;
+}
+
+/* 上传按钮区 */
+.upload-btn-area {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20rpx 40rpx;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  background: #ffffff;
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.06);
+  z-index: 10;
+}
+
+.upload-btn {
+  width: 100%;
+  font-size: 30rpx;
+}

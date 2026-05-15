@@ -1,0 +1,47 @@
+<view class="timeline-page">
+  <!-- 里程碑进度条 -->
+  <milestone-bar
+    milestones="{{milestones}}"
+    current-stage="{{currentStage}}"
+  />
+
+  <!-- 施工日志列表 -->
+  <scroll-view
+    class="logs-scroll"
+    scroll-y
+    bindscrolltolower="onReachBottom"
+    lower-threshold="100"
+  >
+    <view class="logs-list" wx:if="{{!isEmpty}}">
+      <view
+        wx:for="{{logs}}"
+        wx:key="_id"
+        data-id="{{item._id}}"
+        bindtap="onLogTap"
+      >
+        <log-card log="{{item}}" />
+      </view>
+    </view>
+
+    <!-- 加载状态 -->
+    <view class="loading-area" wx:if="{{loading}}">
+      <text class="loading-text">加载中...</text>
+    </view>
+    <view class="no-more" wx:if="{{!hasMore && !isEmpty && logs.length > 0}}">
+      <text class="no-more-text">没有更多了</text>
+    </view>
+
+    <!-- 空状态 -->
+    <empty-state
+      wx:if="{{isEmpty && !loading}}"
+      message="暂无施工日志"
+      sub-message="设计师可以发布新的施工日志"
+    />
+  </scroll-view>
+
+  <!-- 发布按钮 (仅设计师可见) -->
+  <view class="fab-btn" wx:if="{{isDesigner}}" bindtap="onPublishTap">
+    <text class="fab-icon">+</text>
+    <text class="fab-text">发布日志</text>
+  </view>
+</view>

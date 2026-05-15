@@ -1,0 +1,75 @@
+.timeline-page {
+  min-height: 100vh;
+  background-color: #F5F5F5;
+  padding-bottom: 120rpx;
+}
+
+/* 日志滚动区 */
+.logs-scroll {
+  height: calc(100vh - 220rpx);
+  padding: 0 24rpx;
+}
+
+/* 日志列表 */
+.logs-list {
+  padding-top: 20rpx;
+}
+
+.logs-list > view {
+  margin-bottom: 20rpx;
+}
+
+/* 加载状态 */
+.loading-area {
+  padding: 40rpx 0;
+  text-align: center;
+}
+
+.loading-text {
+  font-size: 26rpx;
+  color: #999;
+}
+
+/* 没有更多 */
+.no-more {
+  padding: 30rpx 0 60rpx;
+  text-align: center;
+}
+
+.no-more-text {
+  font-size: 24rpx;
+  color: #ccc;
+}
+
+/* 发布按钮 */
+.fab-btn {
+  position: fixed;
+  bottom: 60rpx;
+  right: 40rpx;
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  background: linear-gradient(135deg, #1A6D5C 0%, #0D4F42 100%);
+  padding: 22rpx 36rpx;
+  border-radius: 48rpx;
+  box-shadow: 0 8rpx 32rpx rgba(26, 109, 92, 0.35);
+  z-index: 100;
+}
+
+.fab-btn:active {
+  transform: scale(0.95);
+  opacity: 0.9;
+}
+
+.fab-icon {
+  font-size: 36rpx;
+  color: #ffffff;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.fab-text {
+  font-size: 26rpx;
+  color: #ffffff;
+  font-weight: 500;
+}

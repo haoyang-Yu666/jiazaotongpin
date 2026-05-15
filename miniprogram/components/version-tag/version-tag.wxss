@@ -1,0 +1,30 @@
+.version-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rpx 16rpx;
+  border-radius: 8rpx;
+  font-size: 22rpx;
+  line-height: 1.4;
+}
+
+.tag-text {
+  color: #fff;
+  font-weight: 500;
+}
+
+.version-V1 {
+  background-color: #4A90D9;
+}
+
+.version-V2 {
+  background-color: #8B5CF6;
+}
+
+.version-V3 {
+  background-color: #F59E0B;
+}
+
+.version-final {
+  background-color: #1A6D5C;
+}

@@ -1,0 +1,42 @@
+/* 主题色 */
+page {
+  --primary-color: #1A6D5C;
+  --primary-light: #E8F5F0;
+  --primary-dark: #0D4F42;
+
+  /* 功能色 */
+  --success-color: #52C41A;
+  --warning-color: #FAAD14;
+  --error-color: #FF4D4F;
+  --info-color: #1890FF;
+
+  /* 文字色 */
+  --text-primary: #1A1A1A;
+  --text-secondary: #666666;
+  --text-hint: #999999;
+  --text-disabled: #CCCCCC;
+
+  /* 背景色 */
+  --bg-color: #F5F5F5;
+  --bg-white: #FFFFFF;
+  --bg-card: #FFFFFF;
+
+  /* 边框色 */
+  --border-color: #EEEEEE;
+  --divider-color: #F0F0F0;
+
+  /* 阴影 */
+  --shadow-card: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+  --shadow-elevated: 0 8rpx 24rpx rgba(0, 0, 0, 0.08);
+
+  /* 圆角 */
+  --radius-sm: 8rpx;
+  --radius-md: 16rpx;
+  --radius-lg: 24rpx;
+  --radius-round: 999rpx;
+
+  /* 设计师标识色 */
+  --designer-color: #1A6D5C;
+  /* 客户标识色 */
+  --client-color: #D4A574;
+}

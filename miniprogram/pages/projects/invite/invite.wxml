@@ -1,0 +1,66 @@
+<view class="invite-page">
+  <!-- 加载中 -->
+  <view class="loading-area" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 错误状态 -->
+  <view class="error-area" wx:if="{{!loading && error}}">
+    <view class="error-icon">!</view>
+    <text class="error-text">{{error}}</text>
+    <text class="error-hint">请联系设计师获取有效邀请链接</text>
+  </view>
+
+  <!-- 项目信息 -->
+  <view class="invite-content" wx:if="{{!loading && projectInfo}}">
+    <!-- 顶部装饰 -->
+    <view class="invite-header">
+      <view class="header-decor"></view>
+      <text class="invite-title">你被邀请加入项目</text>
+    </view>
+
+    <!-- 项目信息卡片 -->
+    <view class="project-info-card">
+      <view class="info-row">
+        <text class="info-label">项目名称</text>
+        <text class="info-value">{{projectInfo.name}}</text>
+      </view>
+      <view class="info-divider"></view>
+      <view class="info-row" wx:if="{{projectInfo.community}}">
+        <text class="info-label">小区</text>
+        <text class="info-value">{{projectInfo.community}}</text>
+      </view>
+      <view class="info-divider" wx:if="{{projectInfo.community}}"></view>
+      <view class="info-row" wx:if="{{projectInfo.area}}">
+        <text class="info-label">面积</text>
+        <text class="info-value">{{projectInfo.area}}m2</text>
+      </view>
+      <view class="info-divider" wx:if="{{projectInfo.area}}"></view>
+      <view class="info-row" wx:if="{{projectInfo.designerName}}">
+        <text class="info-label">设计师</text>
+        <text class="info-value">{{projectInfo.designerName}}</text>
+      </view>
+    </view>
+
+    <!-- 邀请码展示 -->
+    <view class="invite-code-area">
+      <text class="code-label">邀请码</text>
+      <view class="code-box">
+        <text class="code-text">{{inviteCode}}</text>
+      </view>
+    </view>
+
+    <!-- 加入按钮 -->
+    <button
+      class="btn-primary join-btn"
+      bindtap="onJoinProject"
+      loading="{{joining}}"
+      disabled="{{joining}}"
+    >
+      加入项目
+    </button>
+
+    <text class="join-hint">加入后即可查看项目详情并参与协作</text>
+  </view>
+</view>

@@ -1,0 +1,8 @@
+<view class="empty-state">
+  <image class="empty-icon" src="{{icon || '/images/empty-default.png'}}" mode="aspectFit"></image>
+  <text class="empty-title">{{title || '暂无内容'}}</text>
+  <text class="empty-desc" wx:if="{{description}}">{{description}}</text>
+  <view class="empty-action" wx:if="{{actionText}}" bindtap="onAction">
+    <text class="action-text">{{actionText}}</text>
+  </view>
+</view>

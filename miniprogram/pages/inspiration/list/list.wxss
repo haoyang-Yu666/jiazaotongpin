@@ -1,0 +1,156 @@
+.inspiration-page {
+  min-height: 100vh;
+  background-color: #F5F5F5;
+  position: relative;
+}
+
+/* 滚动区域 */
+.inspiration-scroll {
+  height: 100vh;
+  padding: 20rpx 24rpx 120rpx;
+}
+
+/* 瀑布流网格 */
+.masonry-grid {
+  display: flex;
+  gap: 16rpx;
+}
+
+.masonry-column {
+  flex: 1;
+}
+
+.masonry-left {
+  margin-right: 0;
+}
+
+/* 灵感卡片 */
+.inspiration-card {
+  background: #ffffff;
+  border-radius: 16rpx;
+  overflow: hidden;
+  margin-bottom: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.card-images {
+  position: relative;
+  width: 100%;
+}
+
+.card-image {
+  width: 100%;
+  display: block;
+}
+
+.image-count {
+  position: absolute;
+  top: 12rpx;
+  right: 12rpx;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 4rpx 14rpx;
+  border-radius: 16rpx;
+}
+
+.count-text {
+  font-size: 22rpx;
+  color: #ffffff;
+}
+
+.card-content {
+  padding: 16rpx 20rpx 0;
+}
+
+.card-desc {
+  font-size: 26rpx;
+  color: #333;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.5;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14rpx 20rpx 18rpx;
+}
+
+.uploader-info {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.uploader-avatar {
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
+  background: #f0f0f0;
+}
+
+.uploader-name {
+  font-size: 22rpx;
+  color: #999;
+  max-width: 120rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-time {
+  font-size: 20rpx;
+  color: #bbb;
+}
+
+/* 加载状态 */
+.loading-area {
+  padding: 40rpx 0;
+  text-align: center;
+}
+
+.loading-text {
+  font-size: 26rpx;
+  color: #999;
+}
+
+/* 没有更多 */
+.no-more {
+  padding: 30rpx 0 60rpx;
+  text-align: center;
+}
+
+.no-more-text {
+  font-size: 24rpx;
+  color: #ccc;
+}
+
+/* 添加按钮 */
+.fab-btn {
+  position: fixed;
+  bottom: 60rpx;
+  right: 40rpx;
+  width: 100rpx;
+  height: 100rpx;
+  background: linear-gradient(135deg, #1A6D5C 0%, #0D4F42 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 32rpx rgba(26, 109, 92, 0.35);
+  z-index: 100;
+}
+
+.fab-btn:active {
+  transform: scale(0.92);
+  opacity: 0.9;
+}
+
+.fab-icon {
+  font-size: 52rpx;
+  color: #ffffff;
+  font-weight: 300;
+  line-height: 1;
+}

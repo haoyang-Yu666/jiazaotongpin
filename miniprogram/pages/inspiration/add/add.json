@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "添加灵感",
+  "usingComponents": {
+    "image-uploader": "/components/image-uploader/image-uploader"
+  }
+}

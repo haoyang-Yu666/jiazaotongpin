@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+    "milestone-bar": "/components/milestone-bar/milestone-bar",
+    "log-card": "/components/log-card/log-card",
+    "file-card": "/components/file-card/file-card",
+    "empty-state": "/components/empty-state/empty-state"
+  },
+  "navigationBarTitleText": "项目详情"
+}

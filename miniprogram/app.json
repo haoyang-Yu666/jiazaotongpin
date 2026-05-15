@@ -1,0 +1,52 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/login/login",
+    "pages/projects/list/list",
+    "pages/projects/create/create",
+    "pages/projects/detail/detail",
+    "pages/projects/invite/invite",
+    "pages/questionnaire/fill/fill",
+    "pages/questionnaire/view/view",
+    "pages/inspiration/list/list",
+    "pages/inspiration/add/add",
+    "pages/files/list/list",
+    "pages/files/upload/upload",
+    "pages/files/preview/preview",
+    "pages/files/confirm/confirm",
+    "pages/progress/timeline/timeline",
+    "pages/progress/publish/publish",
+    "pages/progress/log-detail/log-detail",
+    "pages/profile/index/index",
+    "pages/profile/edit/edit"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTitleText": "家造同频",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f5f5f5"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#1A6D5C",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/projects/list/list",
+        "text": "项目",
+        "iconPath": "images/tab-project.png",
+        "selectedIconPath": "images/tab-project-active.png"
+      },
+      {
+        "pagePath": "pages/profile/index/index",
+        "text": "我的",
+        "iconPath": "images/tab-profile.png",
+        "selectedIconPath": "images/tab-profile-active.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+}

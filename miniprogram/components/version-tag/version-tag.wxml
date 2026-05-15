@@ -1,0 +1,3 @@
+<view class="version-tag version-{{version}}">
+  <text class="tag-text">{{version}}</text>
+</view>

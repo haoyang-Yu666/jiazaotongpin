@@ -1,0 +1,158 @@
+.view-page {
+  min-height: 100vh;
+  background-color: #F5F5F5;
+  padding-bottom: 140rpx;
+}
+
+/* 加载中 */
+.loading-area {
+  display: flex;
+  justify-content: center;
+  padding-top: 200rpx;
+}
+
+/* 滚动内容 */
+.content-scroll {
+  height: 100vh;
+  padding: 20rpx 24rpx;
+}
+
+/* 提交信息 */
+.submit-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border-radius: 16rpx;
+  padding: 24rpx 28rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.submit-time {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.review-badge {
+  font-size: 24rpx;
+  color: #52C41A;
+  background: rgba(82, 196, 26, 0.1);
+  padding: 6rpx 20rpx;
+  border-radius: 16rpx;
+  font-weight: 500;
+}
+
+/* 查看区块 */
+.view-section {
+  background: #ffffff;
+  border-radius: 16rpx;
+  padding: 28rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.section-header {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1A1A1A;
+  margin-bottom: 20rpx;
+  display: block;
+}
+
+/* 字段行 */
+.field-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14rpx 0;
+}
+
+.field-divider {
+  height: 1rpx;
+  background: #f0f0f0;
+  margin: 4rpx 0;
+}
+
+.field-label {
+  font-size: 26rpx;
+  color: #999;
+  flex-shrink: 0;
+}
+
+.field-value {
+  font-size: 28rpx;
+  color: #333;
+  text-align: right;
+  margin-left: 24rpx;
+}
+
+/* 标签展示 */
+.tags-display {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.display-tag {
+  background: rgba(26, 109, 92, 0.08);
+  padding: 8rpx 24rpx;
+  border-radius: 20rpx;
+}
+
+.tag-text {
+  font-size: 26rpx;
+  color: #1A6D5C;
+}
+
+.empty-field {
+  font-size: 26rpx;
+  color: #ccc;
+}
+
+/* 字段块 */
+.field-block {
+  padding: 14rpx 0;
+}
+
+.field-content {
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.6;
+  margin-top: 8rpx;
+  display: block;
+}
+
+/* 底部留白 */
+.bottom-space {
+  height: 40rpx;
+}
+
+/* 底部操作栏 */
+.view-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20rpx 32rpx;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  background: #ffffff;
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.06);
+  z-index: 10;
+}
+
+.mark-btn {
+  width: 100%;
+}
+
+.reviewed-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reviewed-text {
+  font-size: 28rpx;
+  color: #52C41A;
+  font-weight: 500;
+}

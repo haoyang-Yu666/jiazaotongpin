@@ -1,0 +1,91 @@
+<view class="confirm-page" wx:if="{{file}}">
+  <!-- 大文件预览 -->
+  <view class="large-preview card">
+    <!-- 图片 -->
+    <block wx:if="{{file.file_type === 'image' && file.file_ids.length > 0}}">
+      <swiper
+        class="image-swiper"
+        indicator-dots="{{file.file_ids.length > 1}}"
+        indicator-color="rgba(0,0,0,0.3)"
+        indicator-active-color="#1A6D5C"
+        autoplay="{{false}}"
+        circular="{{true}}"
+      >
+        <swiper-item
+          wx:for="{{file.file_ids}}"
+          wx:key="*this"
+        >
+          <image
+            class="swiper-image"
+            src="{{item}}"
+            mode="aspectFit"
+            data-url="{{item}}"
+            bindtap="onPreviewImage"
+          />
+        </swiper-item>
+      </swiper>
+    </block>
+
+    <!-- PDF -->
+    <block wx:if="{{file.file_type === 'pdf'}}">
+      <view class="pdf-card" bindtap="onOpenPdf">
+        <text class="pdf-icon">📄</text>
+        <text class="pdf-name">{{file.title}}.pdf</text>
+        <text class="pdf-action">点击查看文件</text>
+      </view>
+    </block>
+  </view>
+
+  <!-- 文件元数据卡片 -->
+  <view class="meta-card card">
+    <view class="meta-row">
+      <text class="meta-label">文件标题</text>
+      <text class="meta-value">{{file.title}}</text>
+    </view>
+    <view class="meta-row">
+      <text class="meta-label">版本</text>
+      <text class="meta-value">{{file.version}}</text>
+    </view>
+    <view class="meta-row">
+      <text class="meta-label">分类</text>
+      <text class="meta-value">{{file.categoryLabel}}</text>
+    </view>
+    <view class="meta-row">
+      <text class="meta-label">上传时间</text>
+      <text class="meta-value">{{file.createdAtText}}</text>
+    </view>
+    <view class="meta-row" wx:if="{{file.description}}">
+      <text class="meta-label">说明</text>
+      <text class="meta-value desc">{{file.description}}</text>
+    </view>
+  </view>
+
+  <!-- 确认历史 -->
+  <view class="history-section" wx:if="{{confirmHistory.length > 0}}">
+    <text class="section-title">确认历史</text>
+    <view class="timeline">
+      <view
+        class="timeline-item"
+        wx:for="{{confirmHistory}}"
+        wx:key="_id"
+      >
+        <view class="timeline-dot"></view>
+        <view class="timeline-content">
+          <view class="timeline-header">
+            <text class="timeline-user">{{item.operatorName || '客户'}}</text>
+            <text class="timeline-action {{item.action === 'confirmed' ? 'action-pass' : 'action-reject'}}">
+              {{item.action === 'confirmed' ? '确认通过' : '已驳回'}}
+            </text>
+          </view>
+          <text class="timeline-time">{{item.timeText}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部操作按钮 -->
+  <view class="bottom-actions" wx:if="{{file.status === 'pending'}}">
+    <button class="btn-outline reject-btn" bindtap="onRejectTap">驳回</button>
+    <button class="btn-primary confirm-btn" bindtap="onConfirmTap">确认通过</button>
+  </view>
+</view>

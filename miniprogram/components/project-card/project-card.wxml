@@ -1,0 +1,27 @@
+<view class="project-card" bindtap="onTap">
+  <view class="card-header">
+    <text class="project-name">{{project.name}}</text>
+    <view class="status-badge status-{{project.status}}">
+      {{statusText}}
+    </view>
+  </view>
+  <view class="card-info">
+    <text class="info-item">{{project.community}}</text>
+    <text class="info-item" wx:if="{{project.area}}">{{project.area}}m²</text>
+  </view>
+  <view class="card-progress" wx:if="{{project.status !== 'waiting'}}">
+    <view class="progress-bar">
+      <view class="progress-fill" style="width: {{progressPercent}}%"></view>
+    </view>
+    <text class="progress-text">{{currentStageName}}</text>
+  </view>
+  <view class="card-footer">
+    <view class="client-info" wx:if="{{project.client_info.nickname}}">
+      <image class="client-avatar" src="{{project.client_info.avatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+      <text class="client-name">{{project.client_info.nickname}}</text>
+    </view>
+    <view class="client-info waiting" wx:elif="{{project.status === 'waiting'}}">
+      <text class="waiting-text">等待客户加入</text>
+    </view>
+  </view>
+</view>

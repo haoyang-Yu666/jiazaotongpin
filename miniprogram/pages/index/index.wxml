@@ -1,0 +1,28 @@
+<view class="index-page">
+  <!-- 品牌区域 -->
+  <view class="brand-area">
+    <view class="logo-box">
+      <text class="logo-text">造</text>
+    </view>
+    <text class="app-title">家造同频</text>
+    <text class="app-slogan">让设计与生活同频共振</text>
+  </view>
+
+  <!-- 角色选择 -->
+  <view class="role-area">
+    <view class="role-btn role-designer" bindtap="onRoleSelect" data-role="designer">
+      <text class="role-icon">📐</text>
+      <text class="role-label">设计师入口</text>
+      <text class="role-desc">管理项目、上传图纸、发布进度</text>
+    </view>
+    <view class="role-btn role-client" bindtap="onRoleSelect" data-role="client">
+      <text class="role-icon">🏠</text>
+      <text class="role-label">客户入口</text>
+      <text class="role-desc">填写需求、确认图纸、查看进度</text>
+    </view>
+  </view>
+
+  <view class="footer-area">
+    <text class="footer-text">首次使用请选择身份进入</text>
+  </view>
+</view>

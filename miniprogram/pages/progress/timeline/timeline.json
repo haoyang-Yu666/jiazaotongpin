@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "milestone-bar": "/components/milestone-bar/milestone-bar",
+    "log-card": "/components/log-card/log-card",
+    "empty-state": "/components/empty-state/empty-state"
+  },
+  "navigationBarTitleText": "施工进度"
+}

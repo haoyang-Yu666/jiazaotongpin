@@ -1,0 +1,51 @@
+<view class="profile-page">
+  <!-- 头部渐变背景 -->
+  <view class="profile-header"></view>
+
+  <!-- 用户信息卡片（覆盖在header上方） -->
+  <view class="profile-card">
+    <image
+      class="user-avatar"
+      src="{{userInfo.avatar || '/images/default-avatar.png'}}"
+      mode="aspectFill"
+    />
+    <view class="user-info">
+      <text class="user-name">{{userInfo.nickname || '未设置昵称'}}</text>
+      <view class="role-badge {{isDesigner ? 'badge-designer' : 'badge-client'}}">
+        <text class="role-text">{{roleLabel}}</text>
+      </view>
+    </view>
+    <view class="user-phone" wx:if="{{userInfo.phone}}">
+      <text class="phone-text">{{userInfo.phone}}</text>
+    </view>
+  </view>
+
+  <!-- 菜单列表 -->
+  <view class="menu-section">
+    <view class="menu-item" bindtap="onEditProfile">
+      <view class="menu-left">
+        <text class="menu-icon-text">📝</text>
+        <text class="menu-label">编辑资料</text>
+      </view>
+      <text class="menu-arrow">></text>
+    </view>
+
+    <view class="menu-item" bindtap="onAboutTap">
+      <view class="menu-left">
+        <text class="menu-icon-text">ℹ️</text>
+        <text class="menu-label">关于我们</text>
+      </view>
+      <text class="menu-arrow">></text>
+    </view>
+  </view>
+
+  <!-- 退出登录 -->
+  <view class="logout-section">
+    <button class="logout-btn" bindtap="onLogout">退出登录</button>
+  </view>
+
+  <!-- 版本信息 -->
+  <view class="version-info">
+    <text class="version-text">家造同频 v1.0.0</text>
+  </view>
+</view>

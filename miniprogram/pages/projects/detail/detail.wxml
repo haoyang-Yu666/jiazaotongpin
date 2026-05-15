@@ -1,0 +1,190 @@
+<view class="detail-page">
+  <!-- 加载中 -->
+  <view class="loading-area" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+  </view>
+
+  <block wx:if="{{!loading && project}}">
+    <!-- 项目头部 -->
+    <view class="project-header">
+      <view class="header-info">
+        <text class="project-name">{{project.name}}</text>
+        <view class="project-meta">
+          <text class="meta-item">{{project.community}}</text>
+          <text class="meta-dot" wx:if="{{project.area}}">|</text>
+          <text class="meta-item" wx:if="{{project.area}}">{{project.area}}m2</text>
+        </view>
+        <view class="project-status">
+          <text class="status-tag status-{{project.status}}">
+            {{project.status === 'waiting' ? '等待加入' : project.status === 'active' ? '进行中' : '已完成'}}
+          </text>
+          <text
+            class="invite-code-btn"
+            wx:if="{{isDesigner && project.invite_code}}"
+            bindtap="onCopyInviteCode"
+          >
+            邀请码: {{project.invite_code}}
+          </text>
+        </view>
+      </view>
+    </view>
+
+    <!-- Tab 栏 -->
+    <view class="tab-bar">
+      <view
+        class="tab-item {{activeTab === item.key ? 'active' : ''}}"
+        wx:for="{{tabs}}"
+        wx:key="key"
+        data-tab="{{item.key}}"
+        bindtap="onTabSwitch"
+      >
+        <text class="tab-text">{{item.label}}</text>
+      </view>
+      <view class="tab-line" style="transform: translateX({{activeTab === 'needs' ? '0' : activeTab === 'files' ? '100%' : '200%'}})">
+      </view>
+    </view>
+
+    <!-- Tab 内容 -->
+    <swiper
+      class="tab-content"
+      current="{{activeTab === 'needs' ? 0 : activeTab === 'files' ? 1 : 2}}"
+      bindchange="onSwiperChange"
+    >
+      <!-- 需求 Tab -->
+      <swiper-item>
+        <scroll-view class="tab-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+          <view class="tab-inner">
+            <!-- 问卷状态卡片 -->
+            <view class="section-card">
+              <text class="section-title">需求问卷</text>
+              <view class="questionnaire-status-card" wx:if="{{questionnaireStatus === 'pending'}}">
+                <text class="qs-desc">客户尚未填写需求问卷</text>
+                <button
+                  class="btn-primary qs-btn"
+                  wx:if="{{!isDesigner}}"
+                  bindtap="onFillQuestionnaire"
+                >
+                  去填写
+                </button>
+                <text class="qs-hint" wx:if="{{isDesigner}}">等待客户填写</text>
+              </view>
+              <view class="questionnaire-status-card" wx:elif="{{questionnaireStatus === 'submitted'}}">
+                <text class="qs-desc">客户已提交需求问卷{{isDesigner ? '，请查阅' : ''}}</text>
+                <button class="btn-primary qs-btn" bindtap="onViewQuestionnaire">
+                  {{isDesigner ? '查看问卷' : '查看问卷'}}
+                </button>
+              </view>
+              <view class="questionnaire-status-card" wx:elif="{{questionnaireStatus === 'reviewed'}}">
+                <text class="qs-desc">问卷已标记已阅</text>
+                <button class="btn-outline qs-btn" bindtap="onViewQuestionnaire">
+                  查看问卷
+                </button>
+              </view>
+            </view>
+
+            <!-- 灵感板入口 -->
+            <view class="section-card">
+              <text class="section-title">灵感收集</text>
+              <view class="inspiration-entry" bindtap="onViewInspiration">
+                <text class="entry-label">查看灵感板</text>
+                <text class="entry-arrow">></text>
+              </view>
+            </view>
+          </view>
+        </scroll-view>
+      </swiper-item>
+
+      <!-- 图纸 Tab -->
+      <swiper-item>
+        <scroll-view class="tab-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+          <view class="tab-inner">
+            <!-- 文件分类筛选 -->
+            <scroll-view class="category-filter" scroll-x enhanced show-scrollbar="{{false}}">
+              <view
+                class="filter-item {{fileCategory === item.key ? 'active' : ''}}"
+                wx:for="{{fileCategoryOptions}}"
+                wx:key="key"
+                data-category="{{item.key}}"
+                bindtap="onFileCategoryChange"
+              >
+                <text class="filter-text">{{item.label}}</text>
+              </view>
+            </scroll-view>
+
+            <!-- 文件列表 -->
+            <view class="file-list" wx:if="{{fileList.length > 0}}">
+              <view
+                class="file-item"
+                wx:for="{{fileList}}"
+                wx:key="_id"
+                data-id="{{item._id}}"
+                bindtap="onFileTap"
+              >
+                <file-card file="{{item}}" />
+              </view>
+            </view>
+
+            <empty-state
+              wx:if="{{fileList.length === 0}}"
+              type="file"
+              message="暂无图纸文件"
+              description="上传图纸文件以开始协作"
+            />
+
+            <!-- 上传按钮（设计师） -->
+            <view class="upload-area" wx:if="{{isDesigner}}">
+              <button class="btn-outline upload-btn" bindtap="onUploadFile">
+                上传图纸
+              </button>
+            </view>
+          </view>
+        </scroll-view>
+      </swiper-item>
+
+      <!-- 进度 Tab -->
+      <swiper-item>
+        <scroll-view class="tab-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+          <view class="tab-inner">
+            <!-- 里程碑 -->
+            <view class="section-card">
+              <text class="section-title">施工进度</text>
+              <milestone-bar
+                milestones="{{milestones}}"
+                current="{{currentStage}}"
+                bind:stagechange="onStageChange"
+              />
+            </view>
+
+            <!-- 进度日志 -->
+            <view class="section-card">
+              <text class="section-title">进度记录</text>
+              <view class="log-list" wx:if="{{logs.length > 0}}">
+                <view
+                  class="log-item"
+                  wx:for="{{logs}}"
+                  wx:key="_id"
+                  data-id="{{item._id}}"
+                  bindtap="onLogTap"
+                >
+                  <log-card log="{{item}}" />
+                </view>
+              </view>
+              <empty-state
+                wx:if="{{logs.length === 0}}"
+                type="log"
+                message="暂无进度记录"
+              />
+            </view>
+
+            <!-- 发布按钮（设计师） -->
+            <view class="publish-area" wx:if="{{isDesigner}}">
+              <button class="btn-primary publish-btn" bindtap="onPublishLog">
+                发布进度
+              </button>
+            </view>
+          </view>
+        </scroll-view>
+      </swiper-item>
+    </swiper>
+  </block>
+</view>

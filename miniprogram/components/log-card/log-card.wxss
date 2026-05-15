@@ -1,0 +1,115 @@
+.log-card {
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 28rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+/* 头部：头像 + 昵称 + 时间 */
+.log-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.author-avatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  margin-right: 20rpx;
+  background: #F5F5F5;
+  flex-shrink: 0;
+}
+
+.author-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.author-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1A1A1A;
+  margin-bottom: 4rpx;
+}
+
+.log-time {
+  font-size: 22rpx;
+  color: #999999;
+}
+
+/* 内容文本 */
+.log-content {
+  font-size: 28rpx;
+  color: #1A1A1A;
+  line-height: 1.7;
+  margin-bottom: 20rpx;
+  word-break: break-all;
+}
+
+/* 图片九宫格 */
+.log-images {
+  margin-bottom: 20rpx;
+}
+
+.image-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.image-grid.grid-single {
+  justify-content: flex-start;
+}
+
+.image-grid.grid-single .grid-image {
+  width: 360rpx;
+  height: 360rpx;
+  border-radius: 16rpx;
+}
+
+.image-grid.grid-multi {
+  margin: -6rpx;
+}
+
+.image-grid.grid-multi .grid-image {
+  width: calc(33.33% - 12rpx);
+  height: 0;
+  padding-bottom: calc(33.33% - 12rpx);
+  margin: 6rpx;
+  border-radius: 8rpx;
+  object-fit: cover;
+}
+
+.grid-image {
+  background: #F5F5F5;
+}
+
+/* 操作按钮 */
+.log-actions {
+  display: flex;
+  align-items: center;
+  padding-top: 16rpx;
+  border-top: 1rpx solid #F0F0F0;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  margin-right: 40rpx;
+  padding: 8rpx 0;
+}
+
+.action-icon {
+  font-size: 32rpx;
+  margin-right: 8rpx;
+}
+
+.action-count {
+  font-size: 24rpx;
+  color: #666666;
+}
+
+.like-btn.liked .action-count {
+  color: #FF4D4F;
+}

@@ -1,0 +1,129 @@
+<view class="upload-page">
+  <view class="form-section">
+    <!-- 标题 -->
+    <view class="form-group">
+      <text class="form-label">文件标题</text>
+      <input
+        class="form-input"
+        placeholder="请输入文件标题"
+        value="{{title}}"
+        bindinput="onTitleInput"
+        maxlength="50"
+      />
+    </view>
+
+    <!-- 文件类型切换 -->
+    <view class="form-group">
+      <text class="form-label">文件类型</text>
+      <view class="mode-switch">
+        <view
+          class="mode-btn {{isImageMode ? 'mode-active' : ''}}"
+          data-mode="image"
+          bindtap="onModeSwitch"
+        >
+          <text>图片</text>
+        </view>
+        <view
+          class="mode-btn {{!isImageMode ? 'mode-active' : ''}}"
+          data-mode="file"
+          bindtap="onModeSwitch"
+        >
+          <text>PDF文件</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 文件选择 -->
+    <view class="form-group">
+      <text class="form-label">选择文件</text>
+
+      <!-- 图片选择 -->
+      <view wx:if="{{isImageMode}}" class="file-picker">
+        <view class="image-picker-area" wx:if="{{imageList.length === 0}}" bindtap="onChooseImage">
+          <text class="picker-icon">+</text>
+          <text class="picker-text">选择图片</text>
+        </view>
+        <view class="image-preview" wx:else>
+          <image class="preview-image" src="{{imageList[0]}}" mode="aspectFit" />
+          <view class="remove-btn" bindtap="onRemoveFile">
+            <text class="remove-icon">x</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 文件选择 -->
+      <view wx:if="{{!isImageMode}}" class="file-picker">
+        <view class="file-picker-area" wx:if="{{!fileUrl}}" bindtap="onChooseFile">
+          <text class="picker-icon">+</text>
+          <text class="picker-text">选择文件</text>
+          <text class="picker-hint">支持 PDF、图片格式</text>
+        </view>
+        <view class="file-preview" wx:else>
+          <view class="file-info-row">
+            <text class="file-icon">📄</text>
+            <text class="file-name">{{fileName}}</text>
+          </view>
+          <view class="remove-btn" bindtap="onRemoveFile">
+            <text class="remove-icon">x</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 分类 -->
+    <view class="form-group">
+      <text class="form-label">文件分类</text>
+      <radio-group class="radio-group" bindchange="onCategoryChange">
+        <label
+          class="radio-item {{category === item.value ? 'radio-active' : ''}}"
+          wx:for="{{categoryOptions}}"
+          wx:key="value"
+        >
+          <radio value="{{item.value}}" checked="{{category === item.value}}" color="#1A6D5C" />
+          <text class="radio-label">{{item.label}}</text>
+        </label>
+      </radio-group>
+    </view>
+
+    <!-- 版本 -->
+    <view class="form-group">
+      <text class="form-label">版本号</text>
+      <picker
+        class="form-picker"
+        range="{{versionOptions}}"
+        value="{{versionOptions.indexOf(version)}}"
+        bindchange="onVersionChange"
+      >
+        <view class="picker-content">
+          <text class="picker-value">{{version}}</text>
+          <text class="picker-arrow">></text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 描述 -->
+    <view class="form-group">
+      <text class="form-label">描述说明</text>
+      <textarea
+        class="form-textarea"
+        placeholder="请输入文件描述（选填）"
+        value="{{description}}"
+        bindinput="onDescriptionInput"
+        maxlength="200"
+        auto-height
+      />
+    </view>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="submit-area">
+    <button
+      class="btn-primary submit-btn"
+      bindtap="onSubmit"
+      disabled="{{submitting}}"
+      loading="{{submitting}}"
+    >
+      上传文件
+    </button>
+  </view>
+</view>
