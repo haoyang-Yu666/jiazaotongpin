@@ -89,12 +89,12 @@ Page({
   async loadQuestionnaire() {
     try {
       const res = await questionnaireApi.get(this.data.projectId)
+      const status = res && res.status ? res.status : 'pending'
       this.setData({
         questionnaireData: res,
-        questionnaireStatus: res ? res.status : 'pending'
+        questionnaireStatus: status
       })
     } catch (err) {
-      // 问卷可能尚未提交
       this.setData({ questionnaireStatus: 'pending' })
     }
   },

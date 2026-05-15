@@ -1,7 +1,6 @@
 <view class="login-page">
   <!-- 顶部装饰 -->
   <view class="login-header">
-    <view class="header-bg"></view>
     <view class="avatar-area">
       <view class="avatar-wrapper">
         <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
@@ -10,10 +9,10 @@
             src="{{avatarUrl || '/images/default-avatar.png'}}"
             mode="aspectFill"
           />
-          <view class="avatar-edit">
-            <text class="edit-icon">+</text>
-          </view>
         </button>
+        <view class="avatar-edit-badge">
+          <text class="edit-icon">+</text>
+        </view>
       </view>
       <text class="role-tag role-tag-{{role}}">{{roleLabel}}</text>
     </view>
