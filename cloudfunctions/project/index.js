@@ -172,6 +172,8 @@ async function handleList(openid, event) {
     const page = event.page || 1
     const pageSize = event.pageSize || 10
     const status = event.status
+    const keyword = event.keyword || ''
+    const sortBy = event.sortBy || 'updated_at'
 
     const { data: users } = await db.collection('jt_users')
       .where({ openid })
@@ -196,13 +198,21 @@ async function handleList(openid, event) {
       whereCondition.status = status
     }
 
+    if (keyword) {
+      whereCondition.name = db.RegExp({
+        regexp: keyword,
+        options: 'i'
+      })
+    }
+
     const countResult = await db.collection('jt_projects')
       .where(whereCondition)
       .count()
 
+    const sortField = sortBy === 'created_at' ? 'created_at' : 'updated_at'
     const { data: list } = await db.collection('jt_projects')
       .where(whereCondition)
-      .orderBy('updated_at', 'desc')
+      .orderBy(sortField, 'desc')
       .skip((page - 1) * pageSize)
       .limit(pageSize)
       .get()

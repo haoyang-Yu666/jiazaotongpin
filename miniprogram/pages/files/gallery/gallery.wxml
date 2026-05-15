@@ -1,0 +1,32 @@
+<view class="gallery-page">
+  <!-- 计数器 -->
+  <view class="gallery-counter">
+    <text class="counter-text">{{currentIndex + 1}} / {{imageUrls.length}}</text>
+  </view>
+
+  <!-- 图片滑动区 -->
+  <swiper
+    class="gallery-swiper"
+    current="{{currentIndex}}"
+    bindchange="onSwiperChange"
+    circular
+  >
+    <swiper-item wx:for="{{imageUrls}}" wx:key="*this">
+      <view class="image-container" bindtap="onPreviewImage">
+        <image
+          class="gallery-image"
+          src="{{currentIndex === index ? currentUrl : item}}"
+          mode="aspectFit"
+          bindtap="onPreviewImage"
+        />
+      </view>
+    </swiper-item>
+  </swiper>
+
+  <!-- 底部操作 -->
+  <view class="gallery-footer">
+    <view class="action-btn" bindtap="onSaveImage">
+      <text class="action-text">保存图片</text>
+    </view>
+  </view>
+</view>

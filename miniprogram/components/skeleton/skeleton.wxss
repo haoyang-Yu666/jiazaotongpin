@@ -1,0 +1,103 @@
+.skeleton-wrap {
+  padding: 24rpx 32rpx;
+}
+
+.sk-card {
+  background: #ffffff;
+  border-radius: 16rpx;
+  padding: 28rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.sk-row {
+  display: flex;
+  align-items: center;
+}
+
+.sk-bar {
+  height: 24rpx;
+  border-radius: 8rpx;
+  background: linear-gradient(90deg, #EEEEEE 25%, #F5F5F5 50%, #EEEEEE 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.sk-w60 { width: 60%; }
+.sk-w70 { width: 70%; }
+.sk-w40 { width: 40%; }
+.sk-w20 { width: 20%; }
+.sk-w50 { width: 50%; }
+.sk-w80 { width: 80%; }
+.sk-w30 { width: 30%; }
+.sk-full { width: 100%; }
+
+.sk-tag {
+  width: 80rpx;
+  height: 36rpx;
+  border-radius: 18rpx;
+  margin-left: auto;
+}
+
+.sk-mt { margin-top: 16rpx; }
+
+.sk-progress {
+  margin-top: 20rpx;
+  height: 8rpx;
+  border-radius: 4rpx;
+  overflow: hidden;
+  background: #F0F0F0;
+}
+
+.sk-progress .sk-bar {
+  height: 100%;
+  border-radius: 4rpx;
+  width: 50%;
+}
+
+.sk-footer {
+  margin-top: 16rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx solid #F0F0F0;
+}
+
+.sk-circle {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  background: linear-gradient(90deg, #EEEEEE 25%, #F5F5F5 50%, #EEEEEE 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.sk-thumb {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 12rpx;
+  background: linear-gradient(90deg, #EEEEEE 25%, #F5F5F5 50%, #EEEEEE 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  flex-shrink: 0;
+  margin-right: 20rpx;
+}
+
+.sk-text-group {
+  flex: 1;
+  margin-left: 20rpx;
+}
+
+.sk-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background: linear-gradient(90deg, #EEEEEE 25%, #F5F5F5 50%, #EEEEEE 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

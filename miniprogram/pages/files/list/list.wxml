@@ -14,34 +14,43 @@
     </scroll-view>
   </view>
 
+  <!-- 骨架屏 -->
+  <skeleton wx:if="{{loading && files.length === 0}}" type="file" count="3" />
+
   <!-- 文件列表 -->
-  <scroll-view class="files-scroll" scroll-y>
-    <view class="files-list" wx:if="{{!isEmpty}}">
+  <scroll-view
+    wx:if="{{!isEmpty}}"
+    class="files-scroll"
+    scroll-y
+    bindscrolltolower="onLoadMore"
+    lower-threshold="200"
+  >
+    <view class="files-list">
       <view
         wx:for="{{files}}"
         wx:key="_id"
         data-id="{{item._id}}"
         bindtap="onFileTap"
       >
-        <file-card
-          file="{{item}}"
-          category-label="{{item.categoryLabel}}"
-        />
+        <file-card file="{{item}}" />
       </view>
     </view>
 
-    <!-- 加载状态 -->
-    <view class="loading-area" wx:if="{{loading}}">
+    <view class="load-more" wx:if="{{loading && files.length > 0}}">
+      <view class="loading-spinner"></view>
       <text class="loading-text">加载中...</text>
     </view>
-
-    <!-- 空状态 -->
-    <empty-state
-      wx:if="{{isEmpty && !loading}}"
-      message="暂无设计文件"
-      sub-message="设计师可上传设计文件"
-    />
+    <view class="load-more" wx:if="{{!hasMore && files.length > 0}}">
+      <text class="no-more-text">没有更多了</text>
+    </view>
   </scroll-view>
+
+  <!-- 空状态 -->
+  <empty-state
+    wx:if="{{isEmpty && !loading}}"
+    message="暂无设计文件"
+    description="设计师可上传设计文件"
+  />
 
   <!-- 上传按钮 (仅设计师可见) -->
   <view class="upload-btn-area" wx:if="{{isDesigner}}">

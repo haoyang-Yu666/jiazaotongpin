@@ -1,7 +1,8 @@
 {
   "usingComponents": {
     "file-card": "/components/file-card/file-card",
-    "empty-state": "/components/empty-state/empty-state"
+    "empty-state": "/components/empty-state/empty-state",
+    "skeleton": "/components/skeleton/skeleton"
   },
   "navigationBarTitleText": "设计文件"
 }

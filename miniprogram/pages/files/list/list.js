@@ -1,6 +1,5 @@
 const { fileApi } = require('../../../utils/cloud')
 const auth = require('../../../utils/auth')
-const constants = require('../../../utils/constants')
 
 Page({
   data: {
@@ -15,7 +14,10 @@ Page({
     files: [],
     loading: false,
     isEmpty: false,
-    isDesigner: false
+    isDesigner: false,
+    page: 1,
+    pageSize: 10,
+    hasMore: true
   },
 
   onLoad(options) {
@@ -27,6 +29,7 @@ Page({
   },
 
   onPullDownRefresh() {
+    this.setData({ page: 1, files: [], hasMore: true })
     this.loadFiles().then(() => {
       wx.stopPullDownRefresh()
     })
@@ -34,29 +37,44 @@ Page({
 
   onCategoryTap(e) {
     const key = e.currentTarget.dataset.key
-    this.setData({ currentCategory: key })
+    if (key === this.data.currentCategory) return
+    this.setData({ currentCategory: key, page: 1, files: [], hasMore: true })
     this.loadFiles()
   },
 
   async loadFiles() {
     this.setData({ loading: true })
     try {
-      const data = { projectId: this.data.projectId }
+      const data = {
+        projectId: this.data.projectId,
+        page: this.data.page,
+        pageSize: this.data.pageSize
+      }
       if (this.data.currentCategory) {
         data.category = this.data.currentCategory
       }
       const res = await fileApi.list(data)
-      const files = (res && res.list) || []
+      const list = (res && res.list) || []
+      const total = (res && res.total) || 0
+      const files = this.data.page === 1 ? list : this.data.files.concat(list)
+
       this.setData({
         files,
         isEmpty: files.length === 0,
+        hasMore: files.length < total,
         loading: false
       })
     } catch (err) {
       console.error('加载文件失败:', err)
-      this.setData({ loading: false })
+      this.setData({ loading: false, isEmpty: this.data.files.length === 0 })
       wx.showToast({ title: '加载失败', icon: 'none' })
     }
+  },
+
+  onLoadMore() {
+    if (!this.data.hasMore || this.data.loading) return
+    this.setData({ page: this.data.page + 1 })
+    this.loadFiles()
   },
 
   onFileTap(e) {

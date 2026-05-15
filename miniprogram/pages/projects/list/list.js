@@ -12,6 +12,20 @@ Page({
     loading: true,
     isEmpty: false,
     isDesigner: false,
+    page: 1,
+    pageSize: 10,
+    hasMore: true,
+    // 搜索筛选
+    keyword: '',
+    statusFilter: '',
+    sortBy: 'updated_at',
+    statusFilters: [
+      { key: '', label: '全部' },
+      { key: 'active', label: '进行中' },
+      { key: 'waiting', label: '等待中' },
+      { key: 'completed', label: '已完成' }
+    ],
+    // 加入项目
     showJoinDialog: false,
     inviteCode: '',
     joining: false
@@ -24,39 +38,85 @@ Page({
   },
 
   onShow() {
-    this.loadProjects()
+    this.resetAndLoad()
   },
 
   onPullDownRefresh() {
-    this.loadProjects().then(() => {
+    this.resetAndLoad().then(() => {
       wx.stopPullDownRefresh()
     })
   },
 
+  resetAndLoad() {
+    this.setData({ page: 1, projects: [], hasMore: true })
+    return this.loadProjects()
+  },
+
   async loadProjects() {
-    this.setData({ loading: true, isEmpty: false })
+    this.setData({ loading: true })
     try {
-      const res = await projectApi.list({
-        role: this.data.currentRole
-      })
-      const projects = (res && res.list) || []
+      const params = {
+        role: this.data.currentRole,
+        page: this.data.page,
+        pageSize: this.data.pageSize,
+        sortBy: this.data.sortBy
+      }
+      if (this.data.keyword.trim()) {
+        params.keyword = this.data.keyword.trim()
+      }
+      if (this.data.statusFilter) {
+        params.status = this.data.statusFilter
+      }
+
+      const res = await projectApi.list(params)
+      const list = (res && res.list) || []
+      const total = (res && res.total) || 0
+      const projects = this.data.page === 1 ? list : this.data.projects.concat(list)
+
       this.setData({
-        projects: projects,
+        projects,
         isEmpty: projects.length === 0,
+        hasMore: projects.length < total,
         loading: false
       })
     } catch (err) {
       console.error('加载项目列表失败:', err)
-      this.setData({ loading: false, isEmpty: true })
+      this.setData({ loading: false, isEmpty: this.data.projects.length === 0 })
       wx.showToast({ title: '加载失败', icon: 'none' })
     }
+  },
+
+  onLoadMore() {
+    if (!this.data.hasMore || this.data.loading) return
+    this.setData({ page: this.data.page + 1 })
+    this.loadProjects()
+  },
+
+  onSearchInput(e) {
+    this.setData({ keyword: e.detail.value })
+  },
+
+  onSearchConfirm() {
+    this.resetAndLoad()
+  },
+
+  onStatusFilter(e) {
+    const status = e.currentTarget.dataset.status
+    this.setData({ statusFilter: status })
+    this.resetAndLoad()
+  },
+
+  onSortToggle() {
+    const newSort = this.data.sortBy === 'updated_at' ? 'created_at' : 'updated_at'
+    this.setData({ sortBy: newSort })
+    this.resetAndLoad()
   },
 
   onRoleSwitch(e) {
     const role = e.currentTarget.dataset.role
     if (role === this.data.currentRole) return
     this.setData({ currentRole: role, isDesigner: role === 'designer' })
-    this.loadProjects()
+    this.resetAndLoad()
   },
 
   onProjectTap(e) {
@@ -98,7 +158,7 @@ Page({
       await projectApi.join(code)
       wx.showToast({ title: '加入成功', icon: 'success' })
       this.setData({ showJoinDialog: false })
-      this.loadProjects()
+      this.resetAndLoad()
     } catch (err) {
       wx.showToast({ title: err.message || '加入失败', icon: 'none' })
     } finally {

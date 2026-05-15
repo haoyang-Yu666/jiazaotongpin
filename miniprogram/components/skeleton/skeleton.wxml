@@ -1,0 +1,65 @@
+<view class="skeleton-wrap">
+  <!-- 项目卡片骨架 -->
+  <block wx:if="{{type === 'project'}}">
+    <view class="sk-card" wx:for="{{count}}" wx:key="index">
+      <view class="sk-row">
+        <view class="sk-bar sk-w60"></view>
+        <view class="sk-bar sk-tag"></view>
+      </view>
+      <view class="sk-row">
+        <view class="sk-bar sk-w40"></view>
+        <view class="sk-bar sk-w20"></view>
+      </view>
+      <view class="sk-progress">
+        <view class="sk-bar sk-full"></view>
+      </view>
+      <view class="sk-row sk-footer">
+        <view class="sk-circle"></view>
+        <view class="sk-bar sk-w30"></view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 文件卡片骨架 -->
+  <block wx:if="{{type === 'file'}}">
+    <view class="sk-card" wx:for="{{count}}" wx:key="index">
+      <view class="sk-row">
+        <view class="sk-thumb"></view>
+        <view class="sk-text-group">
+          <view class="sk-bar sk-w70"></view>
+          <view class="sk-bar sk-w40 sk-mt"></view>
+          <view class="sk-bar sk-w50 sk-mt"></view>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 日志骨架 -->
+  <block wx:if="{{type === 'log'}}">
+    <view class="sk-card" wx:for="{{count}}" wx:key="index">
+      <view class="sk-row">
+        <view class="sk-circle"></view>
+        <view class="sk-text-group">
+          <view class="sk-bar sk-w40"></view>
+          <view class="sk-bar sk-w20 sk-mt"></view>
+        </view>
+      </view>
+      <view class="sk-bar sk-full sk-mt"></view>
+      <view class="sk-bar sk-w80 sk-mt"></view>
+    </view>
+  </block>
+
+  <!-- 通知骨架 -->
+  <block wx:if="{{type === 'notification'}}">
+    <view class="sk-card" wx:for="{{count}}" wx:key="index">
+      <view class="sk-row">
+        <view class="sk-dot"></view>
+        <view class="sk-text-group">
+          <view class="sk-bar sk-w60"></view>
+          <view class="sk-bar sk-w80 sk-mt"></view>
+          <view class="sk-bar sk-w20 sk-mt"></view>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

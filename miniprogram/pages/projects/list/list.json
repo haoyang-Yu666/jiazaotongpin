@@ -1,7 +1,8 @@
 {
   "usingComponents": {
     "project-card": "/components/project-card/project-card",
-    "empty-state": "/components/empty-state/empty-state"
+    "empty-state": "/components/empty-state/empty-state",
+    "skeleton": "/components/skeleton/skeleton"
   },
   "navigationBarTitleText": "项目大厅"
 }

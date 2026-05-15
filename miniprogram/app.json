@@ -14,6 +14,7 @@
     "pages/files/upload/upload",
     "pages/files/preview/preview",
     "pages/files/confirm/confirm",
+    "pages/files/gallery/gallery",
     "pages/progress/timeline/timeline",
     "pages/progress/publish/publish",
     "pages/progress/log-detail/log-detail",
