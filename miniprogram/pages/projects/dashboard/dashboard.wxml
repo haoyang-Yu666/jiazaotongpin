@@ -1,0 +1,75 @@
+<view class="dashboard-page">
+  <view class="loading-area" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+  </view>
+
+  <block wx:if="{{!loading && project}}">
+    <!-- 项目标题 -->
+    <view class="project-title-bar">
+      <text class="title-name">{{project.name}}</text>
+      <text class="title-meta">{{project.community}} {{project.area ? '· ' + project.area + 'm²' : ''}}</text>
+    </view>
+
+    <!-- 进度概览 -->
+    <view class="section-card">
+      <text class="section-label">施工进度</text>
+      <view class="stage-row">
+        <view class="stage-bar">
+          <view class="stage-fill" style="width: {{project.current_stage >= 7 ? 100 : ((project.current_stage + 1) / 8 * 100)}}%"></view>
+        </view>
+        <text class="stage-text">{{currentStageName || '未开始'}}</text>
+      </view>
+      <text class="stage-hint">第 {{project.current_stage + 1}} / 8 阶段</text>
+    </view>
+
+    <!-- 统计卡片 -->
+    <view class="stats-row">
+      <view class="stat-card">
+        <text class="stat-number">{{fileStats.total}}</text>
+        <text class="stat-label">图纸总数</text>
+        <text class="stat-sub">已确认 {{fileStats.confirmed}}</text>
+      </view>
+      <view class="stat-card">
+        <text class="stat-number">{{fileStats.confirmRate}}%</text>
+        <text class="stat-label">确认率</text>
+      </view>
+      <view class="stat-card">
+        <text class="stat-number">{{logCount}}</text>
+        <text class="stat-label">进度记录</text>
+      </view>
+    </view>
+
+    <!-- 快捷操作 -->
+    <view class="section-card">
+      <text class="section-label">快捷操作</text>
+      <view class="action-grid">
+        <view class="action-item" bindtap="onViewFiles">
+          <text class="action-icon">📄</text>
+          <text class="action-text">查看图纸</text>
+        </view>
+        <view class="action-item" bindtap="onViewProgress">
+          <text class="action-icon">📋</text>
+          <text class="action-text">进度记录</text>
+        </view>
+        <view class="action-item" bindtap="onViewQuestionnaire" wx:if="{{questionnaireStatus}}">
+          <text class="action-icon">📝</text>
+          <text class="action-text">查看问卷</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 最近动态 -->
+    <view class="section-card" wx:if="{{recentLogs.length > 0}}">
+      <text class="section-label">最近动态</text>
+      <view class="log-list">
+        <view class="log-item" wx:for="{{recentLogs}}" wx:key="_id">
+          <view class="log-dot"></view>
+          <view class="log-info">
+            <text class="log-content">{{item.content || '发布了新进度'}}</text>
+            <text class="log-time">{{item.timeText}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

@@ -30,6 +30,14 @@
       <text class="menu-arrow">></text>
     </view>
 
+    <view class="menu-item" bindtap="onViewCard" wx:if="{{isDesigner}}">
+      <view class="menu-left">
+        <text class="menu-icon-text">🪪</text>
+        <text class="menu-label">我的名片</text>
+      </view>
+      <text class="menu-arrow">></text>
+    </view>
+
     <view class="menu-item" bindtap="onAboutTap">
       <view class="menu-left">
         <text class="menu-icon-text">ℹ️</text>
@@ -46,6 +54,6 @@
 
   <!-- 版本信息 -->
   <view class="version-info">
-    <text class="version-text">家造同频 v1.0.0</text>
+    <text class="version-text">家造同频 v2.0.0</text>
   </view>
 </view>

@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "log-card": "/components/log-card/log-card"
+  },
+  "navigationBarTitleText": "项目概览"
+}

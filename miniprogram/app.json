@@ -20,7 +20,10 @@
     "pages/progress/log-detail/log-detail",
     "pages/profile/index/index",
     "pages/profile/edit/edit",
-    "pages/notifications/list/list"
+    "pages/profile/card/card",
+    "pages/notifications/list/list",
+    "pages/projects/dashboard/dashboard",
+    "pages/projects/poster/poster"
   ],
   "window": {
     "backgroundTextStyle": "light",

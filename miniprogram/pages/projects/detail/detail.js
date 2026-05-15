@@ -207,5 +207,17 @@ Page({
         wx.showToast({ title: '邀请码已复制', icon: 'success' })
       }
     })
+  },
+
+  onViewDashboard() {
+    wx.navigateTo({
+      url: `/pages/projects/dashboard/dashboard?projectId=${this.data.projectId}`
+    })
+  },
+
+  onGeneratePoster() {
+    wx.navigateTo({
+      url: `/pages/projects/poster/poster?projectId=${this.data.projectId}`
+    })
   }
 })

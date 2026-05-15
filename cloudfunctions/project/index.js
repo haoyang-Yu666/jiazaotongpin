@@ -20,6 +20,10 @@ exports.main = async (event, context) => {
       return handleGetDetail(event.projectId)
     case 'updateStage':
       return handleUpdateStage(openid, event.projectId, event.stageIndex)
+    case 'getStats':
+      return handleGetStats(event.projectId)
+    case 'getQrCode':
+      return handleGetQrCode(openid, event.projectId)
     default:
       return { code: -1, message: '未知操作' }
   }
@@ -303,4 +307,84 @@ function generateInviteCode() {
     code += chars.charAt(Math.floor(Math.random() * chars.length))
   }
   return code
+}
+
+async function handleGetStats(projectId) {
+  try {
+    const { data: project } = await db.collection('jt_projects').doc(projectId).get()
+    if (!project) {
+      return { code: -1, message: '项目不存在' }
+    }
+
+    // 文件统计
+    const { data: files } = await db.collection('jt_design_files')
+      .where({ project_id: projectId })
+      .get()
+    const fileTotal = files.length
+    const fileConfirmed = files.filter(f => f.status === 'confirmed').length
+    const filePending = files.filter(f => f.status === 'pending').length
+    const fileRejected = files.filter(f => f.status === 'rejected').length
+
+    // 进度日志数
+    const { total: logCount } = await db.collection('jt_progress_logs')
+      .where({ project_id: projectId })
+      .count()
+
+    // 最近5条日志
+    const { data: recentLogs } = await db.collection('jt_progress_logs')
+      .where({ project_id: projectId })
+      .orderBy('created_at', 'desc')
+      .limit(5)
+      .get()
+
+    // 问卷状态
+    const { data: questionnaires } = await db.collection('jt_questionnaires')
+      .where({ project_id: projectId })
+      .get()
+    const questionnaireStatus = questionnaires.length > 0 ? questionnaires[0].status : ''
+
+    return {
+      code: 0,
+      data: {
+        project,
+        fileStats: {
+          total: fileTotal,
+          confirmed: fileConfirmed,
+          pending: filePending,
+          rejected: fileRejected,
+          confirmRate: fileTotal > 0 ? Math.round((fileConfirmed / fileTotal) * 100) : 0
+        },
+        logCount,
+        recentLogs,
+        questionnaireStatus
+      }
+    }
+  } catch (err) {
+    return { code: -1, message: '查询失败: ' + err.message }
+  }
+}
+
+async function handleGetQrCode(openid, projectId) {
+  try {
+    const { data: project } = await db.collection('jt_projects').doc(projectId).get()
+    if (!project) {
+      return { code: -1, message: '项目不存在' }
+    }
+
+    const result = await cloud.openapi.wxacode.getUnlimited({
+      scene: project.invite_code,
+      page: 'pages/projects/invite/invite',
+      width: 280,
+      isHyaline: false
+    })
+
+    const uploadResult = await cloud.uploadFile({
+      cloudPath: `qrcodes/${projectId}_${Date.now()}.png`,
+      fileContent: result.buffer
+    })
+
+    return { code: 0, data: { fileID: uploadResult.fileID } }
+  } catch (err) {
+    return { code: -1, message: '生成二维码失败: ' + err.message }
+  }
 }

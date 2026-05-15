@@ -1,0 +1,23 @@
+<view class="poster-page">
+  <!-- 隐藏Canvas -->
+  <canvas type="2d" id="posterCanvas" class="poster-canvas"></canvas>
+
+  <!-- 海报预览 -->
+  <view class="poster-preview" wx:if="{{posterUrl}}">
+    <image class="poster-image" src="{{posterUrl}}" mode="widthFix" />
+  </view>
+
+  <!-- 加载中 -->
+  <view class="generating" wx:if="{{generating}}">
+    <view class="loading-spinner"></view>
+    <text class="generating-text">海报生成中...</text>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="poster-footer">
+    <button class="btn-primary save-btn" bindtap="onSavePoster" disabled="{{!posterUrl || saved}}">
+      {{saved ? '已保存' : '保存到相册'}}
+    </button>
+    <button class="btn-outline share-btn" open-type="share">分享给好友</button>
+  </view>
+</view>

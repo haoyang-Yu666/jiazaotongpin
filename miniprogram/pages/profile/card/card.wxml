@@ -1,0 +1,45 @@
+<view class="card-page">
+  <!-- 名片卡片 -->
+  <view class="card-container">
+    <view class="card-header">
+      <image
+        class="card-avatar"
+        src="{{userInfo.avatar || '/images/default-avatar.png'}}"
+        mode="aspectFill"
+      />
+      <view class="card-info">
+        <text class="card-name">{{userInfo.nickname || '设计师'}}</text>
+        <view class="card-badge">
+          <text class="badge-text">认证设计师</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="card-stats">
+      <view class="stat-item">
+        <text class="stat-num">{{projectCount}}</text>
+        <text class="stat-desc">服务项目</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <text class="stat-num">家造同频</text>
+        <text class="stat-desc">设计平台</text>
+      </view>
+    </view>
+
+    <view class="card-company" wx:if="{{userInfo.company}}">
+      <text class="company-text">{{userInfo.company}}</text>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="card-actions">
+    <button class="btn-primary action-btn" open-type="share">
+      分享名片给好友
+    </button>
+  </view>
+
+  <view class="card-slogan">
+    <text class="slogan-text">让设计与生活同频共振</text>
+  </view>
+</view>

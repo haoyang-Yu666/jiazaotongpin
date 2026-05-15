@@ -48,10 +48,16 @@ Page({
     })
   },
 
+  onViewCard() {
+    wx.navigateTo({
+      url: '/pages/profile/card/card'
+    })
+  },
+
   onAboutTap() {
     wx.showModal({
       title: '关于家造同频',
-      content: '家造同频 v1.0.0\n让设计与生活同频共振',
+      content: '家造同频 v2.0.0\n让设计与生活同频共振',
       showCancel: false,
       confirmText: '知道了',
       confirmColor: '#1A6D5C'

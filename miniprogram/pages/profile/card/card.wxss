@@ -1,0 +1,115 @@
+.card-page {
+  min-height: 100vh;
+  background-color: #F5F5F5;
+  padding: 32rpx;
+  box-sizing: border-box;
+}
+
+.card-container {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 48rpx 40rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.08);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 40rpx;
+}
+
+.card-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  flex-shrink: 0;
+}
+
+.card-info {
+  margin-left: 28rpx;
+  flex: 1;
+}
+
+.card-name {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 12rpx;
+}
+
+.card-badge {
+  display: inline-flex;
+  align-items: center;
+  background: linear-gradient(135deg, #1A6D5C, #2A9D8F);
+  padding: 6rpx 20rpx;
+  border-radius: 20rpx;
+}
+
+.badge-text {
+  font-size: 22rpx;
+  color: #ffffff;
+}
+
+.card-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32rpx 0;
+  border-top: 1rpx solid #f0f0f0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.stat-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-num {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #1A6D5C;
+}
+
+.stat-desc {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 8rpx;
+}
+
+.stat-divider {
+  width: 1rpx;
+  height: 60rpx;
+  background-color: #f0f0f0;
+}
+
+.card-company {
+  margin-top: 28rpx;
+  text-align: center;
+}
+
+.company-text {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.card-actions {
+  margin-top: 40rpx;
+}
+
+.action-btn {
+  width: 100%;
+}
+
+.card-slogan {
+  text-align: center;
+  margin-top: 40rpx;
+}
+
+.slogan-text {
+  font-size: 24rpx;
+  color: #999;
+}

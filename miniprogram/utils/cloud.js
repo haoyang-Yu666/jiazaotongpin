@@ -35,7 +35,9 @@ const projectApi = {
   join: (inviteCode) => callFunction('project', { action: 'join', inviteCode }),
   list: (data) => callFunction('project', { action: 'list', ...data }),
   getDetail: (projectId) => callFunction('project', { action: 'getDetail', projectId }),
-  updateStage: (projectId, stageIndex) => callFunction('project', { action: 'updateStage', projectId, stageIndex })
+  updateStage: (projectId, stageIndex) => callFunction('project', { action: 'updateStage', projectId, stageIndex }),
+  getStats: (projectId) => callFunction('project', { action: 'getStats', projectId }),
+  getQrCode: (projectId) => callFunction('project', { action: 'getQrCode', projectId })
 }
 
 // questionnaire 模块
