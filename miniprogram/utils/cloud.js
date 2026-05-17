@@ -37,7 +37,17 @@ const projectApi = {
   getDetail: (projectId) => callFunction('project', { action: 'getDetail', projectId }),
   updateStage: (projectId, stageIndex) => callFunction('project', { action: 'updateStage', projectId, stageIndex }),
   getStats: (projectId) => callFunction('project', { action: 'getStats', projectId }),
-  getQrCode: (projectId) => callFunction('project', { action: 'getQrCode', projectId })
+  getQrCode: (projectId) => callFunction('project', { action: 'getQrCode', projectId }),
+  // V3.0 项目管理
+  update: (projectId, data) => callFunction('project', { action: 'update', projectId, ...data }),
+  archive: (projectId) => callFunction('project', { action: 'archive', projectId }),
+  unarchive: (projectId) => callFunction('project', { action: 'unarchive', projectId }),
+  delete: (projectId) => callFunction('project', { action: 'delete', projectId }),
+  // V3.0 聊天
+  sendMessage: (projectId, type, content) => callFunction('project', { action: 'sendMessage', projectId, type, content }),
+  getMessages: (data) => callFunction('project', { action: 'getMessages', ...data }),
+  markMessagesRead: (projectId) => callFunction('project', { action: 'markMessagesRead', projectId }),
+  getUnreadMessageCount: () => callFunction('project', { action: 'getUnreadMessageCount' })
 }
 
 // questionnaire 模块

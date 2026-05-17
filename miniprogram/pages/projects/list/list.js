@@ -22,7 +22,8 @@ Page({
       { key: '', label: '全部' },
       { key: 'active', label: '进行中' },
       { key: 'waiting', label: '等待中' },
-      { key: 'completed', label: '已完成' }
+      { key: 'completed', label: '已完成' },
+      { key: 'archived', label: '已归档' }
     ],
     // 加入项目
     showJoinDialog: false,

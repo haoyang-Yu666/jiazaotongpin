@@ -1,0 +1,55 @@
+<view class="chat-page">
+  <!-- 消息列表 -->
+  <scroll-view
+    class="message-list"
+    scroll-y
+    enhanced
+    show-scrollbar="{{false}}"
+    scroll-into-view="{{scrollToView}}"
+    scroll-with-animation
+  >
+    <!-- 加载更多 -->
+    <view class="load-more-area" wx:if="{{hasMore && messages.length > 0}}" bindtap="onLoadMore">
+      <text class="load-more-text">加载更早消息</text>
+    </view>
+
+    <!-- 加载中 -->
+    <view class="loading-area" wx:if="{{loading}}">
+      <view class="loading-spinner"></view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-area" wx:if="{{!loading && messages.length === 0}}">
+      <text class="empty-text">暂无消息，发送第一条消息吧</text>
+    </view>
+
+    <!-- 消息 -->
+    <view id="msg-{{index}}" wx:for="{{messages}}" wx:key="_id">
+      <message-bubble message="{{item}}" currentUserOpenid="{{currentUserOpenid}}" />
+    </view>
+
+    <!-- 底部留白 -->
+    <view class="list-bottom"></view>
+  </scroll-view>
+
+  <!-- 输入栏 -->
+  <view class="input-bar">
+    <view class="input-bar-inner">
+      <view class="image-btn" bindtap="onChooseImage">
+        <text class="image-btn-icon">+</text>
+      </view>
+      <input
+        class="msg-input"
+        placeholder="输入消息..."
+        value="{{inputText}}"
+        bindinput="onInputChange"
+        bindconfirm="onConfirm"
+        confirm-type="send"
+        adjust-position="{{true}}"
+      />
+      <view class="send-btn {{inputText.trim() ? '' : 'send-disabled'}}" bindtap="onSend">
+        <text class="send-text">发送</text>
+      </view>
+    </view>
+  </view>
+</view>

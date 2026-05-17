@@ -1,0 +1,129 @@
+.chat-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #F5F5F5;
+  overflow: hidden;
+}
+
+.message-list {
+  flex: 1;
+  padding-top: 16rpx;
+}
+
+.load-more-area {
+  display: flex;
+  justify-content: center;
+  padding: 16rpx 0;
+}
+
+.load-more-text {
+  font-size: 24rpx;
+  color: #1A6D5C;
+}
+
+.loading-area {
+  display: flex;
+  justify-content: center;
+  padding: 80rpx 0;
+}
+
+.loading-spinner {
+  width: 48rpx;
+  height: 48rpx;
+  border: 4rpx solid #E0E0E0;
+  border-top-color: #1A6D5C;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.empty-area {
+  display: flex;
+  justify-content: center;
+  padding: 160rpx 0;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #BBBBBB;
+}
+
+.list-bottom {
+  height: 20rpx;
+}
+
+/* 输入栏 */
+.input-bar {
+  background: #ffffff;
+  border-top: 1rpx solid #F0F0F0;
+  padding: 16rpx 24rpx;
+  padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
+}
+
+.input-bar-inner {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.image-btn {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 36rpx;
+  background: #F5F5F5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.image-btn:active {
+  background: #EEEEEE;
+}
+
+.image-btn-icon {
+  font-size: 36rpx;
+  color: #666666;
+  font-weight: 300;
+}
+
+.msg-input {
+  flex: 1;
+  height: 72rpx;
+  line-height: 72rpx;
+  background: #F5F5F5;
+  border-radius: 36rpx;
+  padding: 0 28rpx;
+  font-size: 28rpx;
+  color: #333333;
+  box-sizing: border-box;
+}
+
+.send-btn {
+  height: 72rpx;
+  padding: 0 28rpx;
+  border-radius: 36rpx;
+  background: #1A6D5C;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.send-btn:active {
+  background: #0D4F42;
+}
+
+.send-btn.send-disabled {
+  background: #CCCCCC;
+}
+
+.send-text {
+  font-size: 28rpx;
+  color: #ffffff;
+  font-weight: 500;
+}

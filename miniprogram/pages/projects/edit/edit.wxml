@@ -1,0 +1,127 @@
+<view class="edit-page">
+  <view class="form-container">
+    <!-- 项目名称 -->
+    <view class="form-group">
+      <text class="form-label">项目名称 <text class="required">*</text></text>
+      <input
+        class="form-input"
+        placeholder="请输入项目名称"
+        value="{{form.name}}"
+        data-field="name"
+        bindinput="onInputChange"
+        maxlength="30"
+      />
+    </view>
+
+    <!-- 小区名称 -->
+    <view class="form-group">
+      <text class="form-label">小区名称 <text class="required">*</text></text>
+      <input
+        class="form-input"
+        placeholder="请输入小区名称"
+        value="{{form.community}}"
+        data-field="community"
+        bindinput="onInputChange"
+        maxlength="30"
+      />
+    </view>
+
+    <!-- 面积 -->
+    <view class="form-group">
+      <text class="form-label">面积 (m2) <text class="required">*</text></text>
+      <input
+        class="form-input"
+        type="digit"
+        placeholder="请输入面积"
+        value="{{form.area}}"
+        data-field="area"
+        bindinput="onInputChange"
+      />
+    </view>
+
+    <!-- 装修风格 -->
+    <view class="form-group">
+      <text class="form-label">装修风格</text>
+      <picker mode="selector" range="{{styleOptions}}" value="{{styleIndex}}" bindchange="onStyleChange">
+        <view class="form-picker">
+          <text class="picker-value {{form.style ? '' : 'placeholder'}}">{{form.style || '请选择装修风格'}}</text>
+          <text class="picker-arrow">></text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 预算范围 -->
+    <view class="form-group">
+      <text class="form-label">预算范围</text>
+      <picker mode="selector" range="{{budgetOptions}}" value="{{budgetIndex}}" bindchange="onBudgetChange">
+        <view class="form-picker">
+          <text class="picker-value {{form.budget ? '' : 'placeholder'}}">{{form.budget || '请选择预算范围'}}</text>
+          <text class="picker-arrow">></text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 详细地址 -->
+    <view class="form-group">
+      <text class="form-label">详细地址</text>
+      <input
+        class="form-input"
+        placeholder="请输入详细地址"
+        value="{{form.address}}"
+        data-field="address"
+        bindinput="onInputChange"
+        maxlength="50"
+      />
+    </view>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="form-footer">
+    <button class="btn-primary submit-btn" bindtap="onSubmit" loading="{{submitting}}" disabled="{{submitting}}">
+      保存修改
+    </button>
+  </view>
+
+  <!-- 危险区 -->
+  <view class="danger-zone">
+    <text class="danger-title">危险操作</text>
+
+    <!-- 已完成 → 归档 -->
+    <view class="danger-item" wx:if="{{projectStatus === 'completed'}}" bindtap="onShowArchiveDialog">
+      <text class="danger-text">归档项目</text>
+      <text class="danger-desc">归档后可随时恢复</text>
+    </view>
+
+    <!-- 已归档 → 恢复 -->
+    <view class="danger-item" wx:if="{{projectStatus === 'archived'}}" bindtap="onUnarchive">
+      <text class="danger-text">恢复项目</text>
+      <text class="danger-desc">取消归档，恢复为已完成状态</text>
+    </view>
+
+    <!-- 删除 -->
+    <view class="danger-item danger-delete" bindtap="onShowDeleteDialog">
+      <text class="danger-text">删除项目</text>
+      <text class="danger-desc">删除后不可恢复，所有数据将被清除</text>
+    </view>
+  </view>
+
+  <!-- 归档确认弹窗 -->
+  <confirm-dialog
+    wx:if="{{showArchiveDialog}}"
+    title="确认归档"
+    content="归档后项目不再显示在列表中，但可随时恢复。"
+    confirmText="确认归档"
+    bindconfirm="onConfirmArchive"
+    bindcancel="onCancelArchive"
+  />
+
+  <!-- 删除确认弹窗 -->
+  <confirm-dialog
+    wx:if="{{showDeleteDialog}}"
+    title="确认删除"
+    content="删除后不可恢复！项目及所有关联数据将被永久清除。"
+    confirmText="确认删除"
+    bindconfirm="onConfirmDelete"
+    bindcancel="onCancelDelete"
+  />
+</view>

@@ -64,5 +64,11 @@ Page({
     wx.navigateTo({
       url: `/pages/questionnaire/view/view?projectId=${this.data.projectId}`
     })
+  },
+
+  onGenerateReport() {
+    wx.navigateTo({
+      url: `/pages/projects/report/report?projectId=${this.data.projectId}`
+    })
   }
 })

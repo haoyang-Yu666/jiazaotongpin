@@ -66,6 +66,11 @@
   color: rgba(255, 255, 255, 0.8);
 }
 
+.status-archived {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.6);
+}
+
 .invite-code-btn {
   margin-left: 16rpx;
   padding: 4rpx 16rpx;
@@ -128,7 +133,6 @@
 .tab-bar {
   display: flex;
   background: #ffffff;
-  position: relative;
   box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
   margin-top: -20rpx;
   position: relative;
@@ -158,7 +162,7 @@
 .tab-line {
   position: absolute;
   bottom: 0;
-  width: 33.33%;
+  width: 25%;
   height: 6rpx;
   display: flex;
   justify-content: center;
@@ -330,4 +334,56 @@
 
 .publish-btn {
   width: 100%;
+}
+
+/* 聊天入口 */
+.chat-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chat-entry-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-entry-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1A1A1A;
+  margin-bottom: 4rpx;
+}
+
+.chat-entry-desc {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.chat-entry-right {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.unread-badge {
+  min-width: 36rpx;
+  height: 36rpx;
+  border-radius: 18rpx;
+  background: #E74C3C;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8rpx;
+}
+
+.unread-num {
+  font-size: 22rpx;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.chat-entry-arrow {
+  font-size: 28rpx;
+  color: #999999;
 }

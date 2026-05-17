@@ -24,6 +24,24 @@ exports.main = async (event, context) => {
       return handleGetStats(event.projectId)
     case 'getQrCode':
       return handleGetQrCode(openid, event.projectId)
+    // V3.0 项目管理
+    case 'update':
+      return handleUpdate(openid, event.projectId, event)
+    case 'archive':
+      return handleArchive(openid, event.projectId)
+    case 'unarchive':
+      return handleUnarchive(openid, event.projectId)
+    case 'delete':
+      return handleDelete(openid, event.projectId)
+    // V3.0 项目内聊天
+    case 'sendMessage':
+      return handleSendMessage(openid, event)
+    case 'getMessages':
+      return handleGetMessages(openid, event)
+    case 'markMessagesRead':
+      return handleMarkMessagesRead(openid, event.projectId)
+    case 'getUnreadMessageCount':
+      return handleGetUnreadMessageCount(openid)
     default:
       return { code: -1, message: '未知操作' }
   }
@@ -386,5 +404,243 @@ async function handleGetQrCode(openid, projectId) {
     return { code: 0, data: { fileID: uploadResult.fileID } }
   } catch (err) {
     return { code: -1, message: '生成二维码失败: ' + err.message }
+  }
+}
+
+// ========== V3.0 项目管理 ==========
+
+async function handleUpdate(openid, projectId, event) {
+  try {
+    const { data: project } = await db.collection('jt_projects').doc(projectId).get()
+    if (!project || project.designer_openid !== openid) {
+      return { code: -1, message: '无权限操作' }
+    }
+
+    const allowedFields = ['name', 'community', 'area', 'style', 'budget', 'address']
+    const updateData = { updated_at: db.serverDate() }
+    for (const field of allowedFields) {
+      if (event[field] !== undefined) {
+        updateData[field] = event[field]
+      }
+    }
+
+    await db.collection('jt_projects').doc(projectId).update({ data: updateData })
+    return { code: 0, data: null, message: '更新成功' }
+  } catch (err) {
+    return { code: -1, message: '更新失败: ' + err.message }
+  }
+}
+
+async function handleArchive(openid, projectId) {
+  try {
+    const { data: project } = await db.collection('jt_projects').doc(projectId).get()
+    if (!project || project.designer_openid !== openid) {
+      return { code: -1, message: '无权限操作' }
+    }
+    if (project.status !== 'completed') {
+      return { code: -1, message: '仅已完成的项目可归档' }
+    }
+
+    await db.collection('jt_projects').doc(projectId).update({
+      data: { status: 'archived', updated_at: db.serverDate() }
+    })
+    return { code: 0, data: null, message: '归档成功' }
+  } catch (err) {
+    return { code: -1, message: '归档失败: ' + err.message }
+  }
+}
+
+async function handleUnarchive(openid, projectId) {
+  try {
+    const { data: project } = await db.collection('jt_projects').doc(projectId).get()
+    if (!project || project.designer_openid !== openid) {
+      return { code: -1, message: '无权限操作' }
+    }
+    if (project.status !== 'archived') {
+      return { code: -1, message: '仅归档项目可恢复' }
+    }
+
+    await db.collection('jt_projects').doc(projectId).update({
+      data: { status: 'completed', updated_at: db.serverDate() }
+    })
+    return { code: 0, data: null, message: '恢复成功' }
+  } catch (err) {
+    return { code: -1, message: '恢复失败: ' + err.message }
+  }
+}
+
+async function handleDelete(openid, projectId) {
+  try {
+    const { data: project } = await db.collection('jt_projects').doc(projectId).get()
+    if (!project || project.designer_openid !== openid) {
+      return { code: -1, message: '无权限操作' }
+    }
+
+    // 删除关联数据
+    const collections = ['jt_design_files', 'jt_progress_logs', 'jt_questionnaires', 'jt_notifications']
+    for (const col of collections) {
+      const { data: records } = await db.collection(col).where({ project_id: projectId }).get()
+      for (const record of records) {
+        await db.collection(col).doc(record._id).remove()
+      }
+    }
+
+    // 删除关联评论
+    const { data: logs } = await db.collection('jt_progress_logs')
+      .where({ project_id: projectId }).get()
+    for (const log of logs) {
+      const { data: comments } = await db.collection('jt_comments').where({ log_id: log._id }).get()
+      for (const comment of comments) {
+        await db.collection('jt_comments').doc(comment._id).remove()
+      }
+    }
+
+    // 删除灵感图片记录
+    const { data: inspirations } = await db.collection('jt_inspirations').where({ project_id: projectId }).get()
+    for (const ins of inspirations) {
+      await db.collection('jt_inspirations').doc(ins._id).remove()
+    }
+
+    // 删除消息
+    const { data: messages } = await db.collection('jt_messages').where({ project_id: projectId }).get()
+    for (const msg of messages) {
+      await db.collection('jt_messages').doc(msg._id).remove()
+    }
+
+    // 最后删除项目
+    await db.collection('jt_projects').doc(projectId).remove()
+
+    return { code: 0, data: null, message: '删除成功' }
+  } catch (err) {
+    return { code: -1, message: '删除失败: ' + err.message }
+  }
+}
+
+// ========== V3.0 项目内聊天 ==========
+
+async function handleSendMessage(openid, event) {
+  try {
+    const { projectId, type, content } = event
+
+    // 验证项目成员
+    const { data: project } = await db.collection('jt_projects').doc(projectId).get()
+    if (!project) {
+      return { code: -1, message: '项目不存在' }
+    }
+
+    const isMember = project.designer_openid === openid || project.client_openid === openid
+    if (!isMember) {
+      return { code: -1, message: '非项目成员' }
+    }
+
+    // 获取发送者信息
+    const { data: users } = await db.collection('jt_users').where({ openid }).get()
+    if (users.length === 0) {
+      return { code: -1, message: '用户不存在' }
+    }
+    const sender = users[0]
+
+    const message = {
+      project_id: projectId,
+      sender_id: sender._id,
+      sender_openid: openid,
+      sender_info: { nickname: sender.nickname, avatar: sender.avatar },
+      type: type || 'text',
+      content,
+      is_read: false,
+      created_at: db.serverDate()
+    }
+
+    const result = await db.collection('jt_messages').add({ data: message })
+
+    // 通知对方
+    try {
+      const receiverOpenid = project.designer_openid === openid ? project.client_openid : project.designer_openid
+      if (receiverOpenid) {
+        await db.collection('jt_notifications').add({
+          data: {
+            user_openid: receiverOpenid,
+            project_id: projectId,
+            project_name: project.name,
+            type: 'new_message',
+            title: '新消息',
+            content: (sender.nickname || '用户') + '：' + (type === 'image' ? '[图片]' : content.substring(0, 30)),
+            related_id: result._id,
+            is_read: false,
+            created_at: db.serverDate()
+          }
+        })
+      }
+    } catch (e) {}
+
+    return { code: 0, data: { _id: result._id }, message: '发送成功' }
+  } catch (err) {
+    return { code: -1, message: '发送失败: ' + err.message }
+  }
+}
+
+async function handleGetMessages(openid, event) {
+  try {
+    const { projectId, page = 1, pageSize = 20, afterTimestamp } = event
+
+    let whereCondition = { project_id: projectId }
+    if (afterTimestamp) {
+      whereCondition.created_at = _.gt(new Date(afterTimestamp))
+    }
+
+    const { total } = await db.collection('jt_messages').where(whereCondition).count()
+    const { data: list } = await db.collection('jt_messages')
+      .where(whereCondition)
+      .orderBy('created_at', 'asc')
+      .skip((page - 1) * pageSize)
+      .limit(pageSize)
+      .get()
+
+    // 获取未读数
+    const { total: unreadCount } = await db.collection('jt_messages').where({
+      project_id: projectId,
+      sender_openid: _.neq(openid),
+      is_read: false
+    }).count()
+
+    return {
+      code: 0,
+      data: { list, total, page, pageSize, hasMore: page * pageSize < total, unreadCount }
+    }
+  } catch (err) {
+    return { code: -1, message: '获取消息失败: ' + err.message }
+  }
+}
+
+async function handleMarkMessagesRead(openid, projectId) {
+  try {
+    const { data: messages } = await db.collection('jt_messages').where({
+      project_id: projectId,
+      sender_openid: _.neq(openid),
+      is_read: false
+    }).get()
+
+    for (const msg of messages) {
+      await db.collection('jt_messages').doc(msg._id).update({
+        data: { is_read: true }
+      })
+    }
+
+    return { code: 0, data: { count: messages.length } }
+  } catch (err) {
+    return { code: -1, message: '标记失败: ' + err.message }
+  }
+}
+
+async function handleGetUnreadMessageCount(openid) {
+  try {
+    const { total } = await db.collection('jt_messages').where({
+      sender_openid: _.neq(openid),
+      is_read: false
+    }).count()
+
+    return { code: 0, data: { total } }
+  } catch (err) {
+    return { code: -1, message: '查询失败: ' + err.message }
   }
 }

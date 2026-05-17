@@ -16,7 +16,7 @@
         </view>
         <view class="project-status">
           <text class="status-tag status-{{project.status}}">
-            {{project.status === 'waiting' ? '等待加入' : project.status === 'active' ? '进行中' : '已完成'}}
+            {{project.status === 'waiting' ? '等待加入' : project.status === 'active' ? '进行中' : project.status === 'archived' ? '已归档' : '已完成'}}
           </text>
           <text
             class="invite-code-btn"
@@ -37,6 +37,12 @@
         <view class="header-action-btn" bindtap="onGeneratePoster" wx:if="{{isDesigner}}">
           <text class="action-label">海报</text>
         </view>
+        <view class="header-action-btn" bindtap="onGenerateReport" wx:if="{{isDesigner}}">
+          <text class="action-label">报告</text>
+        </view>
+        <view class="header-action-btn" bindtap="onEditProject" wx:if="{{isDesigner}}">
+          <text class="action-label">编辑</text>
+        </view>
       </view>
     </view>
 
@@ -51,14 +57,14 @@
       >
         <text class="tab-text">{{item.label}}</text>
       </view>
-      <view class="tab-line" style="transform: translateX({{activeTab === 'needs' ? '0' : activeTab === 'files' ? '100%' : '200%'}})">
+      <view class="tab-line" style="transform: translateX({{activeTab === 'needs' ? '0' : activeTab === 'files' ? '100%' : activeTab === 'progress' ? '200%' : '300%'}})">
       </view>
     </view>
 
     <!-- Tab 内容 -->
     <swiper
       class="tab-content"
-      current="{{activeTab === 'needs' ? 0 : activeTab === 'files' ? 1 : 2}}"
+      current="{{activeTab === 'needs' ? 0 : activeTab === 'files' ? 1 : activeTab === 'progress' ? 2 : 3}}"
       bindchange="onSwiperChange"
     >
       <!-- 需求 Tab -->
@@ -197,6 +203,28 @@
               <button class="btn-primary publish-btn" bindtap="onPublishLog">
                 发布进度
               </button>
+            </view>
+          </view>
+        </scroll-view>
+      </swiper-item>
+
+      <!-- 沟通 Tab -->
+      <swiper-item>
+        <scroll-view class="tab-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+          <view class="tab-inner">
+            <view class="section-card" bindtap="onOpenChat">
+              <view class="chat-entry">
+                <view class="chat-entry-info">
+                  <text class="chat-entry-title">项目沟通</text>
+                  <text class="chat-entry-desc">与{{isDesigner ? '客户' : '设计师'}}即时沟通</text>
+                </view>
+                <view class="chat-entry-right">
+                  <view class="unread-badge" wx:if="{{unreadMessages > 0}}">
+                    <text class="unread-num">{{unreadMessages > 99 ? '99+' : unreadMessages}}</text>
+                  </view>
+                  <text class="chat-entry-arrow">></text>
+                </view>
+              </view>
             </view>
           </view>
         </scroll-view>

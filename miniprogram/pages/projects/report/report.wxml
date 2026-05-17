@@ -1,0 +1,25 @@
+<view class="report-page">
+  <!-- 离屏 Canvas -->
+  <canvas type="2d" id="reportCanvas" class="report-canvas"></canvas>
+
+  <!-- 生成中 -->
+  <view class="loading-area" wx:if="{{generating}}">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">报告生成中...</text>
+  </view>
+
+  <!-- 预览 -->
+  <view class="preview-area" wx:if="{{reportUrl}}">
+    <image class="preview-image" src="{{reportUrl}}" mode="widthFix" />
+  </view>
+
+  <!-- 底部操作 -->
+  <view class="report-footer" wx:if="{{reportUrl}}">
+    <button class="btn-primary save-btn" bindtap="onSaveReport">
+      {{saved ? '已保存' : '保存到相册'}}
+    </button>
+    <button class="btn-outline share-btn" open-type="share">
+      分享给好友
+    </button>
+  </view>
+</view>

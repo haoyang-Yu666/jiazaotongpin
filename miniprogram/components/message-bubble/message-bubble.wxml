@@ -1,0 +1,30 @@
+<view class="bubble-row {{isSelf ? 'row-self' : 'row-other'}}">
+  <!-- 对方头像 -->
+  <image
+    wx:if="{{!isSelf}}"
+    class="bubble-avatar"
+    src="{{message.sender_info.avatar || '/images/default-avatar.png'}}"
+    mode="aspectFill"
+  />
+
+  <view class="bubble-content">
+    <!-- 气泡 -->
+    <view class="bubble {{isSelf ? 'bubble-self' : 'bubble-other'}}" wx:if="{{message.type === 'text'}}">
+      <text class="bubble-text {{isSelf ? 'text-self' : 'text-other'}}">{{message.content}}</text>
+    </view>
+    <view class="bubble-image-wrap" wx:elif="{{message.type === 'image'}}" bindtap="onImageTap">
+      <image class="bubble-image" src="{{message.content}}" mode="widthFix" />
+    </view>
+
+    <!-- 时间 -->
+    <text class="bubble-time {{isSelf ? 'time-self' : 'time-other'}}">{{timeText}}</text>
+  </view>
+
+  <!-- 自己头像 -->
+  <image
+    wx:if="{{isSelf}}"
+    class="bubble-avatar"
+    src="{{message.sender_info.avatar || '/images/default-avatar.png'}}"
+    mode="aspectFill"
+  />
+</view>

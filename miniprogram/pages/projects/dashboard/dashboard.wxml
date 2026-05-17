@@ -55,6 +55,10 @@
           <text class="action-icon">📝</text>
           <text class="action-text">查看问卷</text>
         </view>
+        <view class="action-item" bindtap="onGenerateReport">
+          <text class="action-icon">📊</text>
+          <text class="action-text">项目报告</text>
+        </view>
       </view>
     </view>
 

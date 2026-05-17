@@ -24,7 +24,10 @@
     "pages/profile/card/card",
     "pages/notifications/list/list",
     "pages/projects/dashboard/dashboard",
-    "pages/projects/poster/poster"
+    "pages/projects/poster/poster",
+    "pages/projects/edit/edit",
+    "pages/projects/report/report",
+    "pages/projects/chat/chat"
   ],
   "window": {
     "backgroundTextStyle": "light",

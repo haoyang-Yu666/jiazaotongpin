@@ -35,7 +35,8 @@ Component({
       const statusMap = {
         waiting: '等待中',
         active: '进行中',
-        completed: '已完成'
+        completed: '已完成',
+        archived: '已归档'
       }
 
       // 计算进度百分比和当前阶段名称

@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "confirm-dialog": "/components/confirm-dialog/confirm-dialog"
+  },
+  "navigationBarTitleText": "编辑项目"
+}

@@ -14,7 +14,8 @@ Page({
     tabs: [
       { key: 'needs', label: '需求' },
       { key: 'files', label: '图纸' },
-      { key: 'progress', label: '进度' }
+      { key: 'progress', label: '进度' },
+      { key: 'chat', label: '沟通' }
     ],
     activeTab: 'needs',
 
@@ -36,7 +37,10 @@ Page({
     // 进度 tab
     currentStage: 0,
     logs: [],
-    milestones: constants.MILESTONES
+    milestones: constants.MILESTONES,
+
+    // 聊天 tab
+    unreadMessages: 0
   },
 
   onLoad(options) {
@@ -84,6 +88,7 @@ Page({
     this.loadQuestionnaire()
     this.loadFiles()
     this.loadLogs()
+    this.loadUnreadMessages()
   },
 
   async loadQuestionnaire() {
@@ -224,6 +229,34 @@ Page({
   onGeneratePoster() {
     wx.navigateTo({
       url: `/pages/projects/poster/poster?projectId=${this.data.projectId}`
+    })
+  },
+
+  // V3.0 编辑项目
+  onEditProject() {
+    wx.navigateTo({
+      url: `/pages/projects/edit/edit?id=${this.data.projectId}`
+    })
+  },
+
+  // V3.0 生成报告
+  onGenerateReport() {
+    wx.navigateTo({
+      url: `/pages/projects/report/report?projectId=${this.data.projectId}`
+    })
+  },
+
+  // V3.0 聊天
+  async loadUnreadMessages() {
+    try {
+      const res = await projectApi.getUnreadMessageCount()
+      this.setData({ unreadMessages: res.total || 0 })
+    } catch (err) {}
+  },
+
+  onOpenChat() {
+    wx.navigateTo({
+      url: `/pages/projects/chat/chat?projectId=${this.data.projectId}`
     })
   }
 })

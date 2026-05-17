@@ -7,7 +7,8 @@ const constants = {
   PROJECT_STATUS: {
     WAITING: 'waiting',    // 等待客户加入
     ACTIVE: 'active',      // 进行中
-    COMPLETED: 'completed' // 已完成
+    COMPLETED: 'completed', // 已完成
+    ARCHIVED: 'archived'   // 已归档
   },
 
   // 问卷状态
@@ -109,7 +110,8 @@ const constants = {
     FILE_REJECT: 'file_reject',
     PROGRESS_PUBLISH: 'progress_publish',
     QUESTIONNAIRE_SUBMIT: 'questionnaire_submit',
-    PROJECT_JOIN: 'project_join'
+    PROJECT_JOIN: 'project_join',
+    NEW_MESSAGE: 'new_message'
   }
 }
 
