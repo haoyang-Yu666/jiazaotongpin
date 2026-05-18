@@ -56,4 +56,11 @@
       <text class="tip-link">《隐私政策》</text>
     </view>
   </view>
+
+  <!-- 隐私协议弹窗 -->
+  <privacy-popup
+    visible="{{showPrivacy}}"
+    bind:agree="onPrivacyAgree"
+    bind:disagree="onPrivacyDisagree"
+  />
 </view>

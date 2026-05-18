@@ -42,7 +42,9 @@ async function handleSubmit(openid, event) {
         color_preference: event.colorPreference || '',
         budget_range: event.budgetRange || '',
         special_requirements: event.specialRequirements || '',
+        special_images: event.specialImages || [],
         disliked: event.disliked || '',
+        disliked_images: event.dislikedImages || [],
         rooms: event.rooms || [],
         custom_answers: event.customAnswers || [],
         snapshot_questions: event.snapshotQuestions || []

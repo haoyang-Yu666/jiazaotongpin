@@ -57,14 +57,14 @@
       >
         <text class="tab-text">{{item.label}}</text>
       </view>
-      <view class="tab-line" style="transform: translateX({{activeTab === 'needs' ? '0' : activeTab === 'files' ? '100%' : activeTab === 'progress' ? '200%' : '300%'}})">
+      <view class="tab-line" style="width: {{100 / tabCount}}%; transform: translateX({{activeTabIndex * 100}}%)">
       </view>
     </view>
 
     <!-- Tab 内容 -->
     <swiper
       class="tab-content"
-      current="{{activeTab === 'needs' ? 0 : activeTab === 'files' ? 1 : activeTab === 'progress' ? 2 : 3}}"
+      current="{{activeTabIndex}}"
       bindchange="onSwiperChange"
     >
       <!-- 需求 Tab -->
@@ -208,8 +208,8 @@
         </scroll-view>
       </swiper-item>
 
-      <!-- 沟通 Tab -->
-      <swiper-item>
+      <!-- 沟通 Tab（仅项目有客户时显示） -->
+      <swiper-item wx:if="{{project.client_openid}}">
         <scroll-view class="tab-scroll" scroll-y enhanced show-scrollbar="{{false}}">
           <view class="tab-inner">
             <view class="section-card" bindtap="onOpenChat">

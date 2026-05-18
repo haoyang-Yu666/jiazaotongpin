@@ -70,11 +70,41 @@
         <view class="field-block">
           <text class="field-label">特殊需求</text>
           <text class="field-content">{{questionnaire.specialRequirements || '无'}}</text>
+          <view class="room-images" wx:if="{{questionnaire.specialImages && questionnaire.specialImages.length > 0}}">
+            <view class="image-grid">
+              <image
+                class="room-ref-image"
+                wx:for="{{questionnaire.specialImages}}"
+                wx:for-item="imgUrl"
+                wx:key="*this"
+                src="{{imgUrl}}"
+                mode="aspectFill"
+                data-url="{{imgUrl}}"
+                data-urls="{{questionnaire.specialImages}}"
+                bindtap="onPreviewRoomImage"
+              />
+            </view>
+          </view>
         </view>
         <view class="field-divider"></view>
         <view class="field-block">
           <text class="field-label">不喜欢的元素</text>
           <text class="field-content">{{questionnaire.dislikedElements || '无'}}</text>
+          <view class="room-images" wx:if="{{questionnaire.dislikedImages && questionnaire.dislikedImages.length > 0}}">
+            <view class="image-grid">
+              <image
+                class="room-ref-image"
+                wx:for="{{questionnaire.dislikedImages}}"
+                wx:for-item="imgUrl"
+                wx:key="*this"
+                src="{{imgUrl}}"
+                mode="aspectFill"
+                data-url="{{imgUrl}}"
+                data-urls="{{questionnaire.dislikedImages}}"
+                bindtap="onPreviewRoomImage"
+              />
+            </view>
+          </view>
         </view>
       </view>
 

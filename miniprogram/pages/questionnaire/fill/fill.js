@@ -17,7 +17,9 @@ Page({
       budgetRange: '',
       budgetIndex: -1,
       specialRequirements: '',
-      dislikedElements: ''
+      specialImages: [],
+      dislikedElements: '',
+      dislikedImages: []
     },
 
     styleOptions: constants.STYLE_OPTIONS,
@@ -129,6 +131,14 @@ Page({
     this.setData({ [`customAnswers[${index}]`]: e.detail.value })
   },
 
+  onSpecialImagesChange(e) {
+    this.setData({ 'form.specialImages': e.detail.imageList })
+  },
+
+  onDislikedImagesChange(e) {
+    this.setData({ 'form.dislikedImages': e.detail.imageList })
+  },
+
   onCustomSelect(e) {
     const { index, option } = e.currentTarget.dataset
     this.setData({ [`customAnswers[${index}]`]: option })
@@ -169,6 +179,24 @@ Page({
     try {
       const { form } = this.data
 
+      // 上传特别要求参考图
+      let specialImages = []
+      if (form.specialImages && form.specialImages.length > 0) {
+        specialImages = await upload.uploadImages(
+          form.specialImages,
+          `questionnaire/${this.data.projectId}/special`
+        )
+      }
+
+      // 上传不喜欢元素参考图
+      let dislikedImages = []
+      if (form.dislikedImages && form.dislikedImages.length > 0) {
+        dislikedImages = await upload.uploadImages(
+          form.dislikedImages,
+          `questionnaire/${this.data.projectId}/disliked`
+        )
+      }
+
       // 上传房间参考图
       const rooms = []
       for (let i = 0; i < this.data.rooms.length; i++) {
@@ -201,7 +229,9 @@ Page({
         colorPreference: form.colorPreference.trim(),
         budgetRange: form.budgetRange,
         specialRequirements: form.specialRequirements.trim(),
+        specialImages,
         disliked: form.dislikedElements.trim(),
+        dislikedImages,
         rooms,
         customAnswers: this.data.customAnswers,
         snapshotQuestions: this.data.customQuestions

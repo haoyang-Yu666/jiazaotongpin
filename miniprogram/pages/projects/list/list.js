@@ -3,7 +3,8 @@ const auth = require('../../../utils/auth')
 
 Page({
   data: {
-    currentRole: 'designer',
+    currentRole: '',
+    userRole: '',
     viewTabs: [
       { key: 'designer', label: '我设计的' },
       { key: 'client', label: '我参与的' }
@@ -32,8 +33,8 @@ Page({
   },
 
   onLoad() {
-    // 默认显示设计师视角
-    this.setData({ currentRole: 'designer' })
+    const userRole = auth.getRole() || 'client'
+    this.setData({ currentRole: userRole, userRole })
   },
 
   onShow() {

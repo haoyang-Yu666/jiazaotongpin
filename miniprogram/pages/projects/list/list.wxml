@@ -1,6 +1,6 @@
 <view class="project-list-page">
   <!-- 视角切换 -->
-  <view class="view-tabs">
+  <view class="view-tabs" wx:if="{{userRole === 'designer'}}">
     <view
       class="view-tab {{currentRole === item.key ? 'active' : ''}}"
       wx:for="{{viewTabs}}"

@@ -7,7 +7,8 @@ Page({
     roleLabel: '',
     avatarUrl: '',
     nickName: '',
-    loading: false
+    loading: false,
+    showPrivacy: false
   },
 
   onLoad(options) {
@@ -34,7 +35,7 @@ Page({
   },
 
   async onLogin() {
-    const { role, nickName, avatarUrl } = this.data
+    const { nickName } = this.data
 
     if (!nickName || !nickName.trim()) {
       wx.showToast({ title: '请输入昵称', icon: 'none' })
@@ -42,6 +43,33 @@ Page({
     }
 
     if (this.data.loading) return
+
+    // 检查是否需要隐私授权
+    try {
+      const res = await wx.getPrivacySetting()
+      if (res.needAuthorization) {
+        this.setData({ showPrivacy: true })
+        return
+      }
+    } catch (e) {
+      // API 不可用，直接继续
+    }
+
+    this.doLogin()
+  },
+
+  onPrivacyAgree() {
+    this.setData({ showPrivacy: false })
+    this.doLogin()
+  },
+
+  onPrivacyDisagree() {
+    this.setData({ showPrivacy: false })
+    wx.showToast({ title: '需要同意隐私协议才能使用', icon: 'none' })
+  },
+
+  async doLogin() {
+    const { role, nickName, avatarUrl } = this.data
     this.setData({ loading: true })
 
     try {

@@ -218,15 +218,15 @@ Page({
 
       await projectApi.sendMessage(this.data.projectId, 'image', cloudPaths[0])
     } catch (err) {
+      // 移除乐观消息
+      this.setData({ messages: this.data.messages.filter(m => m._id !== optimisticMsg._id) })
       wx.showToast({ title: '发送失败', icon: 'none' })
     } finally {
       this.setData({ sending: false })
     }
   },
 
-  onConfirm(e) {
-    if (e.detail.value === 'done') {
-      this.onSend()
-    }
+  onConfirm() {
+    this.onSend()
   }
 })

@@ -1,0 +1,18 @@
+<view class="privacy-mask" wx:if="{{visible}}" bindtap="onDisagree">
+  <view class="privacy-box" catchtap="">
+    <text class="privacy-title">用户隐私保护提示</text>
+    <view class="privacy-content">
+      <text class="privacy-text">在使用家造同频服务之前，请仔细阅读</text>
+      <text class="privacy-link" bindtap="onViewPrivacy">《隐私保护指引》</text>
+      <text class="privacy-text">。如你同意，请点击"同意"开始使用。</text>
+    </view>
+    <view class="privacy-actions">
+      <view class="privacy-btn privacy-cancel" bindtap="onDisagree">
+        <text>拒绝</text>
+      </view>
+      <button class="privacy-btn privacy-agree" open-type="agreePrivacyAuthorization" bindagreeprivacyauthorization="onAgree">
+        同意
+      </button>
+    </view>
+  </view>
+</view>

@@ -37,7 +37,9 @@ Page({
         colorPreference: qData.color_preference || '',
         budgetRange: qData.budget_range || '',
         specialRequirements: qData.special_requirements || '',
+        specialImages: qData.special_images || [],
         dislikedElements: qData.disliked || '',
+        dislikedImages: qData.disliked_images || [],
         rooms: qData.rooms || [],
         snapshotQuestions: qData.snapshot_questions || [],
         customAnswers: qData.custom_answers || []

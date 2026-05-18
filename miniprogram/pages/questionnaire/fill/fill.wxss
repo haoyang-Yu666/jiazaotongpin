@@ -227,3 +227,14 @@
 .custom-input {
   margin-top: 8rpx;
 }
+
+.image-upload-area {
+  margin-top: 16rpx;
+}
+
+.image-upload-hint {
+  font-size: 24rpx;
+  color: #999999;
+  margin-bottom: 12rpx;
+  display: block;
+}

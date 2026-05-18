@@ -2,7 +2,7 @@
   <!-- 品牌区域 -->
   <view class="brand-area">
     <view class="logo-box">
-      <text class="logo-text">造</text>
+      <text class="logo-text">家</text>
     </view>
     <text class="app-title">家造同频</text>
     <text class="app-slogan">让设计与生活同频共振</text>

@@ -14,8 +14,7 @@ Page({
     tabs: [
       { key: 'needs', label: '需求' },
       { key: 'files', label: '图纸' },
-      { key: 'progress', label: '进度' },
-      { key: 'chat', label: '沟通' }
+      { key: 'progress', label: '进度' }
     ],
     activeTab: 'needs',
 
@@ -40,7 +39,9 @@ Page({
     milestones: constants.MILESTONES,
 
     // 聊天 tab
-    unreadMessages: 0
+    unreadMessages: 0,
+    activeTabIndex: 0,
+    tabCount: 3
   },
 
   onLoad(options) {
@@ -56,21 +57,45 @@ Page({
       isDesigner: auth.isDesigner()
     })
 
-    this.loadProjectDetail()
+    this.loadProjectDetail(true)
   },
 
   onShow() {
     if (this.data.projectId) {
-      this.loadProjectDetail()
+      this.loadProjectDetail(false)
     }
   },
 
-  async loadProjectDetail() {
-    this.setData({ loading: true })
+  async loadProjectDetail(showLoading) {
+    if (showLoading) {
+      this.setData({ loading: true })
+    }
     try {
       const project = await projectApi.getDetail(this.data.projectId)
+
+      // 根据是否有客户决定是否显示沟通 Tab
+      const hasClient = !!project.client_openid
+      const tabs = [
+        { key: 'needs', label: '需求' },
+        { key: 'files', label: '图纸' },
+        { key: 'progress', label: '进度' }
+      ]
+      if (hasClient) {
+        tabs.push({ key: 'chat', label: '沟通' })
+      }
+
+      // 如果当前 activeTab 是 chat 但没有客户，回退到 needs
+      let activeTab = this.data.activeTab
+      if (activeTab === 'chat' && !hasClient) {
+        activeTab = 'needs'
+      }
+
       this.setData({
         project,
+        tabs,
+        activeTab,
+        activeTabIndex: tabs.findIndex(t => t.key === activeTab),
+        tabCount: tabs.length,
         loading: false,
         currentStage: project.current_stage || 0
       })
@@ -88,7 +113,9 @@ Page({
     this.loadQuestionnaire()
     this.loadFiles()
     this.loadLogs()
-    this.loadUnreadMessages()
+    if (this.data.project && this.data.project.client_openid) {
+      this.loadUnreadMessages()
+    }
   },
 
   async loadQuestionnaire() {
@@ -130,13 +157,16 @@ Page({
 
   onTabSwitch(e) {
     const tab = e.currentTarget.dataset.tab
-    this.setData({ activeTab: tab })
+    this.setData({
+      activeTab: tab,
+      activeTabIndex: this.data.tabs.findIndex(t => t.key === tab)
+    })
   },
 
   onSwiperChange(e) {
     const index = e.detail.current
     const tab = this.data.tabs[index].key
-    this.setData({ activeTab: tab })
+    this.setData({ activeTab: tab, activeTabIndex: index })
   },
 
   // 需求 tab 操作

@@ -334,14 +334,15 @@ async function handleGetStats(projectId) {
       return { code: -1, message: '项目不存在' }
     }
 
-    // 文件统计
-    const { data: files } = await db.collection('jt_design_files')
-      .where({ project_id: projectId })
-      .get()
-    const fileTotal = files.length
-    const fileConfirmed = files.filter(f => f.status === 'confirmed').length
-    const filePending = files.filter(f => f.status === 'pending').length
-    const fileRejected = files.filter(f => f.status === 'rejected').length
+    // 文件统计（使用 count 避免受 get 20条限制）
+    const { total: fileTotal } = await db.collection('jt_design_files')
+      .where({ project_id: projectId }).count()
+    const { total: fileConfirmed } = await db.collection('jt_design_files')
+      .where({ project_id: projectId, status: 'confirmed' }).count()
+    const { total: filePending } = await db.collection('jt_design_files')
+      .where({ project_id: projectId, status: 'pending' }).count()
+    const { total: fileRejected } = await db.collection('jt_design_files')
+      .where({ project_id: projectId, status: 'rejected' }).count()
 
     // 进度日志数
     const { total: logCount } = await db.collection('jt_progress_logs')
@@ -476,18 +477,7 @@ async function handleDelete(openid, projectId) {
       return { code: -1, message: '无权限操作' }
     }
 
-    // 清理关联数据（每个集合独立容错）
-    const collections = ['jt_design_files', 'jt_progress_logs', 'jt_questionnaires', 'jt_notifications', 'jt_inspirations', 'jt_messages']
-    for (const col of collections) {
-      try {
-        const { data: records } = await db.collection(col).where({ project_id: projectId }).get()
-        for (const record of records) {
-          await db.collection(col).doc(record._id).remove()
-        }
-      } catch (e) {}
-    }
-
-    // 删除关联评论
+    // 先删除关联评论（依赖日志ID，必须在日志删除前执行）
     try {
       const { data: logs } = await db.collection('jt_progress_logs')
         .where({ project_id: projectId }).get()
@@ -500,6 +490,17 @@ async function handleDelete(openid, projectId) {
         } catch (e) {}
       }
     } catch (e) {}
+
+    // 再清理其他关联数据（每个集合独立容错）
+    const collections = ['jt_design_files', 'jt_progress_logs', 'jt_questionnaires', 'jt_notifications', 'jt_inspirations', 'jt_messages']
+    for (const col of collections) {
+      try {
+        const { data: records } = await db.collection(col).where({ project_id: projectId }).get()
+        for (const record of records) {
+          await db.collection(col).doc(record._id).remove()
+        }
+      } catch (e) {}
+    }
 
     // 最后删除项目
     await db.collection('jt_projects').doc(projectId).remove()
@@ -583,12 +584,28 @@ async function handleGetMessages(openid, event) {
     }
 
     const { total } = await db.collection('jt_messages').where(whereCondition).count()
-    const { data: list } = await db.collection('jt_messages')
-      .where(whereCondition)
-      .orderBy('created_at', 'asc')
-      .skip((page - 1) * pageSize)
-      .limit(pageSize)
-      .get()
+
+    let list = []
+    if (afterTimestamp) {
+      // 轮询新消息：按时间正序返回
+      const { data } = await db.collection('jt_messages')
+        .where(whereCondition)
+        .orderBy('created_at', 'asc')
+        .limit(pageSize)
+        .get()
+      list = data
+    } else {
+      // 分页加载：倒序取最新一页，再翻转
+      const skip = Math.max(0, total - page * pageSize)
+      const take = total - (page - 1) * pageSize
+      const { data } = await db.collection('jt_messages')
+        .where(whereCondition)
+        .orderBy('created_at', 'desc')
+        .skip(skip)
+        .limit(Math.min(take, pageSize))
+        .get()
+      list = data.reverse()
+    }
 
     // 获取未读数
     const { total: unreadCount } = await db.collection('jt_messages').where({
@@ -597,9 +614,13 @@ async function handleGetMessages(openid, event) {
       is_read: false
     }).count()
 
+    // hasMore: 是否还有更早的消息
+    const oldestInList = list.length > 0 ? list[0] : null
+    const hasOlder = oldestInList ? (page * pageSize < total) : false
+
     return {
       code: 0,
-      data: { list, total, page, pageSize, hasMore: page * pageSize < total, unreadCount }
+      data: { list, total, page, pageSize, hasMore: hasOlder, unreadCount }
     }
   } catch (err) {
     return { code: -1, message: '获取消息失败: ' + err.message }
@@ -628,7 +649,22 @@ async function handleMarkMessagesRead(openid, projectId) {
 
 async function handleGetUnreadMessageCount(openid) {
   try {
+    // 先查用户参与的项目
+    const { data: projects } = await db.collection('jt_projects')
+      .where(_.or([
+        { designer_openid: openid },
+        { client_openid: openid }
+      ]))
+      .field({ _id: true })
+      .get()
+
+    const projectIds = projects.map(p => p._id)
+    if (projectIds.length === 0) {
+      return { code: 0, data: { total: 0 } }
+    }
+
     const { total } = await db.collection('jt_messages').where({
+      project_id: _.in(projectIds),
       sender_openid: _.neq(openid),
       is_read: false
     }).count()

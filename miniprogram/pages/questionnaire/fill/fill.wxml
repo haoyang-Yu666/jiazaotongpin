@@ -115,6 +115,14 @@
           maxlength="500"
           auto-height
         />
+        <view class="image-upload-area">
+          <text class="image-upload-hint">上传参考图（最多3张）</text>
+          <image-uploader
+            imageList="{{form.specialImages}}"
+            maxCount="3"
+            bind:change="onSpecialImagesChange"
+          />
+        </view>
       </view>
 
       <view class="form-group">
@@ -128,6 +136,14 @@
           maxlength="300"
           auto-height
         />
+        <view class="image-upload-area">
+          <text class="image-upload-hint">上传参考图（最多3张）</text>
+          <image-uploader
+            imageList="{{form.dislikedImages}}"
+            maxCount="3"
+            bind:change="onDislikedImagesChange"
+          />
+        </view>
       </view>
     </view>
 
