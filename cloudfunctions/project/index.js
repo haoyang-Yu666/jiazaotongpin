@@ -476,36 +476,30 @@ async function handleDelete(openid, projectId) {
       return { code: -1, message: '无权限操作' }
     }
 
-    // 删除关联数据
-    const collections = ['jt_design_files', 'jt_progress_logs', 'jt_questionnaires', 'jt_notifications']
+    // 清理关联数据（每个集合独立容错）
+    const collections = ['jt_design_files', 'jt_progress_logs', 'jt_questionnaires', 'jt_notifications', 'jt_inspirations', 'jt_messages']
     for (const col of collections) {
-      const { data: records } = await db.collection(col).where({ project_id: projectId }).get()
-      for (const record of records) {
-        await db.collection(col).doc(record._id).remove()
-      }
+      try {
+        const { data: records } = await db.collection(col).where({ project_id: projectId }).get()
+        for (const record of records) {
+          await db.collection(col).doc(record._id).remove()
+        }
+      } catch (e) {}
     }
 
     // 删除关联评论
-    const { data: logs } = await db.collection('jt_progress_logs')
-      .where({ project_id: projectId }).get()
-    for (const log of logs) {
-      const { data: comments } = await db.collection('jt_comments').where({ log_id: log._id }).get()
-      for (const comment of comments) {
-        await db.collection('jt_comments').doc(comment._id).remove()
+    try {
+      const { data: logs } = await db.collection('jt_progress_logs')
+        .where({ project_id: projectId }).get()
+      for (const log of logs) {
+        try {
+          const { data: comments } = await db.collection('jt_comments').where({ log_id: log._id }).get()
+          for (const comment of comments) {
+            await db.collection('jt_comments').doc(comment._id).remove()
+          }
+        } catch (e) {}
       }
-    }
-
-    // 删除灵感图片记录
-    const { data: inspirations } = await db.collection('jt_inspirations').where({ project_id: projectId }).get()
-    for (const ins of inspirations) {
-      await db.collection('jt_inspirations').doc(ins._id).remove()
-    }
-
-    // 删除消息
-    const { data: messages } = await db.collection('jt_messages').where({ project_id: projectId }).get()
-    for (const msg of messages) {
-      await db.collection('jt_messages').doc(msg._id).remove()
-    }
+    } catch (e) {}
 
     // 最后删除项目
     await db.collection('jt_projects').doc(projectId).remove()

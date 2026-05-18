@@ -44,8 +44,11 @@
 }
 
 .status-tag {
-  display: inline-block;
-  padding: 4rpx 16rpx;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16rpx;
+  height: 40rpx;
   border-radius: 999rpx;
   font-size: 22rpx;
   font-weight: 500;
@@ -72,8 +75,12 @@
 }
 
 .invite-code-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   margin-left: 16rpx;
-  padding: 4rpx 16rpx;
+  padding: 0 16rpx;
+  height: 40rpx;
   border-radius: 999rpx;
   font-size: 22rpx;
   background: rgba(255, 255, 255, 0.15);

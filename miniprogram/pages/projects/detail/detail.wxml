@@ -15,16 +15,16 @@
           <text class="meta-item" wx:if="{{project.area}}">{{project.area}}m2</text>
         </view>
         <view class="project-status">
-          <text class="status-tag status-{{project.status}}">
-            {{project.status === 'waiting' ? '等待加入' : project.status === 'active' ? '进行中' : project.status === 'archived' ? '已归档' : '已完成'}}
-          </text>
-          <text
+          <view class="status-tag status-{{project.status}}">
+            <text>{{project.status === 'waiting' ? '等待加入' : project.status === 'active' ? '进行中' : project.status === 'archived' ? '已归档' : '已完成'}}</text>
+          </view>
+          <view
             class="invite-code-btn"
             wx:if="{{isDesigner && project.invite_code}}"
             bindtap="onCopyInviteCode"
           >
-            邀请码: {{project.invite_code}}
-          </text>
+            <text>邀请码: {{project.invite_code}}</text>
+          </view>
         </view>
       </view>
       <view class="header-actions">
