@@ -58,6 +58,6 @@
 
   <!-- 版本信息 -->
   <view class="version-info">
-    <text class="version-text">家造同频 v2.0.0</text>
+    <text class="version-text">家造同频 v{{appVersion}}</text>
   </view>
 </view>

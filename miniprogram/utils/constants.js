@@ -83,6 +83,9 @@ const constants = {
   // 分页大小
   PAGE_SIZE: 10,
 
+  // 应用版本
+  APP_VERSION: '3.3.0',
+
   // 图片上传最大数量
   MAX_IMAGES: 9,
 

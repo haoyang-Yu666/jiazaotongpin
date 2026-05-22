@@ -1,11 +1,13 @@
 const { userApi } = require('../../../utils/cloud')
 const auth = require('../../../utils/auth')
+const constants = require('../../../utils/constants')
 
 Page({
   data: {
     userInfo: null,
     roleLabel: '',
-    isDesigner: false
+    isDesigner: false,
+    appVersion: constants.APP_VERSION
   },
 
   onLoad() {
@@ -57,7 +59,7 @@ Page({
   onAboutTap() {
     wx.showModal({
       title: '关于家造同频',
-      content: '家造同频 v2.0.0\n让设计与生活同频共振',
+      content: `家造同频 v${constants.APP_VERSION}\n让设计与生活同频共振`,
       showCancel: false,
       confirmText: '知道了',
       confirmColor: '#1A6D5C'
