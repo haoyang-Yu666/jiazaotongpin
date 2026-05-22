@@ -22,9 +22,14 @@ Page({
       const res = await projectApi.list({ role: 'designer' })
       const projectCount = res && res.total ? res.total : 0
 
+      const styleList = profile && profile.styles
+        ? profile.styles.split(/[,，、\s]+/).filter(s => s.trim())
+        : []
+
       this.setData({
         userInfo: profile,
-        projectCount
+        projectCount,
+        styleList
       })
     } catch (err) {
       const localInfo = auth.getUserInfo()

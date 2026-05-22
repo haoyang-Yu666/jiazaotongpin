@@ -11,12 +11,16 @@
     />
     <view class="user-info">
       <text class="user-name">{{userInfo.nickname || '未设置昵称'}}</text>
+      <text class="user-position" wx:if="{{userInfo.position}}">{{userInfo.position}}</text>
       <view class="role-badge {{isDesigner ? 'badge-designer' : 'badge-client'}}">
         <text class="role-text">{{roleLabel}}</text>
       </view>
     </view>
     <view class="user-phone" wx:if="{{userInfo.phone}}">
       <text class="phone-text">{{userInfo.phone}}</text>
+    </view>
+    <view class="user-company" wx:if="{{userInfo.company}}">
+      <text class="company-text">{{userInfo.company}}</text>
     </view>
   </view>
 

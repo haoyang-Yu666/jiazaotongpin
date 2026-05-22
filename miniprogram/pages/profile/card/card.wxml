@@ -9,9 +9,30 @@
       />
       <view class="card-info">
         <text class="card-name">{{userInfo.nickname || '设计师'}}</text>
+        <text class="card-position" wx:if="{{userInfo.position}}">{{userInfo.position}}</text>
         <view class="card-badge">
           <text class="badge-text">认证设计师</text>
         </view>
+      </view>
+    </view>
+
+    <view class="card-company" wx:if="{{userInfo.company}}">
+      <text class="company-text">{{userInfo.company}}</text>
+    </view>
+
+    <view class="card-bio" wx:if="{{userInfo.bio}}">
+      <text class="bio-label">个人简介</text>
+      <text class="bio-text">{{userInfo.bio}}</text>
+    </view>
+
+    <view class="card-styles" wx:if="{{userInfo.styles}}">
+      <text class="styles-label">擅长风格</text>
+      <view class="styles-tags">
+        <block wx:for="{{styleList}}" wx:key="*this">
+          <view class="style-tag">
+            <text class="style-tag-text">{{item}}</text>
+          </view>
+        </block>
       </view>
     </view>
 
@@ -27,8 +48,19 @@
       </view>
     </view>
 
-    <view class="card-company" wx:if="{{userInfo.company}}">
-      <text class="company-text">{{userInfo.company}}</text>
+    <view class="card-contact" wx:if="{{userInfo.phone || userInfo.email || userInfo.wechat}}">
+      <view class="contact-item" wx:if="{{userInfo.phone}}">
+        <text class="contact-icon">📞</text>
+        <text class="contact-text">{{userInfo.phone}}</text>
+      </view>
+      <view class="contact-item" wx:if="{{userInfo.email}}">
+        <text class="contact-icon">📧</text>
+        <text class="contact-text">{{userInfo.email}}</text>
+      </view>
+      <view class="contact-item" wx:if="{{userInfo.wechat}}">
+        <text class="contact-icon">💬</text>
+        <text class="contact-text">{{userInfo.wechat}}</text>
+      </view>
     </view>
   </view>
 

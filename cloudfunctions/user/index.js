@@ -41,6 +41,11 @@ async function handleLogin(openid, event) {
       avatar: event.avatar || '',
       phone: '',
       company: '',
+      position: '',
+      styles: '',
+      bio: '',
+      email: '',
+      wechat: '',
       created_at: db.serverDate(),
       updated_at: db.serverDate()
     }
@@ -76,7 +81,7 @@ async function handleGetProfile(openid) {
 async function handleUpdateProfile(openid, event) {
   try {
     const updateData = {}
-    const fields = ['nickname', 'avatar', 'phone', 'company']
+    const fields = ['nickname', 'avatar', 'phone', 'company', 'position', 'styles', 'bio', 'email', 'wechat']
 
     fields.forEach(field => {
       if (event[field] !== undefined) {

@@ -24,10 +24,13 @@ Page({
   },
 
   onChooseAvatar(e) {
+    if (this._choosingAvatar) return
+    this._choosingAvatar = true
     const avatarUrl = e.detail.avatarUrl
     if (avatarUrl) {
       this.setData({ avatarUrl })
     }
+    this._choosingAvatar = false
   },
 
   onNicknameInput(e) {

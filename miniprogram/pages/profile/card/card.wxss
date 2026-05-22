@@ -36,6 +36,13 @@
   font-weight: bold;
   color: #333;
   display: block;
+  margin-bottom: 6rpx;
+}
+
+.card-position {
+  font-size: 26rpx;
+  color: #1A6D5C;
+  display: block;
   margin-bottom: 12rpx;
 }
 
@@ -52,11 +59,71 @@
   color: #ffffff;
 }
 
+.card-company {
+  margin-top: 28rpx;
+  text-align: center;
+}
+
+.company-text {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.card-bio {
+  margin-top: 24rpx;
+  padding: 20rpx 24rpx;
+  background: #F8FAF9;
+  border-radius: 12rpx;
+}
+
+.bio-label {
+  font-size: 24rpx;
+  color: #999;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.bio-text {
+  font-size: 28rpx;
+  color: #444;
+  line-height: 1.6;
+}
+
+.card-styles {
+  margin-top: 24rpx;
+}
+
+.styles-label {
+  font-size: 24rpx;
+  color: #999;
+  display: block;
+  margin-bottom: 14rpx;
+}
+
+.styles-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.style-tag {
+  padding: 8rpx 20rpx;
+  background: #E8F5F0;
+  border-radius: 999rpx;
+}
+
+.style-tag-text {
+  font-size: 24rpx;
+  color: #1A6D5C;
+}
+
 .card-stats {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 32rpx 0;
+  margin-top: 24rpx;
   border-top: 1rpx solid #f0f0f0;
   border-bottom: 1rpx solid #f0f0f0;
 }
@@ -86,14 +153,24 @@
   background-color: #f0f0f0;
 }
 
-.card-company {
+.card-contact {
   margin-top: 28rpx;
-  text-align: center;
 }
 
-.company-text {
-  font-size: 26rpx;
-  color: #666;
+.contact-item {
+  display: flex;
+  align-items: center;
+  padding: 14rpx 0;
+}
+
+.contact-icon {
+  font-size: 32rpx;
+  margin-right: 16rpx;
+}
+
+.contact-text {
+  font-size: 28rpx;
+  color: #555;
 }
 
 .card-actions {

@@ -1,12 +1,13 @@
 <view class="edit-page">
   <!-- 头像 -->
   <view class="avatar-section">
-    <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+    <view class="avatar-wrap">
       <image class="avatar-img" src="{{avatar || '/images/default-avatar.png'}}" mode="aspectFill" />
       <view class="avatar-edit-icon">
         <text class="edit-text">编辑</text>
       </view>
-    </button>
+      <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar"></button>
+    </view>
   </view>
 
   <!-- 表单 -->
@@ -41,6 +42,61 @@
         placeholder="请输入公司名称"
         value="{{company}}"
         bindinput="onCompanyInput"
+      />
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">职位</text>
+      <input
+        class="form-input"
+        placeholder="如：主案设计师、设计总监"
+        value="{{position}}"
+        bindinput="onPositionInput"
+      />
+    </view>
+
+    <block wx:if="{{isDesigner}}">
+      <view class="form-group">
+        <text class="form-label">擅长风格</text>
+        <input
+          class="form-input"
+          placeholder="如：现代简约、北欧风、新中式"
+          value="{{styles}}"
+          bindinput="onStylesInput"
+        />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">个人简介</text>
+        <textarea
+          class="form-textarea"
+          placeholder="简单介绍一下自己，让客户更了解你"
+          value="{{bio}}"
+          bindinput="onBioInput"
+          maxlength="200"
+          auto-height
+        />
+      </view>
+    </block>
+
+    <view class="form-group">
+      <text class="form-label">邮箱</text>
+      <input
+        class="form-input"
+        type="text"
+        placeholder="请输入邮箱"
+        value="{{email}}"
+        bindinput="onEmailInput"
+      />
+    </view>
+
+    <view class="form-group" wx:if="{{isDesigner}}">
+      <text class="form-label">微信号</text>
+      <input
+        class="form-input"
+        placeholder="方便客户联系你"
+        value="{{wechat}}"
+        bindinput="onWechatInput"
       />
     </view>
   </view>

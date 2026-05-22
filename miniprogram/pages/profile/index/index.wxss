@@ -44,6 +44,12 @@
   font-size: 36rpx;
   font-weight: 700;
   color: #1A1A1A;
+  margin-bottom: 6rpx;
+}
+
+.user-position {
+  font-size: 26rpx;
+  color: #1A6D5C;
   margin-bottom: 12rpx;
 }
 
@@ -78,6 +84,15 @@
 }
 
 .phone-text {
+  font-size: 26rpx;
+  color: #999999;
+}
+
+.user-company {
+  margin-top: 6rpx;
+}
+
+.company-text {
   font-size: 26rpx;
   color: #999999;
 }
@@ -135,14 +150,17 @@
 .logout-btn {
   width: 100%;
   height: 88rpx;
-  line-height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: #ffffff;
   border: 2rpx solid #FF4D4F;
   border-radius: 16rpx;
   color: #FF4D4F;
   font-size: 30rpx;
   font-weight: 500;
-  text-align: center;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .logout-btn::after {

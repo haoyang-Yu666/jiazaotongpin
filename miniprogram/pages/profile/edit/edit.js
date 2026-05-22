@@ -7,6 +7,11 @@ Page({
     nickname: '',
     phone: '',
     company: '',
+    position: '',
+    styles: '',
+    bio: '',
+    email: '',
+    wechat: '',
     submitting: false
   },
 
@@ -17,16 +22,24 @@ Page({
         avatar: userInfo.avatar || '',
         nickname: userInfo.nickname || '',
         phone: userInfo.phone || '',
-        company: userInfo.company || ''
+        company: userInfo.company || '',
+        position: userInfo.position || '',
+        styles: userInfo.styles || '',
+        bio: userInfo.bio || '',
+        email: userInfo.email || '',
+        wechat: userInfo.wechat || ''
       })
     }
   },
 
   onChooseAvatar(e) {
+    if (this._choosingAvatar) return
+    this._choosingAvatar = true
     const { avatarUrl } = e.detail
     if (avatarUrl) {
       this.setData({ avatar: avatarUrl })
     }
+    this._choosingAvatar = false
   },
 
   onNicknameInput(e) {
@@ -41,8 +54,28 @@ Page({
     this.setData({ company: e.detail.value })
   },
 
+  onPositionInput(e) {
+    this.setData({ position: e.detail.value })
+  },
+
+  onStylesInput(e) {
+    this.setData({ styles: e.detail.value })
+  },
+
+  onBioInput(e) {
+    this.setData({ bio: e.detail.value })
+  },
+
+  onEmailInput(e) {
+    this.setData({ email: e.detail.value })
+  },
+
+  onWechatInput(e) {
+    this.setData({ wechat: e.detail.value })
+  },
+
   async onSubmit() {
-    const { nickname, phone, company, avatar } = this.data
+    const { nickname, phone, company, position, styles, bio, email, wechat, avatar } = this.data
 
     if (!nickname || !nickname.trim()) {
       wx.showToast({ title: '请输入昵称', icon: 'none' })
@@ -69,7 +102,12 @@ Page({
         nickname: nickname.trim(),
         avatar: finalAvatar,
         phone: phone.trim(),
-        company: company.trim()
+        company: company.trim(),
+        position: position.trim(),
+        styles: styles.trim(),
+        bio: bio.trim(),
+        email: email.trim(),
+        wechat: wechat.trim()
       })
 
       // 更新本地缓存
@@ -79,7 +117,12 @@ Page({
         nickname: nickname.trim(),
         avatar: finalAvatar,
         phone: phone.trim(),
-        company: company.trim()
+        company: company.trim(),
+        position: position.trim(),
+        styles: styles.trim(),
+        bio: bio.trim(),
+        email: email.trim(),
+        wechat: wechat.trim()
       })
 
       wx.showToast({ title: '保存成功', icon: 'success' })
