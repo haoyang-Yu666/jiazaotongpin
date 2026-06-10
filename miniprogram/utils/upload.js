@@ -2,7 +2,17 @@
  * 文件上传工具
  */
 
+const privacy = require('./privacy')
+
 const upload = {
+  // 确保隐私授权（内部使用）
+  async _ensurePrivacy() {
+    const ok = await privacy.ensureAuthorized()
+    if (!ok) {
+      throw new Error('隐私授权未通过')
+    }
+  },
+
   // 压缩并上传单张图片
   async uploadImage(filePath, cloudPath) {
     // 先压缩
@@ -49,25 +59,23 @@ const upload = {
     })
   },
 
-  // 选择图片
-  chooseImage(count = 9) {
+  // 选择图片（自动检查隐私授权）
+  async chooseImage(count = 9) {
+    await this._ensurePrivacy()
     return new Promise((resolve, reject) => {
-      wx.chooseMedia({
+      wx.chooseImage({
         count,
-        mediaType: ['image'],
-        sourceType: ['album', 'camera'],
         sizeType: ['compressed'],
-        success: (res) => {
-          const paths = res.tempFiles.map(f => f.tempFilePath)
-          resolve(paths)
-        },
+        sourceType: ['album', 'camera'],
+        success: (res) => resolve(res.tempFilePaths),
         fail: reject
       })
     })
   },
 
-  // 选择文件（PDF等）
-  chooseFile() {
+  // 选择文件（自动检查隐私授权）
+  async chooseFile() {
+    await this._ensurePrivacy()
     return new Promise((resolve, reject) => {
       wx.chooseMessageFile({
         count: 1,

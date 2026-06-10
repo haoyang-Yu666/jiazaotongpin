@@ -1,3 +1,5 @@
+const privacy = require('../../utils/privacy')
+
 Component({
   properties: {
     imageList: {
@@ -11,35 +13,38 @@ Component({
   },
 
   methods: {
-    onChoose() {
-      const remaining = this.data.maxCount - this.data.imageList.length;
-      if (remaining <= 0) return;
+    async onChoose() {
+      const remaining = this.data.maxCount - this.data.imageList.length
+      if (remaining <= 0) return
 
-      wx.chooseMedia({
+      // 检查隐私授权
+      const ok = await privacy.ensureAuthorized()
+      if (!ok) return
+
+      wx.chooseImage({
         count: remaining,
-        mediaType: ['image'],
+        sizeType: ['compressed'],
         sourceType: ['album', 'camera'],
         success: (res) => {
-          const newImages = res.tempFiles.map(file => file.tempFilePath);
-          const updatedList = [...this.data.imageList, ...newImages];
-          this.triggerEvent('change', { imageList: updatedList });
+          const updatedList = [...this.data.imageList, ...res.tempFilePaths]
+          this.triggerEvent('change', { imageList: updatedList })
         }
-      });
+      })
     },
 
     onDelete(e) {
-      const index = e.currentTarget.dataset.index;
-      const updatedList = [...this.data.imageList];
-      updatedList.splice(index, 1);
-      this.triggerEvent('change', { imageList: updatedList });
+      const index = e.currentTarget.dataset.index
+      const updatedList = [...this.data.imageList]
+      updatedList.splice(index, 1)
+      this.triggerEvent('change', { imageList: updatedList })
     },
 
     onPreview(e) {
-      const index = e.currentTarget.dataset.index;
+      const index = e.currentTarget.dataset.index
       wx.previewImage({
         current: this.data.imageList[index],
         urls: this.data.imageList
-      });
+      })
     }
   }
-});
+})

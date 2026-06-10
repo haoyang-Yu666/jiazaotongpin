@@ -14,6 +14,7 @@ Page({
       { value: 'other', label: '其他' }
     ],
     version: 'V1',
+    versionIndex: 0,
     versionOptions: ['V1', 'V2', 'V3', '最终版'],
     description: '',
     fileUrl: '',
@@ -41,41 +42,69 @@ Page({
   },
 
   onVersionChange(e) {
-    const idx = e.detail.value
-    this.setData({ version: this.data.versionOptions[idx] })
+    const idx = parseInt(e.detail.value)
+    this.setData({
+      versionIndex: idx,
+      version: this.data.versionOptions[idx]
+    })
   },
 
   onModeSwitch(e) {
     const mode = e.currentTarget.dataset.mode
-    this.setData({ isImageMode: mode === 'image' })
+    // 切换模式时清除已选文件
+    this.setData({
+      isImageMode: mode === 'image',
+      imageList: [],
+      fileUrl: '',
+      fileName: '',
+      fileType: ''
+    })
   },
 
   async onChooseImage() {
     try {
       const paths = await upload.chooseImage(1)
-      this.setData({
-        imageList: paths,
-        fileUrl: '',
-        fileName: '',
-        fileType: 'image'
-      })
+      if (paths && paths.length > 0) {
+        this.setData({
+          imageList: paths,
+          fileUrl: '',
+          fileName: '',
+          fileType: 'image'
+        })
+      }
     } catch (err) {
-      console.error('选择图片失败:', err)
+      // 用户取消选择不提示
+      if (err && err.errMsg && err.errMsg.indexOf('cancel') === -1) {
+        console.error('选择图片失败:', err)
+        wx.showToast({ title: '选择图片失败', icon: 'none' })
+      }
     }
   },
 
   async onChooseFile() {
     try {
       const file = await upload.chooseFile()
-      const ext = file.path.split('.').pop().toLowerCase()
-      this.setData({
-        fileUrl: file.path,
-        fileName: file.name,
-        fileType: ext === 'pdf' ? 'pdf' : 'image',
-        imageList: []
-      })
+      if (file && file.path) {
+        const ext = file.path.split('.').pop().toLowerCase()
+        this.setData({
+          fileUrl: file.path,
+          fileName: file.name || '未命名文件',
+          fileType: ext === 'pdf' ? 'pdf' : 'image',
+          imageList: []
+        })
+      }
     } catch (err) {
+      // 用户取消选择不提示
+      if (err && err.errMsg && err.errMsg.indexOf('cancel') !== -1) {
+        return
+      }
+      // 开发工具中 wx.chooseMessageFile 不可用时提示
       console.error('选择文件失败:', err)
+      wx.showModal({
+        title: '选择文件',
+        content: '请先将PDF或图片文件发送到微信聊天（如"文件传输助手"），再重新选择。\n\n当前仅支持从微信聊天记录中选取文件。',
+        showCancel: false
+      })
     }
   },
 
@@ -117,10 +146,17 @@ Page({
 
       // 上传文件（PDF等）
       if (this.data.fileUrl && this.data.fileType === 'pdf') {
-        const ext = this.data.fileName.split('.').pop()
         const cloudPath = `files/${projectId}/${Date.now()}_${this.data.fileName}`
         const fileId = await upload.uploadFile(this.data.fileUrl, cloudPath)
         fileIds = [fileId]
+      }
+
+      // 如果文件模式选的是图片，走图片上传
+      if (this.data.fileUrl && this.data.fileType === 'image') {
+        fileIds = await upload.uploadImages(
+          [this.data.fileUrl],
+          `files/${projectId}/${Date.now()}`
+        )
       }
 
       await fileApi.save({
@@ -140,7 +176,7 @@ Page({
     } catch (err) {
       console.error('上传失败:', err)
       this.setData({ submitting: false })
-      wx.showToast({ title: '上传失败', icon: 'none' })
+      wx.showToast({ title: '上传失败，请重试', icon: 'none' })
     }
   }
 })

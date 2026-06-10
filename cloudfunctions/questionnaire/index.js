@@ -31,6 +31,49 @@ async function handleSubmit(openid, event) {
       return { code: -1, message: '问卷已提交，不可重复填写' }
     }
 
+    // ========== 内容安全审查 ==========
+
+    // 审查文本字段
+    const textFields = [
+      { key: 'specialRequirements', label: '特殊需求' },
+      { key: 'disliked', label: '不喜欢的元素' }
+    ]
+    for (const { key, label } of textFields) {
+      if (event[key]) {
+        try {
+          const checkRes = await cloud.openapi.security.msgSecCheck({ content: event[key] })
+          if (checkRes && checkRes.errCode !== 0) {
+            return { code: -1, message: `"${label}"包含违规内容，无法提交` }
+          }
+        } catch (secErr) {
+          if (secErr.errCode === 87014) return { code: -1, message: `"${label}"包含违规内容，无法提交` }
+          console.error(`${key} msgSecCheck error:`, secErr)
+        }
+      }
+    }
+
+    // 审查上传的参考图片（只查首张）
+    const imageFields = ['specialImages', 'dislikedImages']
+    for (const field of imageFields) {
+      const images = event[field] || []
+      if (images.length > 0) {
+        try {
+          const downloadRes = await cloud.downloadFile({ fileID: images[0] })
+          if (downloadRes && downloadRes.fileContent) {
+            const checkRes = await cloud.openapi.security.imgSecCheck({
+              media: { contentType: 'image/png', value: downloadRes.fileContent }
+            })
+            if (checkRes && checkRes.errCode !== 0) {
+              return { code: -1, message: '参考图片包含违规内容，无法提交' }
+            }
+          }
+        } catch (secErr) {
+          if (secErr.errCode === 87014) return { code: -1, message: '参考图片包含违规内容，无法提交' }
+          console.error(`${field} imgSecCheck error:`, secErr)
+        }
+      }
+    }
+
     const questionnaire = {
       project_id: event.projectId,
       status: 'submitted',

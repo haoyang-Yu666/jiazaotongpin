@@ -188,6 +188,9 @@ Page({
 
   async onChooseImage() {
     if (this.data.sending) return
+
+    let optimisticMsg = null
+
     try {
       const images = await upload.chooseImage(1)
       if (!images || images.length === 0) return
@@ -203,7 +206,7 @@ Page({
       }
 
       // 乐观显示
-      const optimisticMsg = {
+      optimisticMsg = {
         _id: 'temp_img_' + Date.now(),
         sender_openid: this.data.currentUserOpenid,
         sender_info: auth.getUserInfo() || {},
@@ -219,7 +222,9 @@ Page({
       await projectApi.sendMessage(this.data.projectId, 'image', cloudPaths[0])
     } catch (err) {
       // 移除乐观消息
-      this.setData({ messages: this.data.messages.filter(m => m._id !== optimisticMsg._id) })
+      if (optimisticMsg) {
+        this.setData({ messages: this.data.messages.filter(m => m._id !== optimisticMsg._id) })
+      }
       wx.showToast({ title: '发送失败', icon: 'none' })
     } finally {
       this.setData({ sending: false })

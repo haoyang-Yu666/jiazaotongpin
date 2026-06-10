@@ -36,14 +36,62 @@ async function handleSave(openid, event) {
       return { code: -1, message: '仅设计师可上传文件' }
     }
 
+    // ========== 内容安全审查 ==========
+
+    // 审查文件标题
+    if (event.title) {
+      try {
+        const checkRes = await cloud.openapi.security.msgSecCheck({ content: event.title })
+        if (checkRes && checkRes.errCode !== 0) {
+          return { code: -1, message: '标题包含违规内容，无法上传' }
+        }
+      } catch (secErr) {
+        if (secErr.errCode === 87014) return { code: -1, message: '标题包含违规内容，无法上传' }
+        console.error('title msgSecCheck error:', secErr)
+      }
+    }
+
+    // 审查文件描述
+    if (event.description) {
+      try {
+        const checkRes = await cloud.openapi.security.msgSecCheck({ content: event.description })
+        if (checkRes && checkRes.errCode !== 0) {
+          return { code: -1, message: '描述包含违规内容，无法上传' }
+        }
+      } catch (secErr) {
+        if (secErr.errCode === 87014) return { code: -1, message: '描述包含违规内容，无法上传' }
+        console.error('description msgSecCheck error:', secErr)
+      }
+    }
+
+    // 审查上传的图片文件（只查第一张）
+    const fileType = event.fileType || 'image'
+    const fileIds = event.fileIds || []
+    if (fileType === 'image' && fileIds.length > 0) {
+      try {
+        const downloadRes = await cloud.downloadFile({ fileID: fileIds[0] })
+        if (downloadRes && downloadRes.fileContent) {
+          const checkRes = await cloud.openapi.security.imgSecCheck({
+            media: { contentType: 'image/png', value: downloadRes.fileContent }
+          })
+          if (checkRes && checkRes.errCode !== 0) {
+            return { code: -1, message: '图片包含违规内容，无法上传' }
+          }
+        }
+      } catch (secErr) {
+        if (secErr.errCode === 87014) return { code: -1, message: '图片包含违规内容，无法上传' }
+        console.error('file imgSecCheck error:', secErr)
+      }
+    }
+
     const fileRecord = {
       project_id: event.projectId,
       uploader_id: users[0]._id,
       uploader_openid: openid,
       title: event.title || '',
       description: event.description || '',
-      file_type: event.fileType || 'image',
-      file_ids: event.fileIds || [],
+      file_type: fileType,
+      file_ids: fileIds,
       category: event.category || 'other',
       version: event.version || 'V1',
       version_number: event.versionNumber || 1,

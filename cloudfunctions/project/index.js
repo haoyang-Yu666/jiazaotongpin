@@ -517,6 +517,13 @@ async function handleSendMessage(openid, event) {
   try {
     const { projectId, type, content } = event
 
+    // ========== 内容校验 ==========
+
+    // 文本消息长度限制
+    if (type !== 'image' && content && content.length > 500) {
+      return { code: -1, message: '消息内容过长，最多500字' }
+    }
+
     // 验证项目成员
     const { data: project } = await db.collection('jt_projects').doc(projectId).get()
     if (!project) {
@@ -535,6 +542,63 @@ async function handleSendMessage(openid, event) {
     }
     const sender = users[0]
 
+    // ========== 频率限制 ==========
+    // 查询同一用户在该项目的最后一条消息，1秒内不允许重复发送
+    const { data: recentMsgs } = await db.collection('jt_messages')
+      .where({ project_id: projectId, sender_openid: openid })
+      .orderBy('created_at', 'desc')
+      .limit(1)
+      .get()
+    if (recentMsgs && recentMsgs.length > 0 && recentMsgs[0].created_at) {
+      const lastTime = new Date(recentMsgs[0].created_at).getTime()
+      const now = Date.now()
+      if (now - lastTime < 1000) {
+        return { code: -1, message: '发送过快，请稍后再试' }
+      }
+    }
+
+    // ========== 内容安全审查 ==========
+    if (type === 'image') {
+      // 图片消息：下载云存储文件并审查
+      try {
+        const downloadRes = await cloud.downloadFile({ fileID: content })
+        if (downloadRes && downloadRes.fileContent) {
+          const checkRes = await cloud.openapi.security.imgSecCheck({
+            media: {
+              contentType: 'image/png',
+              value: downloadRes.fileContent
+            }
+          })
+          if (checkRes && checkRes.errCode !== 0) {
+            return { code: -1, message: '图片包含违规内容，无法发送' }
+          }
+        }
+      } catch (secErr) {
+        // errCode 87014 表示内容违规
+        if (secErr.errCode === 87014) {
+          return { code: -1, message: '图片包含违规内容，无法发送' }
+        }
+        // 其他错误（如API不可用）不阻塞发送，记录并继续
+        console.error('imgSecCheck error:', secErr)
+      }
+    } else {
+      // 文本消息：审查文本内容
+      if (content) {
+        try {
+          const checkRes = await cloud.openapi.security.msgSecCheck({ content })
+          if (checkRes && checkRes.errCode !== 0) {
+            return { code: -1, message: '消息包含违规内容，无法发送' }
+          }
+        } catch (secErr) {
+          if (secErr.errCode === 87014) {
+            return { code: -1, message: '消息包含违规内容，无法发送' }
+          }
+          console.error('msgSecCheck error:', secErr)
+        }
+      }
+    }
+
+    // ========== 写入消息 ==========
     const message = {
       project_id: projectId,
       sender_id: sender._id,
