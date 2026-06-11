@@ -57,6 +57,11 @@
       </view>
     </view>
 
+    <!-- 设计师删除入口 -->
+    <view class="delete-log-area" wx:if="{{isDesigner}}">
+      <text class="delete-log-link" bindtap="onDeleteLog">删除此进度</text>
+    </view>
+
     <!-- 分割线 -->
     <view class="divider"></view>
 

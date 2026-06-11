@@ -18,6 +18,8 @@ exports.main = async (event, context) => {
       return handleConfirm(openid, event)
     case 'getVersions':
       return handleGetVersions(event)
+    case 'delete':
+      return handleDelete(openid, event)
     default:
       return { code: -1, message: '未知操作' }
   }
@@ -260,5 +262,60 @@ async function handleGetVersions(event) {
     return { code: 0, data: list }
   } catch (err) {
     return { code: -1, message: '查询失败: ' + err.message }
+  }
+}
+
+async function handleDelete(openid, event) {
+  try {
+    const fileId = event.fileId
+    if (!fileId) {
+      return { code: -1, message: '缺少文件ID' }
+    }
+
+    // 查询用户
+    const { data: users } = await db.collection('jt_users')
+      .where({ openid })
+      .get()
+    if (users.length === 0) {
+      return { code: -1, message: '用户不存在' }
+    }
+    const user = users[0]
+
+    // 查询文件记录
+    const { data: file } = await db.collection('jt_design_files')
+      .doc(fileId)
+      .get()
+    if (!file) {
+      return { code: -1, message: '文件不存在' }
+    }
+
+    // 权限校验：只有上传者或对应项目的设计师可删除
+    const { data: project } = await db.collection('jt_projects')
+      .doc(file.project_id)
+      .get()
+
+    const isUploader = file.uploader_openid === openid
+    const isProjectDesigner = project && project.designer_openid === openid
+
+    if (!isUploader && !isProjectDesigner) {
+      return { code: -1, message: '无权删除此文件' }
+    }
+
+    // 删除云存储中的文件
+    if (file.file_ids && file.file_ids.length > 0) {
+      try {
+        await cloud.deleteFile({ fileList: file.file_ids })
+      } catch (e) {
+        console.error('删除云存储文件失败:', e)
+        // 云存储删除失败不阻塞数据库删除
+      }
+    }
+
+    // 删除数据库记录
+    await db.collection('jt_design_files').doc(fileId).remove()
+
+    return { code: 0, data: null, message: '文件已删除' }
+  } catch (err) {
+    return { code: -1, message: '删除失败: ' + err.message }
   }
 }

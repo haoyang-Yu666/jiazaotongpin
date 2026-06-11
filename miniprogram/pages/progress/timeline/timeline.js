@@ -90,5 +90,40 @@ Page({
     wx.navigateTo({
       url: `/pages/progress/publish/publish?projectId=${this.data.projectId}&currentStage=${this.data.currentStage}`
     })
+  },
+
+  onLogLongPress(e) {
+    // 仅设计师可删除进度日志
+    if (!this.data.isDesigner) return
+
+    const { id, content } = e.currentTarget.dataset
+    // 截取内容前20字作为提示
+    const preview = (content || '').substring(0, 20) + ((content || '').length > 20 ? '...' : '')
+    const that = this
+
+    wx.showModal({
+      title: '删除进度',
+      content: `确定要删除「${preview || '该进度'}」吗？\n相关评论也将一并删除，不可恢复。`,
+      confirmColor: '#FF4D4F',
+      success: async (res) => {
+        if (res.confirm) {
+          try {
+            wx.showLoading({ title: '删除中' })
+            await progressApi.deleteLog(id)
+            wx.hideLoading()
+            wx.showToast({ title: '已删除', icon: 'success' })
+            // 从列表中移除
+            const logs = that.data.logs.filter(l => l._id !== id)
+            that.setData({
+              logs,
+              isEmpty: logs.length === 0
+            })
+          } catch (err) {
+            wx.hideLoading()
+            wx.showToast({ title: err.message || '删除失败', icon: 'none' })
+          }
+        }
+      }
+    })
   }
 })

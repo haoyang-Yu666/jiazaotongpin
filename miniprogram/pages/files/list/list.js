@@ -88,5 +88,39 @@ Page({
     wx.navigateTo({
       url: `/pages/files/upload/upload?projectId=${this.data.projectId}`
     })
+  },
+
+  onFileLongPress(e) {
+    // 仅设计师可删除文件
+    if (!this.data.isDesigner) return
+
+    const { id, title } = e.currentTarget.dataset
+    const that = this
+
+    wx.showModal({
+      title: '删除文件',
+      content: `确定要删除「${title || '该文件'}」吗？\n删除后不可恢复。`,
+      confirmColor: '#FF4D4F',
+      success: async (res) => {
+        if (res.confirm) {
+          try {
+            wx.showLoading({ title: '删除中' })
+            await fileApi.delete(id)
+            wx.hideLoading()
+            wx.showToast({ title: '已删除', icon: 'success' })
+
+            // 从列表中移除
+            const files = that.data.files.filter(f => f._id !== id)
+            that.setData({
+              files,
+              isEmpty: files.length === 0
+            })
+          } catch (err) {
+            wx.hideLoading()
+            wx.showToast({ title: err.message || '删除失败', icon: 'none' })
+          }
+        }
+      }
+    })
   }
 })

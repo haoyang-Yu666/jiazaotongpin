@@ -64,7 +64,8 @@ const fileApi = {
   list: (data) => callFunction('file', { action: 'list', ...data }),
   getFile: (fileId) => callFunction('file', { action: 'getFile', fileId }),
   confirm: (fileId, actionType) => callFunction('file', { action: 'confirm', fileId, actionType }),
-  getVersions: (projectId, category) => callFunction('file', { action: 'getVersions', projectId, category })
+  getVersions: (projectId, category) => callFunction('file', { action: 'getVersions', projectId, category }),
+  delete: (fileId) => callFunction('file', { action: 'delete', fileId })
 }
 
 // inspiration 模块
@@ -81,7 +82,8 @@ const progressApi = {
   getLog: (logId) => callFunction('progress', { action: 'getLog', logId }),
   toggleLike: (logId) => callFunction('progress', { action: 'toggleLike', logId }),
   addComment: (logId, content) => callFunction('progress', { action: 'addComment', logId, content }),
-  getComments: (logId, page) => callFunction('progress', { action: 'getComments', logId, page })
+  getComments: (logId, page) => callFunction('progress', { action: 'getComments', logId, page }),
+  deleteLog: (logId) => callFunction('progress', { action: 'deleteLog', logId })
 }
 
 // notification 模块

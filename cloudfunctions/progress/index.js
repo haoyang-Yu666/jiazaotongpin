@@ -20,6 +20,8 @@ exports.main = async (event, context) => {
       return handleAddComment(openid, event)
     case 'getComments':
       return handleGetComments(event)
+    case 'deleteLog':
+      return handleDeleteLog(openid, event)
     default:
       return { code: -1, message: '未知操作' }
   }
@@ -204,5 +206,67 @@ async function handleGetComments(event) {
     return { code: 0, data: { list, page, pageSize } }
   } catch (err) {
     return { code: -1, message: '查询失败: ' + err.message }
+  }
+}
+
+async function handleDeleteLog(openid, event) {
+  try {
+    const logId = event.logId
+    if (!logId) {
+      return { code: -1, message: '缺少日志ID' }
+    }
+
+    // 查询用户
+    const { data: users } = await db.collection('jt_users')
+      .where({ openid })
+      .get()
+    if (users.length === 0) {
+      return { code: -1, message: '用户不存在' }
+    }
+
+    // 查询日志
+    const { data: log } = await db.collection('jt_progress_logs')
+      .doc(logId)
+      .get()
+    if (!log) {
+      return { code: -1, message: '日志不存在' }
+    }
+
+    // 权限校验：只有作者本人或对应项目的设计师可删除
+    const { data: project } = await db.collection('jt_projects')
+      .doc(log.project_id)
+      .get()
+
+    const isAuthor = log.author_openid === openid
+    const isProjectDesigner = project && project.designer_openid === openid
+
+    if (!isAuthor && !isProjectDesigner) {
+      return { code: -1, message: '无权删除此日志' }
+    }
+
+    // 删除图片（如有）
+    if (log.images && log.images.length > 0) {
+      try {
+        await cloud.deleteFile({ fileList: log.images })
+      } catch (e) {
+        console.error('删除进度图片失败:', e)
+      }
+    }
+
+    // 删除关联评论
+    try {
+      await db.collection('jt_comments')
+        .where({ log_id: logId })
+        .remove()
+    } catch (e) {
+      console.error('删除进度评论失败:', e)
+    }
+
+    // 删除日志
+    await db.collection('jt_progress_logs').doc(logId).remove()
+
+    return { code: 0, data: null, message: '日志已删除' }
+  } catch (err) {
+    return { code: -1, message: '删除失败: ' + err.message }
   }
 }

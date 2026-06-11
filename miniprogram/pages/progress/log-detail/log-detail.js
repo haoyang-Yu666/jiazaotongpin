@@ -14,13 +14,15 @@ Page({
     commentContent: '',
     loading: true,
     isLiked: false,
-    likeCount: 0
+    likeCount: 0,
+    isDesigner: false
   },
 
   onLoad(options) {
     this.setData({
       logId: options.logId,
-      projectId: options.projectId
+      projectId: options.projectId,
+      isDesigner: auth.isDesigner()
     })
     this.loadLog()
     this.loadComments()
@@ -130,5 +132,33 @@ Page({
     if (this.data.hasMoreComments) {
       this.loadComments()
     }
+  },
+
+  onDeleteLog() {
+    const content = (this.data.log && this.data.log.content) || ''
+    const preview = content.substring(0, 20) + (content.length > 20 ? '...' : '')
+    const that = this
+
+    wx.showModal({
+      title: '删除进度',
+      content: `确定要删除「${preview || '该进度'}」吗？\n相关评论也将一并删除，不可恢复。`,
+      confirmColor: '#FF4D4F',
+      success: async (res) => {
+        if (res.confirm) {
+          try {
+            wx.showLoading({ title: '删除中' })
+            await progressApi.deleteLog(that.data.logId)
+            wx.hideLoading()
+            wx.showToast({ title: '已删除', icon: 'success' })
+            setTimeout(() => {
+              wx.navigateBack()
+            }, 1000)
+          } catch (err) {
+            wx.hideLoading()
+            wx.showToast({ title: err.message || '删除失败', icon: 'none' })
+          }
+        }
+      }
+    })
   }
 })

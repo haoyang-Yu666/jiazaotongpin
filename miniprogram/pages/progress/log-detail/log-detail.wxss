@@ -123,6 +123,21 @@
   color: #666;
 }
 
+/* 删除入口 */
+.delete-log-area {
+  text-align: center;
+  padding: 16rpx 0;
+}
+
+.delete-log-link {
+  font-size: 26rpx;
+  color: #FF4D4F;
+}
+
+.delete-log-link:active {
+  opacity: 0.7;
+}
+
 /* 分割线 */
 .divider {
   height: 1rpx;

@@ -30,7 +30,9 @@
         wx:for="{{files}}"
         wx:key="_id"
         data-id="{{item._id}}"
+        data-title="{{item.title}}"
         bindtap="onFileTap"
+        bindlongpress="onFileLongPress"
       >
         <file-card file="{{item}}" />
       </view>
