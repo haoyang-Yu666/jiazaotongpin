@@ -14,6 +14,8 @@ exports.main = async (event, context) => {
       return handleGetInviteInfo(event.inviteCode)
     case 'join':
       return handleJoin(openid, event.inviteCode)
+    case 'leave':
+      return handleLeave(openid, event.projectId)
     case 'list':
       return handleList(openid, event)
     case 'getDetail':
@@ -162,6 +164,11 @@ async function handleJoin(openid, inviteCode) {
 
     const project = projects[0]
 
+    // 禁止创建者加入自己的项目
+    if (project.designer_openid === openid) {
+      return { code: -1, message: '您是该项目的创建者，无需加入' }
+    }
+
     if (project.status !== 'waiting') {
       return { code: -1, message: '该项目已绑定客户' }
     }
@@ -205,6 +212,54 @@ async function handleJoin(openid, inviteCode) {
     }
   } catch (err) {
     return { code: -1, message: '加入失败: ' + err.message }
+  }
+}
+
+// 客户退出项目
+async function handleLeave(openid, projectId) {
+  try {
+    const { data: project } = await db.collection('jt_projects').doc(projectId).get()
+    if (!project) {
+      return { code: -1, message: '项目不存在' }
+    }
+
+    // 只有项目客户可以退出（设计师应使用删除）
+    if (project.client_openid !== openid) {
+      return { code: -1, message: '无权限操作' }
+    }
+
+    await db.collection('jt_projects').doc(projectId).update({
+      data: {
+        client_id: '',
+        client_openid: '',
+        client_info: { nickname: '', avatar: '' },
+        status: 'waiting',
+        updated_at: db.serverDate()
+      }
+    })
+
+    // 通知设计师
+    try {
+      if (project.designer_openid) {
+        await db.collection('jt_notifications').add({
+          data: {
+            user_openid: project.designer_openid,
+            project_id: projectId,
+            project_name: project.name,
+            type: 'project_leave',
+            title: '客户已退出',
+            content: (project.client_info && project.client_info.nickname || '客户') + ' 已退出项目「' + project.name + '」',
+            related_id: projectId,
+            is_read: false,
+            created_at: db.serverDate()
+          }
+        })
+      }
+    } catch (e) {}
+
+    return { code: 0, data: null, message: '已退出项目' }
+  } catch (err) {
+    return { code: -1, message: '退出失败: ' + err.message }
   }
 }
 

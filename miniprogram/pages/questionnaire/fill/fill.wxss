@@ -93,46 +93,55 @@
 .picker-value {
   font-size: 28rpx;
   color: #333;
+  line-height: 76rpx;
 }
 
 .picker-value.placeholder {
   color: #bbb;
+  line-height: 76rpx;
 }
 
 .picker-arrow {
   font-size: 28rpx;
   color: #999;
+  line-height: 76rpx;
 }
 
 /* 标签多选 */
 .tag-group {
   display: flex;
   flex-wrap: wrap;
-  gap: 14rpx;
 }
 
-.tag-item {
+.tag-btn {
   display: inline-block;
   padding: 14rpx 28rpx;
+  margin-right: 14rpx;
+  margin-bottom: 14rpx;
   border-radius: 28rpx;
   background: #F5F5F5;
   border: 2rpx solid transparent;
-  transition: all 0.2s;
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.4;
+  width: auto;
 }
 
-.tag-item.active {
+/* 覆盖 button 默认样式 */
+.tag-btn::after {
+  border: none;
+}
+
+.tag-btn.tag-active {
   background: rgba(26, 109, 92, 0.08);
   border-color: #1A6D5C;
+  color: #1A6D5C;
+  font-weight: 500;
 }
 
 .tag-text {
   font-size: 26rpx;
   color: #666;
-}
-
-.tag-item.active .tag-text {
-  color: #1A6D5C;
-  font-weight: 500;
 }
 
 /* 底部留白 */

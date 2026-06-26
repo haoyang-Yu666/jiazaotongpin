@@ -82,6 +82,7 @@
                 data-url="{{imgUrl}}"
                 data-urls="{{questionnaire.specialImages}}"
                 bindtap="onPreviewRoomImage"
+                binderror="onImageError"
               />
             </view>
           </view>
@@ -102,6 +103,7 @@
                 data-url="{{imgUrl}}"
                 data-urls="{{questionnaire.dislikedImages}}"
                 bindtap="onPreviewRoomImage"
+                binderror="onImageError"
               />
             </view>
           </view>
@@ -138,6 +140,7 @@
                 data-url="{{imgUrl}}"
                 data-urls="{{item.reference_images}}"
                 bindtap="onPreviewRoomImage"
+                binderror="onImageError"
               />
             </view>
           </view>
@@ -148,28 +151,28 @@
       <!-- 设计师自定义问题 -->
       <view class="view-section" wx:if="{{questionnaire.snapshotQuestions && questionnaire.snapshotQuestions.length > 0}}">
         <text class="section-header">设计师提问</text>
-        <view class="custom-qa" wx:for="{{questionnaire.snapshotQuestions}}" wx:key="index">
-          <text class="custom-q">{{index + 1}}. {{item.question}}</text>
+        <view class="custom-qa" wx:for="{{questionnaire.snapshotQuestions}}" wx:key="_qi">
+          <text class="custom-q">{{item._qi + 1}}. {{item.question}}</text>
           <block wx:if="{{item.type === 'text' || item.type === 'textarea'}}">
-            <text class="custom-a">{{questionnaire.customAnswers[index].answer || '未填写'}}</text>
+            <text class="custom-a">{{questionnaire.customAnswers[item._qi] || '未填写'}}</text>
           </block>
           <block wx:if="{{item.type === 'single_select'}}">
-            <view class="tags-display" wx:if="{{questionnaire.customAnswers[index].answer}}">
+            <view class="tags-display" wx:if="{{questionnaire.customAnswers[item._qi]}}">
               <view class="display-tag">
-                <text class="tag-text">{{questionnaire.customAnswers[index].answer}}</text>
+                <text class="tag-text">{{questionnaire.customAnswers[item._qi]}}</text>
               </view>
             </view>
             <text class="custom-a" wx:else>未选择</text>
           </block>
           <block wx:if="{{item.type === 'multi_select'}}">
-            <view class="tags-display" wx:if="{{questionnaire.customAnswers[index].answer && questionnaire.customAnswers[index].answer.length > 0}}">
-              <view class="display-tag" wx:for="{{questionnaire.customAnswers[index].answer}}" wx:for-item="opt" wx:key="*this">
+            <view class="tags-display" wx:if="{{questionnaire.customAnswers[item._qi].length > 0}}">
+              <view class="display-tag" wx:for="{{questionnaire.customAnswers[item._qi]}}" wx:for-item="opt" wx:key="*this">
                 <text class="tag-text">{{opt}}</text>
               </view>
             </view>
             <text class="custom-a" wx:else>未选择</text>
           </block>
-          <view class="field-divider" wx:if="{{index < questionnaire.snapshotQuestions.length - 1}}"></view>
+          <view class="field-divider" wx:if="{{item._qi < questionnaire.snapshotQuestions.length - 1}}"></view>
         </view>
       </view>
 
@@ -177,16 +180,23 @@
       <view class="bottom-space"></view>
     </scroll-view>
 
-    <!-- 标记已阅按钮 -->
-    <view class="view-footer" wx:if="{{!reviewed}}">
-      <button class="btn-primary mark-btn" bindtap="markReviewed">
+    <!-- 设计师：标记已阅 -->
+    <view class="view-footer" wx:if="{{isDesigner && !reviewed}}">
+      <button class="btn-primary mark-btn" catchtap="markReviewed">
         标记已阅
       </button>
     </view>
 
-    <!-- 已标记已阅 -->
-    <view class="view-footer reviewed-footer" wx:if="{{reviewed}}">
+    <!-- 设计师：已标记已阅 -->
+    <view class="view-footer reviewed-footer" wx:if="{{isDesigner && reviewed}}">
       <text class="reviewed-text">已标记已阅</text>
+    </view>
+
+    <!-- 客户：修改问卷 -->
+    <view class="view-footer" wx:if="{{!isDesigner}}">
+      <button class="btn-outline edit-btn" bindtap="onEditQuestionnaire">
+        修改问卷
+      </button>
     </view>
   </block>
 </view>

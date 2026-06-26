@@ -20,7 +20,7 @@
           </view>
           <view
             class="invite-code-btn"
-            wx:if="{{isDesigner && project.invite_code}}"
+            wx:if="{{isProjectOwner && project.invite_code}}"
             bindtap="onCopyInviteCode"
           >
             <text>邀请码: {{project.invite_code}}</text>
@@ -34,13 +34,13 @@
         <button class="header-share-btn" open-type="share">
           <text class="action-label">分享</text>
         </button>
-        <view class="header-action-btn" bindtap="onGeneratePoster" wx:if="{{isDesigner}}">
+        <view class="header-action-btn" bindtap="onGeneratePoster" wx:if="{{isProjectOwner}}">
           <text class="action-label">海报</text>
         </view>
-        <view class="header-action-btn" bindtap="onGenerateReport" wx:if="{{isDesigner}}">
+        <view class="header-action-btn" bindtap="onGenerateReport" wx:if="{{isProjectOwner}}">
           <text class="action-label">报告</text>
         </view>
-        <view class="header-action-btn" bindtap="onEditProject" wx:if="{{isDesigner}}">
+        <view class="header-action-btn" bindtap="onEditProject" wx:if="{{isProjectOwner}}">
           <text class="action-label">编辑</text>
         </view>
       </view>
@@ -75,7 +75,7 @@
             <view class="section-card">
               <view class="section-title-row">
                 <text class="section-title">需求问卷</text>
-                <view class="edit-template-btn" wx:if="{{isDesigner}}" bindtap="onEditTemplate">
+                <view class="edit-template-btn" wx:if="{{isProjectOwner}}" bindtap="onEditTemplate">
                   <text class="edit-template-text">编辑模板</text>
                 </view>
               </view>
@@ -83,15 +83,15 @@
                 <text class="qs-desc">客户尚未填写需求问卷</text>
                 <button
                   class="btn-primary qs-btn"
-                  wx:if="{{!isDesigner}}"
+                  wx:if="{{isProjectClient}}"
                   bindtap="onFillQuestionnaire"
                 >
                   去填写
                 </button>
-                <text class="qs-hint" wx:if="{{isDesigner}}">等待客户填写</text>
+                <text class="qs-hint" wx:if="{{isProjectOwner}}">等待客户填写</text>
               </view>
               <view class="questionnaire-status-card" wx:elif="{{questionnaireStatus === 'submitted'}}">
-                <text class="qs-desc">客户已提交需求问卷{{isDesigner ? '，请查阅' : ''}}</text>
+                <text class="qs-desc">客户已提交需求问卷{{isProjectOwner ? '，请查阅' : ''}}</text>
                 <button class="btn-primary qs-btn" bindtap="onViewQuestionnaire">
                   {{isDesigner ? '查看问卷' : '查看问卷'}}
                 </button>
@@ -154,7 +154,7 @@
             />
 
             <!-- 上传按钮（设计师） -->
-            <view class="upload-area" wx:if="{{isDesigner}}">
+            <view class="upload-area" wx:if="{{isProjectOwner}}">
               <button class="btn-outline upload-btn" bindtap="onUploadFile">
                 上传图纸
               </button>
@@ -199,7 +199,7 @@
             </view>
 
             <!-- 发布按钮（设计师） -->
-            <view class="publish-area" wx:if="{{isDesigner}}">
+            <view class="publish-area" wx:if="{{isProjectOwner}}">
               <button class="btn-primary publish-btn" bindtap="onPublishLog">
                 发布进度
               </button>
@@ -216,7 +216,7 @@
               <view class="chat-entry">
                 <view class="chat-entry-info">
                   <text class="chat-entry-title">项目沟通</text>
-                  <text class="chat-entry-desc">与{{isDesigner ? '客户' : '设计师'}}即时沟通</text>
+                  <text class="chat-entry-desc">与{{isProjectOwner ? '客户' : '设计师'}}即时沟通</text>
                 </view>
                 <view class="chat-entry-right">
                   <view class="unread-badge" wx:if="{{unreadMessages > 0}}">
@@ -230,5 +230,13 @@
         </scroll-view>
       </swiper-item>
     </swiper>
+
+    <!-- 退出项目（仅参与者可用） -->
+    <view class="leave-project-area" wx:if="{{isProjectClient}}">
+      <view class="leave-project-btn" bindtap="onLeaveProject">
+        <text class="leave-project-text">退出项目</text>
+      </view>
+      <text class="leave-project-hint">退出后您将无法查看该项目</text>
+    </view>
   </block>
 </view>

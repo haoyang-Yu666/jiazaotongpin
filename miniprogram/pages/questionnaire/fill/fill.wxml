@@ -1,5 +1,5 @@
 <view class="fill-page">
-  <scroll-view class="form-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+  <scroll-view class="form-scroll" scroll-y show-scrollbar="{{false}}">
     <!-- 居住信息 -->
     <view class="form-section">
       <text class="section-header">居住信息</text>
@@ -33,15 +33,15 @@
       <text class="section-hint">可多选</text>
 
       <view class="tag-group">
-        <view
-          class="tag-item {{form.coreNeeds.indexOf(item) > -1 ? 'active' : ''}}"
+        <button
+          class="tag-btn {{form.coreNeeds[item] ? 'tag-active' : ''}}"
           wx:for="{{coreNeedsOptions}}"
           wx:key="*this"
           data-need="{{item}}"
           bindtap="onCoreNeedToggle"
         >
-          <text class="tag-text">{{item}}</text>
-        </view>
+          {{item}}
+        </button>
       </view>
     </view>
 
@@ -217,16 +217,16 @@
       <text class="section-header">设计师提问</text>
       <text class="section-hint">设计师为你准备了以下问题</text>
 
-      <view class="custom-question" wx:for="{{customQuestions}}" wx:key="index">
-        <text class="custom-q-text">{{index + 1}}. {{item.question}} <text class="required" wx:if="{{item.required}}">*</text></text>
+      <view class="custom-question" wx:for="{{customQuestions}}" wx:key="_qi">
+        <text class="custom-q-text">{{item._qi + 1}}. {{item.question}} <text class="required" wx:if="{{item.required}}">*</text></text>
 
         <!-- 短文本 -->
         <input
           wx:if="{{item.type === 'text'}}"
           class="form-input custom-input"
           placeholder="请输入"
-          value="{{customAnswers[index]}}"
-          data-index="{{index}}"
+          value="{{customAnswers[item._qi]}}"
+          data-index="{{item._qi}}"
           bindinput="onCustomInput"
         />
 
@@ -235,8 +235,8 @@
           wx:if="{{item.type === 'textarea'}}"
           class="form-textarea custom-input"
           placeholder="请输入"
-          value="{{customAnswers[index]}}"
-          data-index="{{index}}"
+          value="{{customAnswers[item._qi]}}"
+          data-index="{{item._qi}}"
           bindinput="onCustomInput"
           maxlength="500"
           auto-height
@@ -244,32 +244,32 @@
 
         <!-- 单选 -->
         <view class="tag-group" wx:if="{{item.type === 'single_select'}}">
-          <view
-            class="tag-item {{customAnswers[index] === opt ? 'active' : ''}}"
+          <button
+            class="tag-btn {{customAnswers[item._qi] === opt ? 'tag-active' : ''}}"
             wx:for="{{item.options}}"
             wx:for-item="opt"
             wx:key="*this"
-            data-index="{{index}}"
+            data-index="{{item._qi}}"
             data-option="{{opt}}"
             bindtap="onCustomSelect"
           >
-            <text class="tag-text">{{opt}}</text>
-          </view>
+            {{opt}}
+          </button>
         </view>
 
         <!-- 多选 -->
         <view class="tag-group" wx:if="{{item.type === 'multi_select'}}">
-          <view
-            class="tag-item {{customAnswers[index].indexOf(opt) > -1 ? 'active' : ''}}"
+          <button
+            class="tag-btn {{customActive[item._qi][opt] ? 'tag-active' : ''}}"
             wx:for="{{item.options}}"
             wx:for-item="opt"
             wx:key="*this"
-            data-index="{{index}}"
+            data-index="{{item._qi}}"
             data-option="{{opt}}"
             bindtap="onCustomMultiToggle"
           >
-            <text class="tag-text">{{opt}}</text>
-          </view>
+            {{opt}}
+          </button>
         </view>
       </view>
     </view>

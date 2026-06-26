@@ -394,3 +394,38 @@
   font-size: 28rpx;
   color: #999999;
 }
+
+/* 退出项目 */
+.leave-project-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32rpx;
+  margin-top: 24rpx;
+}
+
+.leave-project-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60%;
+  height: 80rpx;
+  border-radius: 40rpx;
+  border: 2rpx solid #e34d59;
+}
+
+.leave-project-btn:active {
+  background: rgba(227, 77, 89, 0.05);
+}
+
+.leave-project-text {
+  font-size: 28rpx;
+  color: #e34d59;
+  font-weight: 500;
+}
+
+.leave-project-hint {
+  font-size: 24rpx;
+  color: #999999;
+  margin-top: 16rpx;
+}

@@ -43,6 +43,7 @@ const projectApi = {
   archive: (projectId) => callFunction('project', { action: 'archive', projectId }),
   unarchive: (projectId) => callFunction('project', { action: 'unarchive', projectId }),
   delete: (projectId) => callFunction('project', { action: 'delete', projectId }),
+  leave: (projectId) => callFunction('project', { action: 'leave', projectId }),
   // V3.0 聊天
   sendMessage: (projectId, type, content) => callFunction('project', { action: 'sendMessage', projectId, type, content }),
   getMessages: (data) => callFunction('project', { action: 'getMessages', ...data }),

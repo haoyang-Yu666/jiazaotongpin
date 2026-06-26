@@ -1,6 +1,6 @@
 <view class="image-uploader">
   <view class="image-list">
-    <view class="image-item" wx:for="{{imageList}}" wx:key="index">
+    <view class="image-item" wx:for="{{imageList}}" wx:key="*this">
       <image class="upload-image" src="{{item}}" mode="aspectFill" bindtap="onPreview" data-index="{{index}}"></image>
       <view class="delete-btn" catchtap="onDelete" data-index="{{index}}">✕</view>
     </view>

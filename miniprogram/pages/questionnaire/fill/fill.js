@@ -10,7 +10,7 @@ Page({
     form: {
       residents: '',
       familyStructure: '',
-      coreNeeds: [],
+      coreNeeds: {},
       stylePreference: '',
       styleIndex: -1,
       colorPreference: '',
@@ -37,7 +37,8 @@ Page({
 
     // 设计师自定义问题
     customQuestions: [],
-    customAnswers: []
+    customAnswers: [],
+    customActive: []
   },
 
   onLoad(options) {
@@ -65,11 +66,80 @@ Page({
     try {
       const res = await questionnaireApi.get(this.data.projectId)
       if (res && res.custom_questions && res.custom_questions.length > 0) {
-        const answers = res.custom_questions.map(q => {
+        const questions = res.custom_questions.map((q, i) => ({ ...q, _qi: i }))
+        const prevData = res.data || {}  // 已提交的答案（修改问卷时回填）
+        const prevAnswers = prevData.custom_answers || []
+
+        // 回填自定义问题答案（按题目文本匹配，避免模板顺序变化导致错位）
+        const answerMap = {}
+        if (prevData.snapshot_questions && prevData.custom_answers) {
+          prevData.snapshot_questions.forEach((sq, i) => {
+            if (prevData.custom_answers[i] !== undefined) {
+              answerMap[sq.question] = prevData.custom_answers[i]
+            }
+          })
+        }
+
+        const answers = questions.map(q => {
+          if (answerMap.hasOwnProperty(q.question)) return answerMap[q.question]
           if (q.type === 'multi_select') return []
           return ''
         })
-        this.setData({ customQuestions: res.custom_questions, customAnswers: answers })
+        const active = questions.map((q, i) => {
+          if (q.type === 'multi_select') {
+            const act = {}
+            const ans = answers[i]
+            if (Array.isArray(ans)) ans.forEach(o => { act[o] = true })
+            return act
+          }
+          return null
+        })
+
+        // 回填基础表单字段
+        const coreNeeds = {}
+        if (Array.isArray(prevData.core_needs)) {
+          prevData.core_needs.forEach(n => { coreNeeds[n] = true })
+        }
+        const styleOptions = this.data.styleOptions
+        const budgetOptions = this.data.budgetOptions
+        const styleIndex = prevData.style_preference ? styleOptions.indexOf(prevData.style_preference) : -1
+        const budgetIndex = prevData.budget_range ? budgetOptions.indexOf(prevData.budget_range) : -1
+
+        // 回填房间数据
+        const prevRooms = prevData.rooms || []
+        const rooms = this.data.rooms.map(room => {
+          const prev = prevRooms.find(r => r.room_type === room.room_type)
+          if (prev) {
+            return {
+              ...room,
+              style_preference: prev.style_preference || '',
+              color_preference: prev.color_preference || '',
+              special_requirements: prev.special_requirements || '',
+              reference_images: []  // 图片不回溯（cloud:// 不可用于 image-uploader）
+            }
+          }
+          return room
+        })
+
+        this.setData({
+          customQuestions: questions,
+          customAnswers: answers,
+          customActive: active,
+          rooms,
+          form: {
+            ...this.data.form,
+            residents: prevData.residents || '',
+            familyStructure: prevData.family_structure || '',
+            coreNeeds,
+            stylePreference: prevData.style_preference || '',
+            styleIndex,
+            colorPreference: prevData.color_preference || '',
+            budgetRange: prevData.budget_range || '',
+            budgetIndex,
+            specialRequirements: prevData.special_requirements || '',
+            dislikedElements: prevData.disliked || ''
+          }
+        })
       }
     } catch (err) {
       console.error('加载自定义问题失败:', err)
@@ -83,14 +153,14 @@ Page({
 
   onCoreNeedToggle(e) {
     const need = e.currentTarget.dataset.need
-    let coreNeeds = [...this.data.form.coreNeeds]
-    const index = coreNeeds.indexOf(need)
-    if (index > -1) {
-      coreNeeds.splice(index, 1)
+    const form = this.data.form
+    const coreNeeds = { ...form.coreNeeds }
+    if (coreNeeds[need]) {
+      delete coreNeeds[need]
     } else {
-      coreNeeds.push(need)
+      coreNeeds[need] = true
     }
-    this.setData({ 'form.coreNeeds': coreNeeds })
+    this.setData({ form: { ...form, coreNeeds } })
   },
 
   onStyleChange(e) {
@@ -155,7 +225,17 @@ Page({
     } else {
       arr.push(option)
     }
-    this.setData({ [`customAnswers[${index}]`]: arr })
+    // 同步更新 active 映射，避模板用 .indexOf()
+    const active = { ...(this.data.customActive[index] || {}) }
+    if (pos > -1) {
+      delete active[option]
+    } else {
+      active[option] = true
+    }
+    this.setData({
+      [`customAnswers[${index}]`]: arr,
+      [`customActive[${index}]`]: active
+    })
   },
 
   validateForm() {
@@ -224,7 +304,7 @@ Page({
         projectId: this.data.projectId,
         residents: form.residents.trim(),
         familyStructure: form.familyStructure.trim(),
-        coreNeeds: form.coreNeeds,
+        coreNeeds: Object.keys(form.coreNeeds).filter(k => form.coreNeeds[k]),
         stylePreference: form.stylePreference,
         colorPreference: form.colorPreference.trim(),
         budgetRange: form.budgetRange,

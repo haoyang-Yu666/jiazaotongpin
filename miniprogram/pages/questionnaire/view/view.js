@@ -1,5 +1,6 @@
 const { questionnaireApi } = require('../../../utils/cloud')
 const format = require('../../../utils/format')
+const auth = require('../../../utils/auth')
 
 Page({
   data: {
@@ -7,7 +8,8 @@ Page({
     questionnaire: null,
     loading: true,
     reviewed: false,
-    submitTime: ''
+    submitTime: '',
+    isDesigner: false
   },
 
   onLoad(options) {
@@ -17,7 +19,7 @@ Page({
       setTimeout(() => wx.navigateBack(), 1000)
       return
     }
-    this.setData({ projectId })
+    this.setData({ projectId, isDesigner: auth.isDesigner() })
     this.loadQuestionnaire()
   },
 
@@ -29,6 +31,8 @@ Page({
       const submitTime = res && res.submitted_at ? format.dateTime(res.submitted_at) : ''
 
       const qData = (res && res.data) || {}
+
+      // 云函数已用管理员权限将 cloud:// 转为 https:// 临时链接，此处直接使用
       const questionnaire = {
         residents: qData.residents || '',
         familyStructure: qData.family_structure || '',
@@ -41,7 +45,7 @@ Page({
         dislikedElements: qData.disliked || '',
         dislikedImages: qData.disliked_images || [],
         rooms: qData.rooms || [],
-        snapshotQuestions: qData.snapshot_questions || [],
+        snapshotQuestions: (qData.snapshot_questions || []).map((q, i) => ({ ...q, _qi: i })),
         customAnswers: qData.custom_answers || []
       }
 
@@ -59,12 +63,14 @@ Page({
   },
 
   async markReviewed() {
+    console.log('[标记已阅] 点击, projectId:', this.data.projectId)
     try {
       await questionnaireApi.markReviewed(this.data.projectId)
+      console.log('[标记已阅] 成功')
       wx.showToast({ title: '已标记已阅', icon: 'success' })
       this.setData({ reviewed: true })
     } catch (err) {
-      console.error('标记已阅失败:', err)
+      console.error('[标记已阅] 失败:', err)
       wx.showToast({ title: err.message || '操作失败', icon: 'none' })
     }
   },
@@ -73,5 +79,15 @@ Page({
     const url = e.currentTarget.dataset.url
     const urls = e.currentTarget.dataset.urls
     wx.previewImage({ current: url, urls })
+  },
+
+  onEditQuestionnaire() {
+    wx.navigateTo({
+      url: `/pages/questionnaire/fill/fill?projectId=${this.data.projectId}`
+    })
+  },
+
+  onImageError(e) {
+    console.error('问卷图片加载失败:', e.detail)
   }
 })

@@ -1,4 +1,5 @@
 const { projectApi } = require('../../../utils/cloud')
+const auth = require('../../../utils/auth')
 const constants = require('../../../utils/constants')
 
 Page({
@@ -32,6 +33,15 @@ Page({
   async loadProject(projectId) {
     try {
       const project = await projectApi.getDetail(projectId)
+
+      // 仅项目创建者可编辑
+      const userInfo = auth.getUserInfo()
+      if (!userInfo || userInfo.openid !== project.designer_openid) {
+        wx.showToast({ title: '无权限操作', icon: 'none' })
+        setTimeout(() => wx.navigateBack(), 1000)
+        return
+      }
+
       const { styleOptions, budgetOptions } = this.data
       this.setData({
         form: {

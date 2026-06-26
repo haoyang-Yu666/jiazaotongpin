@@ -8,6 +8,8 @@ Page({
     projectId: '',
     project: null,
     isDesigner: false,
+    isProjectOwner: false,
+    isProjectClient: false,
     loading: true,
 
     // Tab
@@ -73,6 +75,12 @@ Page({
     try {
       const project = await projectApi.getDetail(this.data.projectId)
 
+      // 计算当前用户与项目的关系
+      const userInfo = auth.getUserInfo()
+      const currentOpenid = userInfo ? userInfo.openid : ''
+      const isProjectOwner = currentOpenid && currentOpenid === project.designer_openid
+      const isProjectClient = currentOpenid && currentOpenid === project.client_openid
+
       // 根据是否有客户决定是否显示沟通 Tab
       const hasClient = !!project.client_openid
       const tabs = [
@@ -92,6 +100,8 @@ Page({
 
       this.setData({
         project,
+        isProjectOwner,
+        isProjectClient,
         tabs,
         activeTab,
         activeTabIndex: tabs.findIndex(t => t.key === activeTab),
@@ -288,5 +298,33 @@ Page({
     wx.navigateTo({
       url: `/pages/projects/chat/chat?projectId=${this.data.projectId}`
     })
+  },
+
+  // 退出项目（仅参与者可用）
+  onLeaveProject() {
+    const that = this
+    wx.showModal({
+      title: '退出项目',
+      content: '退出后您将无法查看该项目的内容，确定要退出吗？',
+      confirmText: '确认退出',
+      confirmColor: '#e34d59',
+      success(res) {
+        if (res.confirm) {
+          that.doLeaveProject()
+        }
+      }
+    })
+  },
+
+  async doLeaveProject() {
+    try {
+      await projectApi.leave(this.data.projectId)
+      wx.showToast({ title: '已退出项目', icon: 'success' })
+      setTimeout(() => {
+        wx.navigateBack()
+      }, 1000)
+    } catch (err) {
+      wx.showToast({ title: err.message || '退出失败', icon: 'none' })
+    }
   }
 })

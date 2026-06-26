@@ -27,9 +27,7 @@ async function handleSubmit(openid, event) {
       .where({ project_id: event.projectId })
       .get()
 
-    if (existing.length > 0 && existing[0].status === 'submitted') {
-      return { code: -1, message: '问卷已提交，不可重复填写' }
-    }
+    // 允许客户修改并重新提交（已阅状态也重置为 submitted）
 
     // ========== 内容安全审查 ==========
 
@@ -239,13 +237,57 @@ async function handleGet(projectId) {
       record.custom_questions = DEFAULT_CUSTOM_QUESTIONS
     }
 
+    // 收集所有云存储 fileID，用云函数管理员权限转换为临时链接
+    if (record.data) {
+      const allFileIds = []
+      const collect = (arr) => {
+        if (Array.isArray(arr)) {
+          arr.forEach(url => { if (url && url.startsWith('cloud://')) allFileIds.push(url) })
+        }
+      }
+      collect(record.data.special_images)
+      collect(record.data.disliked_images)
+      if (record.data.rooms) {
+        record.data.rooms.forEach(room => collect(room.reference_images))
+      }
+
+      if (allFileIds.length > 0) {
+        try {
+          const tempRes = await cloud.getTempFileURL({ fileList: allFileIds })
+          if (tempRes && tempRes.fileList) {
+            const urlMap = {}
+            tempRes.fileList.forEach(item => {
+              if (item.tempFileURL) {
+                urlMap[item.fileID] = item.tempFileURL
+              }
+            })
+
+            // 替换 data 中的 cloud:// 为临时链接
+            const replace = (arr) => {
+              if (!Array.isArray(arr)) return
+              for (let i = 0; i < arr.length; i++) {
+                if (urlMap[arr[i]]) arr[i] = urlMap[arr[i]]
+              }
+            }
+            replace(record.data.special_images)
+            replace(record.data.disliked_images)
+            if (record.data.rooms) {
+              record.data.rooms.forEach(room => replace(room.reference_images))
+            }
+          }
+        } catch (e) {
+          console.error('handleGet getTempFileURL error:', e)
+        }
+      }
+    }
+
     return { code: 0, data: record }
   } catch (err) {
     return { code: -1, message: '查询失败: ' + err.message }
   }
 }
 
-async function handleMarkReviewed(openid, event) {
+async function handleMarkReviewed(openid, projectId) {
   try {
     // 校验：只有设计师可以标记已阅
     const { data: users } = await db.collection('jt_users')
@@ -257,7 +299,7 @@ async function handleMarkReviewed(openid, event) {
     }
 
     const { data: questionnaires } = await db.collection('jt_questionnaires')
-      .where({ project_id: event.projectId })
+      .where({ project_id: projectId })
       .get()
 
     if (questionnaires.length === 0) {

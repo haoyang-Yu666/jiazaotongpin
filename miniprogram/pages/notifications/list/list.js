@@ -51,6 +51,9 @@ Page({
         unreadCount,
         loading: false
       })
+
+      // 同步更新 tabBar 红点
+      this._updateBadge()
     } catch (err) {
       console.error('加载通知失败:', err)
       this.setData({ loading: false, isEmpty: this.data.notifications.length === 0 })
@@ -82,11 +85,15 @@ Page({
     if (!item.is_read) {
       try {
         await notificationApi.markRead(item._id)
-        const key = `notifications[${this.data.notifications.indexOf(item)}].is_read`
-        this.setData({
-          [key]: true,
-          unreadCount: Math.max(0, this.data.unreadCount - 1)
-        })
+        // 使用 _id 查找而非 indexOf（dataset 会反序列化对象，引用不相等）
+        const idx = this.data.notifications.findIndex(n => n._id === item._id)
+        if (idx >= 0) {
+          const key = `notifications[${idx}].is_read`
+          this.setData({
+            [key]: true,
+            unreadCount: Math.max(0, this.data.unreadCount - 1)
+          })
+        }
         this._updateBadge()
       } catch (err) {
         console.error('标记已读失败:', err)
