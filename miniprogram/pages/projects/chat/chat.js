@@ -9,6 +9,7 @@ Page({
     otherName: '',
     messages: [],
     inputText: '',
+    canSend: false,
     loading: true,
     hasMore: true,
     page: 1,
@@ -151,7 +152,8 @@ Page({
   },
 
   onInputChange(e) {
-    this.setData({ inputText: e.detail.value })
+    const val = e.detail.value
+    this.setData({ inputText: val, canSend: val.trim().length > 0 })
   },
 
   async onSend() {

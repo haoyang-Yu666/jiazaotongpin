@@ -56,16 +56,22 @@
 
 .picker-value {
   font-size: 28rpx;
+  line-height: 24rpx;
   color: #333;
+  position: relative;
+  top: -10rpx;
 }
 
 .picker-value.placeholder {
-  color: #bbb;
+  color: #999;
 }
 
 .picker-arrow {
   font-size: 28rpx;
+  line-height: 24rpx;
   color: #999;
+  position: relative;
+  top: -10rpx;
 }
 
 /* 提交按钮 */

@@ -92,19 +92,22 @@
 
 .picker-value {
   font-size: 28rpx;
+  line-height: 24rpx;
   color: #333;
-  line-height: 76rpx;
+  position: relative;
+  top: -10rpx;
 }
 
 .picker-value.placeholder {
-  color: #bbb;
-  line-height: 76rpx;
+  color: #999;
 }
 
 .picker-arrow {
   font-size: 28rpx;
+  line-height: 24rpx;
   color: #999;
-  line-height: 76rpx;
+  position: relative;
+  top: -10rpx;
 }
 
 /* 标签多选 */

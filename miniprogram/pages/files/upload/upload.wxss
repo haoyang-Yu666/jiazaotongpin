@@ -309,12 +309,18 @@
 
 .picker-value {
   font-size: 28rpx;
+  line-height: 24rpx;
   color: #1A1A1A;
+  position: relative;
+  top: -10rpx;
 }
 
 .picker-arrow {
   font-size: 24rpx;
+  line-height: 24rpx;
   color: #999999;
+  position: relative;
+  top: -10rpx;
 }
 
 /* ========== 提交按钮 ========== */

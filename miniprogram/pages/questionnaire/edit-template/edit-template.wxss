@@ -232,12 +232,18 @@
 
 .picker-text {
   font-size: 28rpx;
+  line-height: 24rpx;
   color: #333;
+  position: relative;
+  top: -10rpx;
 }
 
 .picker-arrow {
   font-size: 28rpx;
+  line-height: 24rpx;
   color: #999;
+  position: relative;
+  top: -10rpx;
 }
 
 .options-list {

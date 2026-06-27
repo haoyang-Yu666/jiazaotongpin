@@ -48,7 +48,7 @@
         adjust-position="{{true}}"
         maxlength="500"
       />
-      <view class="send-btn {{inputText.trim() ? '' : 'send-disabled'}}" bindtap="onSend">
+      <view class="send-btn {{canSend ? '' : 'send-disabled'}}" bindtap="onSend">
         <text class="send-text">发送</text>
       </view>
     </view>

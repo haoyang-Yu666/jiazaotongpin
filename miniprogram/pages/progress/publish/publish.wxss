@@ -37,13 +37,19 @@
 
 .picker-value {
   font-size: 28rpx;
+  line-height: 24rpx;
   color: #1A6D5C;
   font-weight: 500;
+  position: relative;
+  top: -10rpx;
 }
 
 .picker-arrow {
   font-size: 28rpx;
+  line-height: 24rpx;
   color: #999;
+  position: relative;
+  top: -10rpx;
 }
 
 /* 文本域 */
