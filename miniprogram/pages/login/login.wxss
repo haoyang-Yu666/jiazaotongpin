@@ -34,9 +34,12 @@
 }
 
 .avatar-img {
-  width: 160rpx;
-  height: 160rpx;
+  width: 170rpx;
+  height: 170rpx;
   display: block;
+  position: relative;
+  left: -6rpx;
+  top: -6rpx;
 }
 
 .avatar-btn {
@@ -155,7 +158,6 @@
 .login-btn {
   width: 100%;
   height: 96rpx;
-  line-height: 96rpx;
   background: #1A6D5C;
   color: #ffffff;
   font-size: 32rpx;
@@ -164,6 +166,11 @@
   border: none;
   letter-spacing: 2rpx;
   margin-top: 8rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .login-btn::after {
